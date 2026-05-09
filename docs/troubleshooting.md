@@ -96,6 +96,38 @@ Dienst beim Aufruf einen Fehler bekommt, prüfen:
   abschließendem Slash, mit https)
 - Nach Änderung: `docker compose up -d` (Restart von n8n)
 
+## Bestimmte Nodes fehlen im Workflow-Editor
+
+Wenn die Suche im Editor keine **Execute Command**- oder
+**Local File Trigger**-Node findet: Das ist Absicht. n8n 2.x deaktiviert
+diese beiden Nodes per Default, weil sie beliebige Shell-Befehle bzw.
+Dateisystem-Zugriff erlauben – im Multi-User-Setup oder bei kompromittierten
+Credentials wäre das ein direkter Pfad zur Server-Übernahme.
+
+**Reaktivierung:** in `.env` die Variable `NODES_EXCLUDE` explizit auf eine
+Liste setzen, die die gewünschten Nodes nicht mehr enthält:
+
+```bash
+# Im /opt/n8n auf dem Server:
+echo 'NODES_EXCLUDE=[]' >> .env
+docker compose up -d
+```
+
+`NODES_EXCLUDE=[]` (leeres Array) reaktiviert alle Nodes; alternativ eine
+gezielte Liste setzen, die die ausgeschlossenen Nodes außer den gewünschten
+enthält. Format laut n8n-Doku:
+
+```bash
+NODES_EXCLUDE=["n8n-nodes-base.executeCommand"]
+```
+
+**Vor der Reaktivierung abwägen:** Wer einer Studierenden Execute Command
+freischaltet, gibt ihr in der Konsequenz Root-äquivalenten Zugriff auf den
+Container. Im Kurs-Kontext (jede/r läuft auf eigenem Server) ist das vertretbar,
+in geteilten Setups nicht.
+
+Hintergrund: [n8n 2.0 Breaking Changes – Node Security](https://docs.n8n.io/2-0-breaking-changes/)
+
 ## Speicher voll
 
 ```bash
