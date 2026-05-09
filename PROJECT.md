@@ -41,9 +41,11 @@ Architektur verstehen.
   **CPX21** (2 vCPU, 4 GB RAM) als Empfehlung
 - OS: **Ubuntu 24.04 LTS**
 - Docker: aus Ubuntu-Repos (`docker.io`)
-- n8n: **`n8nio/n8n:1.123.42`** (Minor-/Patch-Pinning – vor jedem Semester
-  bewusst auf neue Stable-Version heben, kein automatischer Major-Sprung
-  auf 2.x während des Semesters)
+- n8n: **`n8nio/n8n:2.20.6`** – wir starten direkt auf der aktuellen
+  Major-Version 2.x (stabil seit Anfang 2026, Setup ist „2.0-ready").
+  Patch-Pinning übers Semester, vor jedem neuen Semester wird bewusst
+  auf eine neuere Stable-Version gehoben. Keine automatischen
+  Updates während eines laufenden Semesters.
 - Postgres: **`postgres:16.13-alpine3.23`**
 - Caddy: **`caddy:2.11.2-alpine`**
 - DNS: **sslip.io** (kein eigenes DNS-Setup für den Kurs)

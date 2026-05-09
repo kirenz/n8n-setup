@@ -116,7 +116,7 @@ n8n bietet einen integrierten Workflow-Editor. Anregungen:
 - Erweiterte Beispiele: Kursmaterial der Veranstaltung
 
 Die n8n-Doku unter [docs.n8n.io](https://docs.n8n.io) ist die primäre
-Referenz; die hier installierte Version ist 1.123.x.
+Referenz; die hier installierte Version ist 2.20.x.
 
 ### Server nach Kursende löschen
 

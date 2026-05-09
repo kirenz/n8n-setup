@@ -18,7 +18,7 @@ dort begründet.
 
 | Entscheidung                              | Warum                                                     |
 | ----------------------------------------- | --------------------------------------------------------- |
-| n8n auf 1.x bleiben (Minor-/Patch-Pinning) | Reproduzierbarkeit über das Semester                      |
+| n8n auf 2.x mit Patch-Pinning (aktuell 2.20.6) | Reproduzierbarkeit über das Semester, gleichzeitig auf aktueller Major-Version |
 | Caddy mit `on_demand` TLS und Allowlist   | Schutz vor Cert-Flooding fremder Domains                  |
 | sslip.io statt eigener Domain              | Studierende ohne eigenes Setup sollen sofort arbeiten können |
 | Postgres statt SQLite                      | Produktionsnaher Setup                                    |
@@ -69,9 +69,9 @@ n8n-hetzner-kurs/
 ### Vor jedem Semester: Versionen prüfen
 
 ```bash
-# Aktuell stable n8n 1.x?
+# Aktuell stable n8n 2.x?
 curl -s "https://hub.docker.com/v2/repositories/n8nio/n8n/tags?page_size=50" \
-  | jq -r '.results[].name' | grep -E '^1\.' | head -5
+  | jq -r '.results[].name' | grep -E '^2\.' | head -5
 
 # Aktuell stable postgres 16?
 curl -s "https://hub.docker.com/v2/repositories/library/postgres/tags?page_size=50&name=16" \

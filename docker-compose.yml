@@ -31,7 +31,7 @@ services:
 
   n8n:
     # Workflow-Engine. Minor-/Patch-Pinning – siehe PROJECT.md.
-    image: n8nio/n8n:${N8N_IMAGE_TAG:-1.123.42}
+    image: n8nio/n8n:${N8N_IMAGE_TAG:-2.20.6}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -69,8 +69,14 @@ services:
       N8N_PERSONALIZATION_ENABLED: ${N8N_PERSONALIZATION_ENABLED:-false}
 
       # Empfohlene Defaults für Produktions-Setup.
+      # N8N_RUNNERS_ENABLED ist in 2.x Default true (war Beta in 1.x);
+      # wird hier explizit gesetzt, damit die Wahl im Repo sichtbar bleibt.
       N8N_RUNNERS_ENABLED: "true"
       N8N_BLOCK_ENV_ACCESS_IN_NODE: "true"
+      # Binärdaten landen im n8n_data-Volume statt im Speicher. In n8n 2.x
+      # ist filesystem ohnehin Default, wir setzen es explizit für klare
+      # Semantik und um Studierenden die Architektur-Entscheidung zu zeigen.
+      N8N_DEFAULT_BINARY_DATA_MODE: filesystem
     volumes:
       - n8n_data:/home/node/.n8n
     networks:
