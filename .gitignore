@@ -1,0 +1,25 @@
+# Geheimnisse: niemals einchecken
+.env
+.env.local
+.env.*.local
+
+# Backups bleiben lokal auf dem Server
+backups/
+*.sql
+*.sql.gz
+*.tar.gz
+
+# Logs
+*.log
+/var/log/
+n8n-setup.log
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Caddy-Daten (wird nur im Container persistiert)
+caddy_data/
+caddy_config/

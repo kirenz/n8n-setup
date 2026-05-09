@@ -1,0 +1,54 @@
+# Caddyfile für n8n-Reverse-Proxy.
+#
+# Strategie: on_demand TLS mit Allowlist.
+# - Zertifikate werden erst bei der ersten Anfrage geholt, nicht beim Start.
+# - Eine interne Ask-Endpoint auf :5555 erlaubt nur die in .env konfigurierte
+#   DOMAIN. Damit kann niemand fremde Domains auf unseren Server zeigen, um
+#   uns ins Let's-Encrypt-Rate-Limit zu treiben.
+# - Bekannte Einschränkung: sslip.io ist nicht auf der Public Suffix List,
+#   daher teilen sich alle *.sslip.io ein gemeinsames Rate Limit von 50
+#   Zertifikaten/Woche. Workarounds: docs/troubleshooting.md.
+
+{
+	# Globale Optionen für on_demand TLS.
+	on_demand_tls {
+		# Caddy fragt vor jedem Cert-Request bei diesem Endpoint nach.
+		# Antwort 2xx → Cert wird angefordert. Sonst → abgelehnt.
+		ask http://localhost:5555/check
+	}
+}
+
+# Interne Allowlist – lauscht nur auf 5555 im Container, nicht von außen
+# erreichbar (Port wird in docker-compose.yml nicht exponiert).
+:5555 {
+	@allowed expression {query.domain} == {$DOMAIN}
+	handle @allowed {
+		respond 200
+	}
+	respond 404
+}
+
+# Hauptsite – nimmt Traffic auf 80/443 entgegen und proxyt zu n8n.
+{$DOMAIN} {
+	# on_demand sorgt dafür, dass Caddy das Zertifikat erst beim ersten
+	# Request holt. In Kombination mit dem caddy_data-Volume bleibt das
+	# Zertifikat über Restarts hinweg erhalten.
+	tls {
+		on_demand
+	}
+
+	# HTTP Strict Transport Security – Browser merken sich, dass diese
+	# Seite nur via HTTPS erreichbar ist.
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+	# Reverse Proxy zu n8n. n8n hört im Container auf 5678 und ist nicht
+	# von außen exponiert.
+	reverse_proxy n8n:5678 {
+		# Die Header werden für n8n-Webhooks gebraucht: n8n muss erkennen,
+		# welche URL der Client ursprünglich aufgerufen hat.
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+}

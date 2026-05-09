@@ -1,0 +1,151 @@
+#cloud-config
+#
+# Cloud-Init für die Hetzner-n8n-Instanz.
+#
+# Cloud-Init läuft per Default nur beim ERSTEN Boot eines Servers. Die
+# eigentliche Provisioning-Logik steckt in einem Bash-Skript, dessen
+# Schritte intern idempotent sind (existierende .env wird nicht
+# überschrieben, vorhandene Secrets bleiben). Damit ist ein manueller
+# Re-Run im Notfall safe.
+#
+# Verwendung: kompletten Inhalt dieser Datei ins Hetzner-Cloud-Feld
+# "User Data" einfügen, dann Server starten. Nach 5–8 Minuten ist die
+# n8n-Instanz unter https://${IP}.sslip.io erreichbar.
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - docker.io           # Docker Engine aus Ubuntu-Repos
+  - docker-compose-v2   # Docker Compose Plugin (`docker compose` statt `docker-compose`)
+  - git                 # Zum Klonen des Repos
+  - ufw                 # Firewall auf Server-Ebene
+  - jq                  # JSON-Parser für Hetzner-Metadata-Service
+  - curl
+  - openssl
+
+write_files:
+  # Setup-Skript wird unten in runcmd aufgerufen. Idempotent geschrieben –
+  # bestehende .env wird nicht überschrieben.
+  - path: /usr/local/sbin/n8n-setup.sh
+    permissions: "0755"
+    owner: root:root
+    content: |
+      #!/usr/bin/env bash
+      # ============================================================
+      # n8n-Setup-Skript (vom Cloud-Init aufgerufen)
+      #
+      # Aufgaben:
+      #  1. Repo nach /opt/n8n klonen (falls nicht vorhanden)
+      #  2. Server-IP ermitteln, Domain bauen
+      #  3. Secrets generieren (falls .env noch nicht existiert)
+      #  4. Docker Compose starten
+      #
+      # Logging: alle Ausgaben landen via runcmd in /var/log/n8n-setup.log
+      # ============================================================
+
+      set -euo pipefail
+
+      REPO_URL="https://github.com/kirenz/n8n-hetzner-kurs.git"
+      REPO_DIR="/opt/n8n"
+      ENV_FILE="${REPO_DIR}/.env"
+      ENV_EXAMPLE="${REPO_DIR}/.env.example"
+
+      echo "[n8n-setup] $(date -Is) – Start"
+
+      # 1. Docker-Daemon ist nach Paket-Install meist schon aktiv,
+      #    sicherheitshalber explizit starten.
+      systemctl enable --now docker
+
+      # 2. Firewall: Default-Deny eingehend, nur SSH/HTTP/HTTPS erlauben.
+      #    UFW ist die zweite Schicht zusätzlich zur Hetzner Cloud Firewall.
+      ufw --force reset
+      ufw default deny incoming
+      ufw default allow outgoing
+      ufw allow 22/tcp comment 'SSH'
+      ufw allow 80/tcp comment 'HTTP (Caddy)'
+      ufw allow 443/tcp comment 'HTTPS (Caddy)'
+      ufw --force enable
+
+      # 3. Repo klonen (idempotent: nur wenn Verzeichnis noch nicht da).
+      if [ ! -d "${REPO_DIR}/.git" ]; then
+        echo "[n8n-setup] Klone Repo nach ${REPO_DIR}"
+        git clone "${REPO_URL}" "${REPO_DIR}"
+      else
+        echo "[n8n-setup] Repo existiert bereits, überspringe clone"
+      fi
+
+      cd "${REPO_DIR}"
+
+      # 4. Server-IP ermitteln. Primär: Hetzner-Metadata-Service (auch ohne
+      #    Internet erreichbar). Fallback: externer Echo-Service.
+      IP="$(curl -fsSL --max-time 5 http://169.254.169.254/hetzner/v1/metadata/public-ipv4 2>/dev/null || true)"
+      if [ -z "${IP}" ]; then
+        IP="$(curl -fsSL --max-time 5 https://ipv4.icanhazip.com)"
+      fi
+      if [ -z "${IP}" ]; then
+        echo "[n8n-setup] FEHLER: konnte Server-IP nicht ermitteln" >&2
+        exit 1
+      fi
+      echo "[n8n-setup] Server-IP: ${IP}"
+
+      # sslip.io-Bindestrich-Variante ist robuster als die Punkt-Variante,
+      # weil manche DNS-Resolver verschachtelte Punkt-Subdomains anders
+      # behandeln.
+      DOMAIN="${IP//./-}.sslip.io"
+      echo "[n8n-setup] Domain: ${DOMAIN}"
+
+      # 5. .env aus Template erzeugen (idempotent: nur wenn nicht vorhanden).
+      if [ ! -f "${ENV_FILE}" ]; then
+        echo "[n8n-setup] Erzeuge .env"
+
+        N8N_ENCRYPTION_KEY="$(openssl rand -hex 32)"
+        POSTGRES_PASSWORD="$(openssl rand -base64 32 | tr -d '\n=+/')"
+
+        # Template kopieren und Platzhalter ersetzen.
+        cp "${ENV_EXAMPLE}" "${ENV_FILE}"
+        # Verwendung von | als Trenner, weil Base64 / und + enthalten kann
+        # (auch wenn wir hier schon herausgefiltert haben).
+        sed -i "s|__DOMAIN__|${DOMAIN}|g" "${ENV_FILE}"
+        sed -i "s|__POSTGRES_PASSWORD__|${POSTGRES_PASSWORD}|" "${ENV_FILE}"
+        sed -i "s|__N8N_ENCRYPTION_KEY__|${N8N_ENCRYPTION_KEY}|" "${ENV_FILE}"
+
+        chmod 600 "${ENV_FILE}"
+      else
+        echo "[n8n-setup] .env existiert bereits, behalte vorhandene Secrets"
+      fi
+
+      # 6. Stack starten.
+      echo "[n8n-setup] Starte Docker Compose"
+      docker compose pull
+      docker compose up -d
+
+      # 7. Status loggen, damit Troubleshooting via cloud-init.log möglich ist.
+      sleep 5
+      docker compose ps
+
+      # 8. Domain ins motd schreiben, damit SSH-User direkt sehen, wie sie
+      #    n8n erreichen.
+      cat > /etc/motd <<MOTD
+
+        n8n läuft. Aufrufen unter:
+          https://${DOMAIN}
+
+        Status: docker compose -f ${REPO_DIR}/docker-compose.yml ps
+        Logs:   docker compose -f ${REPO_DIR}/docker-compose.yml logs -f
+
+      MOTD
+
+      echo "[n8n-setup] $(date -Is) – Fertig"
+
+# Ausführung des Setup-Skripts. Stdout und stderr in /var/log/n8n-setup.log,
+# damit Studierende bei Problemen einen klaren Anhaltspunkt haben.
+runcmd:
+  - [bash, -lc, "/usr/local/sbin/n8n-setup.sh >>/var/log/n8n-setup.log 2>&1"]
+
+# Diese Nachricht wird am Ende des Cloud-Init-Logs ausgegeben (zu sehen via
+# `cloud-init status --long` oder in `/var/log/cloud-init-output.log`).
+final_message: |
+  Provisioning abgeschlossen nach $UPTIME Sekunden.
+  n8n: prüfen mit `tail -n 30 /var/log/n8n-setup.log` und dann
+  `cat /etc/motd` für die finale URL.
