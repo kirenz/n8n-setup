@@ -1,0 +1,58 @@
+# Backups einrichten
+
+Workflows und Credentials liegen in der Datenbank. Ein Backup sichert sie, zusammen mit dem Encryption-Key, ohne den die gesicherten Credentials wertlos sind. Auf dem Hetzner-Server steht dafür ein fertiges Skript bereit.
+
+## Zielbild
+
+Ein Backup-Satz im Verzeichnis `backups/` auf dem Server, regelmäßig erzeugt und zusätzlich lokal gesichert.
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Backup manuell laufen lassen
+
+```bash
+ssh root@<server-ip>
+/opt/n8n/scripts/backup.sh
+```
+
+::: {.callout-tip title="Was gesichert wird"}
+Das Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflows, Credentials und Ausführungen, einen Tarball des n8n-Daten-Volumes und eine Kopie der `.env` mit dem Encryption-Key. Es behält die sieben jüngsten Sätze und entfernt ältere automatisch.
+:::
+
+### Schritt 2: Backup lokal sichern
+
+::: {.callout-important title="Das Backup liegt auf demselben Server"}
+Solange das Backup nur auf dem Server liegt, ist es bei einem Server-Verlust ebenfalls weg. Wer Workflows behalten möchte, kopiert den Ordner regelmäßig auf den eigenen Rechner.
+:::
+
+```bash
+scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
+```
+
+Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum.
+
+### Schritt 3: Tägliches Backup per Cron
+
+Für einen automatischen täglichen Lauf um 03:00 Uhr richten wir auf dem Server einen Cron-Eintrag ein:
+
+```bash
+( crontab -l 2>/dev/null; echo "0 3 * * * /opt/n8n/scripts/backup.sh >> /var/log/n8n-backup.log 2>&1" ) | crontab -
+```
+
+::: {.callout-note}
+Der Ausdruck `0 3 * * *` steht für „täglich um 03:00 Uhr". Die Ausgabe landet in `/var/log/n8n-backup.log`, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.
+:::
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| `permission denied` beim Skript | Skript nicht ausführbar oder falscher Nutzer | als `root` ausführen, Pfad `/opt/n8n/scripts/backup.sh` prüfen |
+| Speicher voll | alte Backups oder viele Ausführungsdaten | `df -h` prüfen, Ausführungsdaten in n8n prunen |
+| `scp: no such file` | falscher Pfad auf dem Server | Pfad `/opt/n8n/backups` kontrollieren |
+
+## Kontrollpunkt
+
+- ein Backup manuell erzeugen und den Inhalt benennen
+- den Backup-Satz per `scp` lokal sichern
+- ein tägliches Backup per Cron einrichten

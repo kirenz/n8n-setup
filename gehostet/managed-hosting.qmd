@@ -1,0 +1,46 @@
+# Managed Hosting nutzen
+
+Managed Hosting liegt zwischen der Cloud und dem eigenen Server. Ein spezialisierter Anbieter betreibt eine eigenständige n8n-Instanz; die Datenkontrolle einer eigenen Instanz bleibt, die Server-Pflege entfällt.
+
+## Wie Managed Hosting funktioniert
+
+Anbieter wie InstaPods stellen eine dedizierte n8n-Instanz bereit und kümmern sich um Server, Updates und Backups. Im Unterschied zur n8n Cloud handelt es sich um eine eigenständige Self-Host-Instanz, oft auf einem wählbaren europäischen Standort. Damit eignet sich dieser Weg für Teams, die die Kostenstruktur und Datenlage von Self-Hosting nutzen möchten, ohne den Server-Betrieb selbst zu übernehmen.
+
+## Eigenschaften
+
+- ab etwa 7 € im Monat für eine Basis-Instanz
+- keine Lizenzkosten und keine eigene Server-Pflege
+- Daten auf europäischen Servern, je nach Anbieter wählbar
+- begrenzte Anpassbarkeit gegenüber einer eigenen Maschine
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Anbieter auswählen
+
+Bei der Auswahl helfen vier Kriterien: der Standort der Server (für europäische Anforderungen ein EU-Standort), der Preis, die angebotene n8n-Version und die Backup-Praxis des Anbieters.
+
+### Schritt 2: Instanz bestellen und Adresse festlegen
+
+Nach der Bestellung richtet der Anbieter die Instanz ein und stellt eine Adresse bereit. Je nach Anbieter lässt sich eine eigene Domain hinterlegen.
+
+### Schritt 3: Editor öffnen und Owner-Konto anlegen
+
+Unter der bereitgestellten Adresse öffnet sich der Editor. Das Owner-Konto wird wie bei jeder n8n-Instanz beim ersten Aufruf angelegt.
+
+## Wann Managed Hosting passt
+
+::: {.callout-tip title="Datenkontrolle ohne Server-Betrieb"}
+Managed Hosting ist eine passende Wahl, wenn sensible Daten verarbeitet werden, aber keine IT-Kapazität für den Server-Betrieb vorhanden ist. Die Daten liegen in einer eigenständigen Instanz auf wählbarem EU-Standort, ohne dass Linux, Docker oder TLS selbst betreut werden müssen.
+:::
+
+## Grenzen
+
+::: {.callout-note}
+Gegenüber einer eigenen Maschine ist die Anpassbarkeit begrenzt: kein freier Zugriff auf das Betriebssystem, keine beliebigen System-Pakete. Wer volle Kontrolle und Anpassbarkeit braucht, etwa um zusätzliche Dienste neben n8n zu betreiben, richtet eine eigene Instanz ein.
+:::
+
+## Kontrollpunkt
+
+- Managed Hosting von der n8n Cloud und vom eigenen Server abgrenzen
+- die vier Kriterien für die Anbieterwahl benennen
+- einordnen, für welche Situation Managed Hosting passt

@@ -1,0 +1,66 @@
+# Der EU AI Act für eigene Workflows
+
+Der EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft; die meisten Pflichten gelten gestaffelt zwischen 2025 und 2027 [@euaiact2024]. Für die eigene Arbeit mit n8n ist weniger der Gesetzestext entscheidend als die Risiko-Logik dahinter, denn sie lässt sich gut auf konkrete Workflows übertragen.
+
+## Use Case statt Tool
+
+Der AI Act reguliert, wofür ein KI-System eingesetzt wird, nicht welches Werkzeug dahintersteht. n8n als Plattform ist neutral; ein Workflow, der ein Sprach-Modell nutzt, kann erlaubt oder verboten sein, je nach Anwendungsfall.
+
+## Die vier Risikoklassen
+
+### Verbotene Praktiken
+
+Bestimmte Anwendungen sind untersagt, etwa Social Scoring von Bürgerinnen und Bürgern, Emotionserkennung am Arbeitsplatz oder in Bildungseinrichtungen sowie manipulative Systeme, die Schwächen gezielt ausnutzen. Solche Workflows dürfen gar nicht erst gebaut werden.
+
+### Hochrisiko
+
+Hier liegt der größte Teil der praktisch relevanten Pflichten. Typische Anwendungsfälle, die in n8n entstehen können:
+
+| Bereich | Typischer Workflow |
+|---|---|
+| Beschäftigung | Bewerbungs-Scoring oder Auswahl-Automation |
+| Bildung | automatisierte Bewertung von Prüfungsleistungen |
+| Zugang zu Diensten | Kreditvergabe- oder Tarif-Scoring |
+| Strafverfolgung | Betrugs-Erkennung mit Folgen für Betroffene |
+
+Für solche Systeme gelten unter anderem ein Risikomanagement, eine Daten-Governance, die Protokollierung der Verarbeitung, technische Dokumentation und eine menschliche Aufsicht.
+
+### Begrenztes Risiko
+
+Workflows, die KI nutzen, ohne in die Hochrisiko-Klasse zu fallen, brauchen oft Transparenz: Nutzer müssen erkennen können, dass sie mit KI interagieren. Beispiele sind ein Chatbot, der sich als KI zu erkennen gibt, oder generierte Texte und Bilder, die als solche gekennzeichnet werden.
+
+### Minimales Risiko
+
+Die Mehrheit der Workflows, etwa Spam-Filterung, das automatische Verschlagworten eingehender E-Mails oder eine Newsletter-Personalisierung. Hier gelten keine spezifischen AI-Act-Pflichten, die DSGVO bleibt selbstverständlich gültig.
+
+## Protokollierung und das Execution-Log
+
+Hochrisiko-Systeme müssen ihre Verarbeitungsschritte protokollieren. n8n bringt das von Haus aus mit: Jede Workflow-Ausführung wird im Execution-Log gespeichert, mit Eingaben, Ergebnissen und Fehlern je Knoten.
+
+::: {.callout-note}
+Für Hochrisiko-Workflows lohnt es sich, die Aufbewahrungsdauer des Execution-Logs auf den geforderten Zeitraum anzuheben, in n8n über die Variable `EXECUTIONS_DATA_PRUNE_MAX_AGE`.
+:::
+
+## Menschliche Aufsicht in n8n
+
+Hochrisiko-Workflows brauchen einen Punkt, an dem ein Mensch eingreift. n8n bietet dafür mehrere Muster:
+
+- ein Approval-Schritt, der per Nachricht in Slack oder Teams zur Freigabe auffordert und erst nach einem Klick weiterläuft
+- eine Review-Warteschlange, in der Vorschläge gesammelt werden und ein Mensch über jeden Fall entscheidet
+- ein Schwellenwert, der nur eindeutige Fälle automatisch verarbeitet und Grenzfälle zur Prüfung eskaliert
+
+::: {.callout-tip title="Den Oversight-Punkt sichtbar machen"}
+Für einen typischen Hochrisiko-Workflow lohnt es sich, den Punkt der menschlichen Aufsicht ausdrücklich im Workflow zu markieren, statt ihn implizit zu lassen. So bleibt nachvollziehbar, wo eine Entscheidung des Modells überprüft wird.
+:::
+
+## Drei Fragen vor jedem produktiven Workflow
+
+1. Welcher Hochrisiko-Kategorie ähnelt der Anwendungsfall? Wenn eine passt, die entsprechenden Pflichten prüfen.
+2. Erkennt der Nutzer, dass KI im Spiel ist? Wenn nein, Transparenz nachrüsten.
+3. Wo greift ein Mensch ein, wenn das Modell falsch liegt? Diesen Punkt konkret im Workflow markieren.
+
+## Kontrollpunkt
+
+- erklären, warum der AI Act den Use Case und nicht das Werkzeug reguliert
+- die vier Risikoklassen an je einem n8n-Beispiel benennen
+- einen Punkt für menschliche Aufsicht in einem Workflow verorten

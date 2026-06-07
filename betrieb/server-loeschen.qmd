@@ -1,0 +1,52 @@
+# Server geordnet beenden
+
+Wird der Server nicht mehr gebraucht, gehört er gelöscht. Ungenutzte Server kosten Geld und vergrößern die Angriffsfläche. Vorher sichern wir, was bleiben soll, denn das Löschen ist unwiderruflich.
+
+## Zielbild
+
+Alles Wichtige ist lokal gesichert, danach ist der Server in der Hetzner-Console gelöscht.
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Workflows als JSON exportieren
+
+Im n8n-Editor öffnet das Drei-Punkte-Menü oben rechts die Option „Download". Damit wird der Workflow als JSON-Datei gesichert. Diese Datei ist portierbar und lässt sich später in eine neue Instanz importieren.
+
+::: {.callout-note}
+Beim JSON-Export werden die Credentials bewusst nicht mitgegeben. Wer auch sie behalten möchte, braucht zusätzlich das Voll-Backup aus dem nächsten Schritt.
+:::
+
+### Schritt 2: Voll-Backup mit Encryption-Key sichern
+
+```bash
+ssh root@<server-ip>
+/opt/n8n/scripts/backup.sh
+exit
+
+scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
+```
+
+::: {.callout-important title="Ohne Encryption-Key sind die Credentials wertlos"}
+Im lokal gesicherten Ordner liegen der Postgres-Dump, der n8n-Daten-Tarball und die `env-…backup` mit dem Encryption-Key. Die Schlüssel-Datei muss zusammen mit dem Dump aufbewahrt werden, idealerweise an einem sicheren Ort wie einem Passwort-Manager. Geht der Key verloren, lassen sich die im Dump enthaltenen Credentials nicht mehr entschlüsseln.
+:::
+
+### Schritt 3: Server in der Console löschen
+
+In der Hetzner-Console unter **Server → Server auswählen → Aktionen → Löschen** den Server-Namen zur Bestätigung eintippen und löschen. Der Server, alle Volumes und alle Daten werden dabei entfernt.
+
+## Aufräumen
+
+- Die Hetzner Cloud Firewall lässt sich löschen, wenn kein weiterer Server sie nutzt.
+- Der SSH-Schlüssel kann bleiben; er ist kein Datenleck.
+
+## Restore in eine neue Instanz
+
+::: {.callout-note title="Kurzfassung für den Wiederherstellungs-Fall" collapse="true"}
+Auf einem frischen, mit dieser Anleitung aufgesetzten Server lässt sich der Stand zurückspielen: den Stack mit `docker compose down` stoppen, die gesicherte `env-…backup` als `.env` einspielen und die `DOMAIN` auf die neue IP anpassen, Postgres starten, den Dump mit `zcat … | docker compose exec -T postgres psql -U n8n n8n` einspielen, danach das n8n-Daten-Volume aus dem Tarball zurückspielen und die Container starten. Externe OAuth-Verbindungen müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-URL ändert.
+:::
+
+## Kontrollpunkt
+
+- Workflows als JSON exportieren
+- ein Voll-Backup samt Encryption-Key lokal sichern
+- den Server in der Console löschen und wissen, was sich später wiederherstellen lässt

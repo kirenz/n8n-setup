@@ -1,0 +1,9 @@
+# Lokal auf dem eigenen Rechner {.unnumbered}
+
+Der schnellste Weg zu einer laufenden n8n-Instanz führt über den eigenen Rechner. Es entstehen keine Kosten, kein Server muss gemietet werden, und nichts verlässt das eigene Gerät. Dieser Weg eignet sich, um die Oberfläche kennenzulernen und Workflows zu entwickeln, bevor sie auf einen dauerhaften Betrieb umziehen.
+
+Wir werden:
+
+- n8n mit einem einzigen Befehl per `npx` starten und den Editor öffnen
+- n8n dauerhaft mit Docker betreiben, sodass Workflows und Einstellungen erhalten bleiben
+- den Unterschied zwischen einem schnellen Test und einer dauerhaften lokalen Instanz einordnen

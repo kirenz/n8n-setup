@@ -46,7 +46,7 @@ write_files:
 
       set -euo pipefail
 
-      REPO_URL="https://github.com/kirenz/n8n-hetzner-kurs.git"
+      REPO_URL="https://github.com/kirenz/n8n-setup.git"
       REPO_DIR="/opt/n8n"
       ENV_FILE="${REPO_DIR}/.env"
       ENV_EXAMPLE="${REPO_DIR}/.env.example"

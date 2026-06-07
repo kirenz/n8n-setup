@@ -1,0 +1,101 @@
+# Server anlegen und starten
+
+Jetzt entsteht der Server. Hetzner stellt eine virtuelle Maschine bereit; ein hinterlegtes Cloud-Init-Skript richtet darauf den kompletten Stack ein. Nach dem Start müssen wir uns nicht einmal einloggen, um n8n zum Laufen zu bringen.
+
+## Zielbild
+
+Ein laufender Server bei Hetzner, der sich selbst eingerichtet hat und unter einer Adresse der Form `https://1-2-3-4.sslip.io` erreichbar ist. Die Stationen:
+
+- Konto und SSH-Schlüssel vorbereiten
+- Firewall anlegen
+- Server mit Cloud-Init erstellen
+- URL ermitteln
+
+## Voraussetzungen
+
+- ein Konto bei [console.hetzner.cloud](https://console.hetzner.cloud)
+- ein SSH-Schlüssel, in der Hetzner-Console hinterlegt
+- Budget von etwa 4 bis 7 € im Monat; der Server lässt sich jederzeit wieder löschen
+
+::: {.callout-note title="SSH-Schlüssel anlegen"}
+Ein SSH-Schlüssel besteht aus einem privaten und einem öffentlichen Teil. Wer noch keinen hat, erzeugt ihn lokal mit `ssh-keygen -t ed25519`. Der öffentliche Teil (Datei `~/.ssh/id_ed25519.pub`) wird in der Hetzner-Console unter „SSH-Keys" hinterlegt, der private Teil bleibt auf dem eigenen Rechner.
+:::
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Firewall anlegen
+
+In der Hetzner-Console unter **Firewalls → Firewall erstellen**:
+
+- Name: `n8n-firewall`
+- eingehende Regeln: nur SSH (22), HTTP (80) und HTTPS (443), jeweils von überall
+- ausgehende Regeln: alle erlauben
+
+::: {.callout-note}
+Diese Firewall arbeitet auf Provider-Ebene und blockiert Verkehr, bevor er den Server erreicht. Die zweite Schicht (UFW) richtet das Cloud-Init-Skript später automatisch auf dem Server selbst ein.
+:::
+
+### Schritt 2: Server erstellen
+
+In der Hetzner-Console unter **Server → Server erstellen** die folgenden Einstellungen wählen:
+
+| Einstellung | Wert |
+|---|---|
+| Standort | Nürnberg oder Falkenstein |
+| Image | Ubuntu 24.04 |
+| Server-Typ | CPX11 (2 vCPU, 2 GB RAM) als Minimum, oder CPX21 (4 GB RAM), wenn KI-Knoten geplant sind |
+| SSH-Key | den hinterlegten Schlüssel auswählen |
+| Firewall | `n8n-firewall` aus Schritt 1 |
+| Cloud-Config | den kompletten Inhalt der Datei `cloud-init.yaml` einfügen |
+| Name | frei wählbar, etwa `n8n-kurs` |
+
+::: {.callout-important title="Cloud-Config nicht vergessen"}
+Der entscheidende Schritt ist das Feld „Cloud-Config" (manchmal unter „Erweitert" zu finden). Dort wird der vollständige Inhalt der Datei `cloud-init.yaml` aus diesem Repo eingefügt. Ohne diesen Inhalt startet zwar ein leerer Server, aber n8n wird nicht eingerichtet.
+:::
+
+::: {.callout-tip title="CPX11 oder CPX21?"}
+Für reine Workflows ohne KI genügt der kleinere CPX11. Sobald KI-Knoten mit größeren Datenmengen im Spiel sind, sind 2 GB RAM schnell knapp; dann ist der CPX21 mit 4 GB die ruhigere Wahl. Ein späterer Wechsel auf einen größeren Typ ist in der Console ohne Datenverlust möglich.
+:::
+
+### Schritt 3: Provisioning abwarten
+
+Nach dem Start richtet sich der Server in etwa 5 bis 8 Minuten selbst ein. In dieser Zeit installiert er Docker, klont das Repo, erzeugt die Geheimnisse und startet die Container.
+
+::: {.callout-tip title="Was im Hintergrund läuft" collapse="true"}
+Das Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UFW-Firewall einrichten, das Repo nach `/opt/n8n` klonen, die Server-IP ermitteln und daraus die sslip.io-Domain bilden. Anschließend erzeugt es mit `openssl rand` ein Datenbank-Passwort und den Encryption-Key, schreibt sie in die `.env`-Datei und startet den Stack mit `docker compose up`. Die Schritte sind so geschrieben, dass ein erneuter Lauf bestehende Geheimnisse nicht überschreibt.
+:::
+
+### Schritt 4: URL ermitteln
+
+Sobald der Server läuft, loggen wir uns einmal per SSH ein. Die Begrüßungsnachricht zeigt die fertige URL:
+
+```bash
+ssh root@<server-ip>
+```
+
+Die Ausgabe nennt die Adresse, etwa:
+
+```
+n8n läuft. Aufrufen unter:
+  https://1-2-3-4.sslip.io
+```
+
+Erscheint die Begrüßung noch nicht, läuft das Provisioning noch. Der Stand lässt sich prüfen mit:
+
+```bash
+tail -n 30 /var/log/n8n-setup.log
+```
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| keine Begrüßungs-URL nach dem Login | Provisioning läuft noch | `sudo cloud-init status --long` prüfen, dann abwarten |
+| Setup ist gescheitert | Fehler im Setup-Skript | `sudo tail -n 100 /var/log/n8n-setup.log` zeigt den Schritt |
+| SSH meldet „connection refused" | Server noch im Boot-Vorgang | eine Minute warten, IP-Adresse prüfen |
+
+## Kontrollpunkt
+
+- eine Provider-Firewall mit drei erlaubten Ports anlegen
+- einen Server mit hinterlegtem Cloud-Init starten
+- die Instanz-URL über SSH oder das Setup-Log ermitteln

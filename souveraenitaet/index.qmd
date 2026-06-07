@@ -1,0 +1,13 @@
+# Souveränität, Datenschutz und EU AI Act {.unnumbered}
+
+Eine Instanz einzurichten ist das eine, sie verantwortungsvoll zu betreiben das andere. Wer personenbezogene Daten verarbeitet oder KI-Knoten einsetzt, bewegt sich in einem rechtlichen Rahmen. Dieses Modul ordnet die wichtigsten Punkte ein: Datensouveränität und DSGVO beim Hosting sowie die Risiko-Logik des EU AI Act für eigene Workflows.
+
+::: {.callout-note}
+Diese Kapitel sind kein Rechtsgutachten. Sie geben den Kontext für ein verantwortungsvolles Setup; im Zweifel rechtlichen Rat einholen.
+:::
+
+Wir werden:
+
+- die Datenschutz-Fragen beim Hosting einordnen (Auftragsverarbeitung, Drittlandtransfer, Telemetrie)
+- souveränere Alternativen für KI-Knoten benennen
+- die vier Risikoklassen des EU AI Act auf typische n8n-Workflows übertragen

@@ -1,0 +1,48 @@
+# Einführung {.unnumbered}
+
+Bevor wir die erste Instanz einrichten, lohnt sich ein Überblick über die Bausteine, mit denen alle vier Wege arbeiten. Jeder Baustein hat eine bestimmte Rolle. Diese Einführung erklärt die zentralen Begriffe in je zwei Sätzen, damit klar ist, worauf die folgenden Module aufbauen.
+
+## Welcher Weg passt?
+
+Die vier Wege unterscheiden sich vor allem darin, wie viel wir selbst betreiben und wo die Daten liegen. Die folgende Übersicht ordnet sie ein:
+
+| Weg | Aufwand | Kosten pro Monat | Datenkontrolle | Gut geeignet für |
+|---|---|---|---|---|
+| Lokal (eigener Rechner) | sehr gering | keine | vollständig, lokal | Ausprobieren, Lernen, Entwicklung |
+| n8n Cloud | gering | ab ca. 24 € | beim Anbieter | schneller Start ohne Technik |
+| Managed Hosting | gering | ab ca. 7 € | eigene Instanz, fremd betrieben | Datenkontrolle ohne Server-Pflege |
+| Eigener Hetzner-Server | mittel | ca. 4 bis 7 € | vollständig | produktiver, souveräner Betrieb |
+
+Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.
+
+## Instanz
+
+Eine Instanz ist eine laufende Kopie von n8n, erreichbar über den Browser. Unabhängig vom gewählten Weg ist das Ergebnis immer eine Instanz mit einem Editor, in dem Workflows entstehen.
+
+## Container und Docker
+
+Ein Container bündelt eine Anwendung mit allem, was sie zum Laufen braucht, in eine isolierte, immer gleich startende Einheit. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.
+
+## Image und Tag
+
+Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa `2.20.6`) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.
+
+## Reverse Proxy
+
+Ein Reverse Proxy nimmt Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.
+
+## TLS und Let's Encrypt
+
+TLS ist die Verschlüsselung hinter dem `https` in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Let's Encrypt ist eine kostenlose Zertifizierungsstelle, von der Caddy die nötigen Zertifikate automatisch bezieht.
+
+## Domain und sslip.io
+
+Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa `n8n.example.com`). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form `1-2-3-4.sslip.io` automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup.
+
+## Credentials und Encryption-Key
+
+Credentials sind Zugangsdaten zu externen Diensten (API-Schlüssel, Passwörter, OAuth-Token), die n8n getrennt von den Workflows speichert. Sie werden mit dem Encryption-Key verschlüsselt abgelegt; geht dieser Schlüssel verloren, sind alle gespeicherten Credentials unbrauchbar.
+
+## Provisioning und Cloud-Init
+
+Provisioning bezeichnet das automatische Einrichten eines frischen Servers, vom Installieren der Pakete bis zum laufenden Dienst. Cloud-Init ist der Standard, mit dem ein Server beim ersten Start ein hinterlegtes Skript ausführt; im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.

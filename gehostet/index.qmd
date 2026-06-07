@@ -1,0 +1,9 @@
+# Gehostete Optionen ohne eigene Server-Pflege {.unnumbered}
+
+Nicht jeder Betrieb braucht einen selbst verwalteten Server. Zwei Wege überlassen den laufenden Betrieb einem Anbieter: die n8n Cloud, betrieben von n8n selbst, und Managed Hosting, bei dem ein spezialisierter Anbieter eine eigenständige Instanz für seine Kunden betreibt. Beide Wege sparen die Server-Pflege, unterscheiden sich aber darin, wo die Daten liegen und wie viel sich anpassen lässt.
+
+Wir werden:
+
+- ein Konto in der n8n Cloud anlegen und die erste Instanz öffnen
+- einordnen, wann Managed Hosting die passende Wahl ist, und einen Anbieter auswählen
+- die laufenden Kosten und die Datenkontrolle beider Wege vergleichen

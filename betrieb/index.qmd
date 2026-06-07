@@ -1,0 +1,9 @@
+# Betrieb und Pflege {.unnumbered}
+
+Eine selbst betriebene Instanz braucht etwas laufende Pflege. Drei Routinen halten sie gesund: regelmäßige Backups, kontrollierte Updates und ein geordnetes Beenden, wenn der Server nicht mehr gebraucht wird. Dieses Modul betrifft vor allem den Hetzner-Weg; bei der n8n Cloud und beim Managed Hosting übernimmt der Anbieter diese Aufgaben.
+
+Wir werden:
+
+- Backups einrichten und zusätzlich lokal sichern
+- die Instanz kontrolliert auf eine neue Version heben
+- den Server geordnet beenden, ohne Workflows oder Schlüssel zu verlieren

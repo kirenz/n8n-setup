@@ -1,0 +1,53 @@
+# Aktualisieren
+
+Updates sind ein bewusster Schritt. Die Versionen sind festgelegt, damit jede Installation dieselbe Fassung nutzt; ein Update ändert den gewünschten Tag und zieht die neue Version kontrolliert nach. Davor wird automatisch gesichert.
+
+## Zielbild
+
+Eine aktualisierte Instanz auf einer bewusst gewählten Version, mit einem frischen Backup als Sicherheitsnetz.
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Zielversion wählen
+
+Vor dem Update prüfen wir, welche Version aktuell stabil ist. Die n8n-Release-Notes und die Tag-Übersicht auf Docker Hub zeigen die verfügbaren Fassungen.
+
+### Schritt 2: Tag in der .env setzen
+
+```bash
+ssh root@<server-ip>
+cd /opt/n8n
+nano .env
+```
+
+In der `.env` wird der gewünschte Tag eingetragen, etwa `N8N_IMAGE_TAG=2.21.0`. Die Datenbank- und Caddy-Tags lassen sich auf dieselbe Weise anheben.
+
+### Schritt 3: Update-Skript ausführen
+
+```bash
+/opt/n8n/scripts/update.sh
+```
+
+::: {.callout-tip title="Was das Skript tut"}
+Das Skript zieht zuerst ein vollständiges Backup, zeigt dann die in der `.env` gesetzten Tags an und führt anschließend `docker compose pull` und `docker compose up -d` aus. Der gewünschte Stand bleibt in der `.env` dokumentiert, das Update ist damit reproduzierbar.
+:::
+
+## Warum nicht latest und nicht automatisch
+
+::: {.callout-important title="Geplant statt automatisch"}
+Kein Image trägt den Tag `latest`. Automatische Updates im laufenden Betrieb könnten unbemerkt eine Version mit Breaking Changes einspielen und Workflows stören. Deshalb ist jedes Update ein geplanter Schritt mit einem Backup davor; so bleibt im Fehlerfall ein klarer Weg zurück.
+:::
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| Container startet nach dem Update nicht | Breaking Change oder offene Migration | Logs prüfen, im Zweifel den vorherigen Tag in `.env` setzen und erneut `docker compose up -d` |
+| `pull` schlägt fehl | Tag existiert nicht | Schreibweise des Tags auf Docker Hub abgleichen |
+| Update bricht vor dem Pull ab | Pre-Backup gescheitert | Speicherplatz und Backup-Pfad prüfen |
+
+## Kontrollpunkt
+
+- eine Zielversion bewusst auswählen
+- den Image-Tag in der `.env` setzen und das Update-Skript ausführen
+- begründen, warum Updates geplant statt automatisch erfolgen

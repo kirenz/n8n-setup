@@ -1,0 +1,59 @@
+# Schnelltest mit npx
+
+Für einen ersten Blick in n8n genügt ein einziger Befehl. Ohne Installation, ohne Konto und ohne Server startet n8n direkt auf dem eigenen Rechner.
+
+## Zielbild
+
+Am Ende läuft n8n lokal und der Editor ist im Browser unter `http://localhost:5678` geöffnet. Die Stationen auf dem Weg dorthin:
+
+- Node.js ist auf dem Rechner vorhanden
+- ein Befehl lädt n8n und startet es
+- der Browser zeigt den Editor
+
+## Voraussetzung: Node.js
+
+`npx` gehört zu Node.js. Wer im Terminal `node --version` ausführt und eine Versionsnummer ab 18 sieht, ist startklar.
+
+::: {.callout-note}
+Fehlt Node.js, lässt es sich über die LTS-Version von [nodejs.org](https://nodejs.org) installieren. LTS steht für „Long Term Support" und bezeichnet die Fassung mit der längsten Pflegezusage, also die richtige Wahl für einen stabilen Start.
+:::
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: n8n starten
+
+```bash
+npx n8n
+```
+
+::: {.callout-tip title="Was npx hier macht"}
+`npx` lädt n8n einmalig herunter und führt es aus, ohne es dauerhaft zu installieren. Der erste Start dauert ein bis zwei Minuten, weil die Pakete geladen werden. Danach erscheint in der Terminal-Ausgabe die Zeile, dass der Editor erreichbar ist.
+:::
+
+### Schritt 2: Editor öffnen
+
+Sobald das Terminal `Editor is now accessible via …` meldet, rufen wir im Browser `http://localhost:5678` auf. Beim ersten Aufruf legt n8n ein Owner-Konto an, also E-Mail-Adresse und Passwort. Diese Anmeldedaten gelten nur für diese lokale Instanz.
+
+### Schritt 3: n8n wieder beenden
+
+Im Terminal beenden wir n8n mit `Strg + C` (auf macOS `Ctrl + C`). Der Prozess hält an, und der Rechner ist wieder frei.
+
+## Wo die Daten liegen
+
+::: {.callout-note}
+n8n legt seine Daten im Ordner `~/.n8n` im Heimatverzeichnis ab, standardmäßig in einer SQLite-Datei. Diese Daten bleiben zwischen den Starts erhalten, solange der Ordner besteht. Für einen dauerhaften Betrieb eignet sich der Weg über Docker, der die Daten in einem klar benannten Volume hält.
+:::
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| `command not found: npx` | Node.js fehlt | Node.js LTS von nodejs.org installieren |
+| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit anderem Port starten: `N8N_PORT=5679 npx n8n` |
+| Browser zeigt nichts an | n8n startet noch | warten, bis das Terminal „Editor is now accessible" meldet |
+
+## Kontrollpunkt
+
+- n8n lokal mit einem einzigen Befehl starten
+- den Editor unter `localhost:5678` öffnen und ein Owner-Konto anlegen
+- die Instanz beenden und wissen, wo die Daten liegen

@@ -1,140 +1,179 @@
-# AGENTS.md
+# AGENTS.md — n8n einrichten (Buch + Infrastruktur)
 
-Hinweise für Claude Code (oder andere LLM-basierte Assistenten), die in
-diesem Repo arbeiten. Stand: 2026-05-09.
+Dieses Dokument ist die **kanonische Quelle der Wahrheit** für jede KI, die in
+diesem Repo arbeitet. Wenn andere Dokumente widersprechen, gilt AGENTS.md.
 
-## Was dieses Repo ist
+Das Repo vereint zwei Welten:
 
-Begleitendes Setup-Repo für Kurse und Trainings von Jan Kirenz zum Thema
-n8n auf Hetzner Cloud. Studierende sollen in <10 Minuten eine
-DSGVO-konforme, produktionsähnliche n8n-Instanz aufsetzen können – und
-dabei die Architektur verstehen.
+1. **Das Quarto-Buch** „n8n einrichten" (Stil-Vorbild: `kurse/n8n-grundlagen`).
+2. **Die kursbegleitende Infrastruktur** (lauffähiger Hetzner-Stack), deren
+   Briefing in [PROJECT.md](PROJECT.md) steht.
 
-Das volle Briefing liegt in [PROJECT.md](PROJECT.md). Architektur-
-Entscheidungen (warum Caddy, warum sslip.io, warum Versionspinning) sind
-dort begründet.
-
-## Locked-in Decisions (nicht ohne Rückfrage ändern)
-
-| Entscheidung                              | Warum                                                     |
-| ----------------------------------------- | --------------------------------------------------------- |
-| n8n auf 2.x mit Patch-Pinning (aktuell 2.20.6) | Reproduzierbarkeit über das Semester, gleichzeitig auf aktueller Major-Version |
-| Caddy mit `on_demand` TLS und Allowlist   | Schutz vor Cert-Flooding fremder Domains                  |
-| sslip.io statt eigener Domain              | Studierende ohne eigenes Setup sollen sofort arbeiten können |
-| Postgres statt SQLite                      | Produktionsnaher Setup                                    |
-| Hetzner Cloud Firewall + UFW              | Defense-in-Depth                                          |
-| Lokales Backup (kein S3/StorageBox)       | v1-Scope; Studierende sichern Backups per `scp` nach lokal |
-| Sprache: Deutsch, indirekte Ansprache      | Convention für alle Kirenz-Lehrrepos                       |
+---
 
 ## Repo-Struktur
 
 ```
-n8n-hetzner-kurs/
-├── README.md                 ← Studierenden-Tutorial
-├── AGENTS.md                 ← diese Datei
-├── PROJECT.md                ← vollständiges Briefing
-├── LICENSE                   ← MIT
-├── .gitignore
-├── cloud-init.yaml           ← Hetzner User-Data (Provisioning)
-├── docker-compose.yml        ← n8n + Postgres + Caddy
-├── Caddyfile                 ← Reverse Proxy mit on_demand TLS
-├── .env.example              ← Konfig-Template, ausführlich kommentiert
-├── scripts/
-│   ├── backup.sh
-│   └── update.sh
-└── docs/
-    ├── architektur.md
-    ├── dsgvo.md
-    ├── eu-ai-act.md
-    ├── troubleshooting.md
-    └── server-loeschen.md
+.
+├── _quarto.yml               # Buch-Build-Konfiguration (project: book)
+├── AGENTS.md                 # Dieses Regelwerk
+├── PROJECT.md                # Infra-Briefing (Architektur-Entscheidungen)
+├── README.md                 # Repo-Beschreibung
+├── book-theme.scss           # Hausstil (Schwester-Datei zu n8n-grundlagen)
+├── references.bib            # Bibliografie für Buch-Zitate
+│
+│  # — Buch-Welt (kanonische Quelle) —
+├── index.qmd                 # Willkommen
+├── introduction.qmd          # Bausteine-Glossar + Wege-Orientierung
+├── lokal/                    # Modul: npx, Docker
+├── gehostet/                 # Modul: n8n Cloud, Managed Hosting
+├── hetzner/                  # Modul: Architektur, Server anlegen, Einrichten
+├── betrieb/                  # Modul: Backups, Aktualisieren, Server löschen
+├── souveraenitaet/           # Modul: Datenschutz, EU AI Act
+│
+│  # — Kursbegleitende Infrastruktur (kein Buch-Inhalt) —
+├── cloud-init.yaml           # Hetzner-Provisioning
+├── docker-compose.yml        # n8n + Postgres + Caddy
+├── Caddyfile                 # Reverse Proxy, on_demand TLS
+├── .env.example              # Konfig-Template, kommentiert
+├── scripts/                  # backup.sh, update.sh
+└── docs/                     # Quell-Notizen (architektur, dsgvo, eu-ai-act, …)
 ```
 
-## Konventionen
+**Modul-Slug**: kebab-case, beschreibend, kein „modul-XX"-Präfix (Reihenfolge
+steht in `_quarto.yml`). **Lesson-Slug**: kebab-case, beschreibt das Thema.
 
-- **Sprache:** Deutsch in Kommentaren, Doku, Commit Messages. Indirekte
-  Ansprache („Server löschen") statt „Sie löschen den Server" oder
-  „Lösche den Server".
-- **Code-Kommentare:** über dem Code-Block, erklären das *Warum*, nicht
-  das *Was*.
-- **Versionspinning:** alle Container-Images mit konkretem Patch-Tag.
-  Keine `latest`-Tags, kein `1`-Major-Tag.
-- **Secrets:** niemals einchecken. `.env` ist in `.gitignore`. Cloud-Init
-  generiert Secrets beim ersten Boot mit `openssl rand`.
-- **Default-deny:** Firewalls ablehnend, Ports nur öffnen wenn nötig.
-  Postgres und n8n haben kein Port-Mapping nach außen.
+**Folien-Welt**: Aktuell ist nur das Buch aufgesetzt (Entscheidung des Nutzers).
+Das Repo ist mono-repo-tauglich angelegt; eine `slides/`-Welt mit
+`scripts/generate_slides.py` kann später nach dem Vorbild von `n8n-grundlagen`
+ergänzt werden. **Buch-First-Prinzip**: Erst das Buch-Kapitel, dann ein Deck.
 
-## Häufige Aufgaben
+---
 
-### Vor jedem Semester: Versionen prüfen
+## Verbindliche Buch-Stilregeln
+
+### 1. Sprach-Stil: Wir-Form
+
+**In sichtbarem Buch-Text** durchgängig die **Wir-Form** („Wir legen ein
+Volume an…"). Das ist der bewusste Unterschied zum Infra-Code, wo in den
+Kommentaren die indirekte Ansprache gilt.
+
+| Verwenden | Vermeiden |
+|---|---|
+| „Wir rufen die URL im Browser auf." | „Du rufst…" / „Sie rufen…" |
+| „Wir sichern die `.env` lokal." | „Man sichert…" |
+| „Drei Container reichen für den Start." | (auch okay, beschreibend ohne Anrede) |
+
+### 2. Kein langer Gedankenstrich
+
+In deutschem Fließtext **kein Em-Dash (—) und kein En-Dash (–)**. Stattdessen
+Nebensätze, Kommas, Klammern oder Punkte. Für Zahlenbereiche „4 bis 7 €".
+
+### 3. Callout-Disziplin
+
+Drei Typen sind Standard: `.callout-tip` (Hinweise, Faustregeln, Analogien),
+`.callout-note` (Hintergrund, Querverweise), `.callout-important`
+(Pflicht-Aufmerksamkeit, Sicherheit, Fallstricke). Pro Kapitel **maximal 4 bis
+5 Callouts**. **Title ist Pflicht** bei `.callout-tip` und `.callout-important`.
+Längere Analogien mit `collapse="true"` einklappen.
+
+### 4. Analogien aus der Berufsalltagswelt
+
+Werkstatt, Büro, Empfang/Archiv, Bibliothek, Labor, Kontrollraum. **Nicht**
+geeignet: Märchen, Zauberei, Cartoon-Tiere, Superhelden, Kindergarten-Beispiele.
+Eine Analogie pro Begriff genügt.
+
+### 5. Pro Lesson ein Kapitel
+
+**Eine Lesson = ein `.qmd` = später ein Deck.** Pro Kapitel ein H1, mehrere H2,
+optional H3. **Lernzeit 5 bis 15 Minuten.**
+
+### 6. Hands-on-Kapitelstruktur
+
+Kapitel, in denen etwas selbst gebaut wird, folgen dieser Reihenfolge:
+
+1. Kurze Einleitung (1 bis 2 Sätze)
+2. `## Zielbild` (Ergebnis plus Liste der Stationen)
+3. `## Schritt für Schritt selbst bauen` mit `### Schritt 1`, `### Schritt 2`, …
+4. `## Fehler diagnostizieren` (Symptom-Tabelle: Symptom, Ursache, nächster Schritt)
+5. `## Kontrollpunkt` (Lernziele in Verb-Infinitiv-Form)
+
+**Theorie steht in Callouts neben dem jeweiligen Schritt**, nicht in
+Vorab-Theorie-Sektionen. Vorbild: `hetzner/server-anlegen.qmd`.
+
+### 7. Keine Vorgriffe
+
+Keine „in Modul X bauen wir …"-Hinweise und keine `Wie es weitergeht`-Sektion.
+Querverweise sachlich-beschreibend formulieren, nicht als Teaser.
+
+### 8. Disziplin-Verbote
+
+- Direkt-Anrede (du, Sie) im Buch-Text; „man"-Konstruktionen
+- Marketing-Sprache, Superlative, Selbst-Bewertung („anschaulich", „sauber")
+- Lernenden-Anrede („für Einsteiger", „Teilnehmende"); beschreiben, was passiert
+- Lange Code-Blöcke ohne erklärenden Folge-Callout
+- Cartoon-Emojis im Fließtext (Ausnahme: Status-Marker in Tabellen)
+- „das LLM" (Neutrum), nicht „der LLM"
+
+---
+
+## Index-Konventionen
+
+- **`index.qmd`**: `Willkommen {.unnumbered}`, 2 bis 3 Absätze, nummerierte
+  Liste der vier Wege, `.callout-note` (Companion-Hinweis), `.callout-tip`
+  (Lernempfehlung).
+- **`introduction.qmd`**: `Einführung {.unnumbered}`, Orientierungstabelle plus
+  Begriffe in je zwei Sätzen.
+- **Modul-`index.qmd`**: `<Titel> {.unnumbered}`, ein Absatz, „Wir werden …".
+
+## Diagramme
+
+Architektur-Diagramme als **gefenste Text-Blöcke** (rendern ohne Toolchain,
+Vorbild: `hetzner/architektur.qmd`). Eine D2-Pipeline nach dem Vorbild von
+`n8n-grundlagen` kann später ergänzt werden; keine gebrochenen Bild-Links
+einchecken.
+
+---
+
+## Kursbegleitende Infrastruktur
+
+Der lauffähige Stack ist die technische Grundlage von Modul 3 bis 5. Regeln
+(Details in [PROJECT.md](PROJECT.md)):
+
+- **Versionspinning**: alle Container-Images mit konkretem Patch-Tag, **kein
+  `latest`**. Tags in `.env.example`, `docker-compose.yml` und `PROJECT.md`
+  synchron halten.
+- **Secrets**: nie einchecken (`.env` in `.gitignore`). Cloud-Init generiert sie
+  mit `openssl rand`.
+- **Indirekte Ansprache in Code-Kommentaren** (nicht Wir-Form): „Server löschen"
+  statt „Wir löschen". Das gilt nur für Infra-Dateien, nicht für das Buch.
+- **Default-deny**: Firewalls ablehnend, nur 22/80/443 offen.
+- Bei inhaltlichen Änderungen am Stack die zugehörigen Buch-Kapitel mitziehen.
+
+---
+
+## Bauen und Veröffentlichen
 
 ```bash
-# Aktuell stable n8n 2.x?
-curl -s "https://hub.docker.com/v2/repositories/n8nio/n8n/tags?page_size=50" \
-  | jq -r '.results[].name' | grep -E '^2\.' | head -5
+# Buch lokal rendern
+quarto render                      # Output in _book/
 
-# Aktuell stable postgres 16?
-curl -s "https://hub.docker.com/v2/repositories/library/postgres/tags?page_size=50&name=16" \
-  | jq -r '.results[].name' | grep alpine | head -5
-
-# Aktuell stable caddy 2?
-curl -s "https://hub.docker.com/v2/repositories/library/caddy/tags?page_size=50&name=2" \
-  | jq -r '.results[].name' | grep alpine | grep -v builder | head -5
+# Auf GitHub Pages veröffentlichen (Branch gh-pages)
+quarto publish gh-pages
 ```
 
-Tags in `.env.example`, `docker-compose.yml` und `PROJECT.md` aktualisieren.
-Auf einem Test-Server verifizieren, bevor der Kurs startet.
+Die Live-Version liegt unter <https://kirenz.github.io/n8n-setup/>. GitHub Pages
+bedient den `gh-pages`-Branch. **Vor jedem Publish `quarto render` ohne Errors.**
+Das Buch-Output (`_book/`, `.quarto/`, `_freeze/`) ist in `.gitignore`; die
+Buch-Quellen (`*.qmd`) und die Infra-Dateien liegen auf `main`.
 
-### Compose-Datei validieren
+---
+
+## Validierung vor Commit
 
 ```bash
-cd /Users/jankirenz/code/n8n-hetzner-kurs
-docker compose --env-file .env.example config >/dev/null
+quarto render
 ```
 
-### Cloud-Init testen (lokal, ohne echten Server)
-
-```bash
-cloud-init devel schema --config-file cloud-init.yaml
-```
-
-(`cloud-init`-Tools müssen lokal installiert sein: `brew install cloud-init`
-oder online-Validator.)
-
-### Auf echtem Hetzner-Server verifizieren
-
-Eine CPX11-Instanz erstellen, `cloud-init.yaml` als User Data einfügen,
-nach 5–8 Min die in `/etc/motd` ausgegebene URL aufrufen, n8n-Setup-Wizard
-durchspielen, danach `scripts/backup.sh` und `scripts/update.sh` testen.
-Server am Ende löschen.
-
-## Was NICHT tun
-
-- **Kein `latest`-Tag** für irgendein Image. Reproduzierbarkeit ist Pflicht.
-- **Kein `--no-verify`** bei Commits.
-- **Keine direkten Pushes auf `main` mit Breaking Changes** während ein
-  Semester läuft. Wenn unsicher: in einem Branch testen, mit Jan Rücksprache
-  halten.
-- **Keine Default-Passwörter** im Code oder in `.env.example`. Alles wird
-  generiert (`openssl rand …` in cloud-init.yaml) oder muss vom User
-  gesetzt werden.
-- **Keine Standalone-Doku-Dateien außerhalb von `docs/`** anlegen, wenn
-  sie nicht mit dem Briefing verankert sind.
-
-## Multi-Audience-Reflex
-
-Bei allen Änderungen mitdenken:
-
-- **Studierende** sollen die Schritte ausführen können → didaktische
-  Klarheit, Screenshots-Platzhalter
-- **Tech-Zielgruppe** soll den Code lesen können → kommentierte Quellen
-- **Executives** lesen den Begleit-Blogpost (nicht hier im Repo) →
-  Architektur-Begründungen müssen in einfacher Sprache verfügbar sein
-  (`PROJECT.md`, `docs/architektur.md`)
-
-## Kontakt / Quellen
-
-- Briefing-Quelle und Entscheidungs-Trail: [PROJECT.md](PROJECT.md)
-- Verwandte Konventionen: `~/code/hdm/lernplattform/AGENTS.md` (für
-  Lehrrepo-Stil im Allgemeinen)
-- Ansprechpartner: Jan Kirenz
+Errors müssen behoben sein. Zusätzlich prüfen: keine langen Gedankenstriche,
+keine Direkt-Anrede im Buch-Text, Callout-Titel gesetzt, Code-Blöcke erklärt.

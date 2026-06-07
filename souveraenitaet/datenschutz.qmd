@@ -1,0 +1,57 @@
+# Datensouveränität und DSGVO
+
+Wo Daten verarbeitet werden, ist nicht nur eine technische Frage. Laut dem Bitkom Cloud Report 2025 halten 78 % der befragten Unternehmen Deutschland für zu abhängig von US-Cloud-Anbietern, und eine große Mehrheit wünscht sich Anbieter aus Deutschland oder der EU [@bitkom2025]. Wer n8n auf einem europäischen Server betreibt, beantwortet einen Teil dieser Frage bereits durch die Wahl des Hosts. Der andere Teil entscheidet sich in den Workflows selbst.
+
+## Auftragsverarbeitung mit dem Hoster
+
+Wer personenbezogene Daten in n8n speichert, lässt diese durch den Hoster verarbeiten. Damit liegt eine Auftragsverarbeitung nach Art. 28 DSGVO vor, und es braucht einen Auftragsverarbeitungsvertrag (AVV). Hetzner stellt einen Standard-AVV bereit, der sich direkt in der Console abschließen lässt.
+
+::: {.callout-note}
+Ein praktischer Schritt vor dem ersten Echt-Workflow: den AVV in der Console abschließen und die Bestätigung lokal sichern. Die Hetzner-Standorte Nürnberg, Falkenstein und Helsinki liegen alle innerhalb der EU.
+:::
+
+## Drittlandtransfer durch KI-Knoten
+
+EU-Hosting ist nur die halbe Miete. Sobald in einem Workflow ein KI-Knoten mit OpenAI, Anthropic oder einem anderen US-Anbieter steckt, fließen die übergebenen Daten in die USA. Das ist ein Drittlandtransfer und braucht eine eigene Rechtsgrundlage, etwa Standardvertragsklauseln und ein Transfer-Impact-Assessment.
+
+::: {.callout-important title="Jeder KI-Knoten ist ein Datenfluss-Punkt"}
+Der Speicherort des Servers schützt nicht vor dem Datenabfluss über einen KI-Knoten. Jede KI-Node in einem produktiven Workflow ist ein Punkt, an dem Daten die eigene Infrastruktur verlassen können, und gehört dokumentiert.
+:::
+
+### Souveränere Alternativen
+
+Für KI-Knoten mit sensiblen Daten gibt es Alternativen mit EU-Bezug oder lokalem Betrieb:
+
+| Anbieter | Sitz | Betrieb | Bemerkung |
+|---|---|---|---|
+| Mistral | Frankreich | EU | API-kompatibel mit OpenAI |
+| Aleph Alpha | Deutschland | DE | Enterprise-Fokus |
+| Ollama | offen | lokal | Open-Source-Modelle auf dem eigenen Server |
+
+Für besonders sensible Daten ist Ollama auf einem eigenen Server ein gangbarer Weg. Dabei sind die Hardware-Anforderungen zu beachten: Für kleinere Modelle reichen einige Gigabyte Arbeitsspeicher, größere Modelle verlangen deutlich mehr oder eine GPU.
+
+## Der Telemetrie-Reflex
+
+n8n sendet im Standard drei Datenströme an n8n.io. Im Kurs-Setup sind alle drei deaktiviert, nicht weil sie gefährlich wären, sondern als Übung: Bei jeder neuen Software lohnt die Frage, was sie nach Hause schickt.
+
+| Variable | Was passiert | Kurs-Standard | Für eigene Nutzung |
+|---|---|---|---|
+| `N8N_DIAGNOSTICS_ENABLED` | anonyme Nutzungs-Telemetrie | `false` | meist weiter `false` |
+| `N8N_VERSION_NOTIFICATIONS_ENABLED` | Prüfung auf neue Versionen | `false` | `true` durchaus sinnvoll, macht Sicherheits-Updates sichtbar |
+| `N8N_PERSONALIZATION_ENABLED` | Profil-Abfrage im Onboarding | `false` | `true` ist ein fairer Tausch für passendere Vorlagen |
+
+::: {.callout-tip title="Die Reflexfrage"}
+Der Punkt ist nicht, jede Telemetrie pauschal abzuschalten. Der Punkt ist, jede Option bewusst zu prüfen, statt Voreinstellungen blind zu übernehmen. Bei n8n ist die Dokumentation dazu gut auffindbar; bei vielen anderen Werkzeugen muss man im Quellcode danach suchen.
+:::
+
+## Encryption-Key bedeutet Datenzugang
+
+::: {.callout-important title="Schlüssel-Verlust gleich Datenverlust"}
+Die in n8n gespeicherten Credentials sind mit dem `N8N_ENCRYPTION_KEY` verschlüsselt. Wer diesen Schlüssel verliert, etwa weil der Server ohne lokale Sicherung der `.env` gelöscht wird, verliert alle Credentials unwiderruflich. Die `.env` gehört deshalb zu jedem Backup und vor jedem Server-Delete an einen sicheren Ort.
+:::
+
+## Kontrollpunkt
+
+- den AVV-Schritt beim Hoster benennen
+- erklären, warum EU-Hosting den Drittlandtransfer durch KI-Knoten nicht automatisch löst
+- den Telemetrie-Reflex auf eine neue Software anwenden

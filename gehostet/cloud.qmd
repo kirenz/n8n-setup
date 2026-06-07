@@ -1,0 +1,62 @@
+# n8n Cloud einrichten
+
+Die n8n Cloud ist die von n8n selbst betriebene Variante. Ein Konto anlegen, und wenige Minuten später steht eine Instanz, ohne eigenen Server und ohne Wartung.
+
+## Zielbild
+
+Eine laufende Cloud-Instanz, erreichbar unter einer eigenen Adresse der Form `<name>.app.n8n.cloud`, mit geöffnetem Editor. Die Stationen:
+
+- Konto anlegen
+- Instanz wird vom Anbieter bereitgestellt
+- Editor öffnen und einrichten
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Konto anlegen
+
+Auf [n8n.io](https://n8n.io) führt der Einstieg über „Get started" in die Cloud-Registrierung. Dort genügen E-Mail-Adresse und Passwort. In der Regel steht eine kostenlose Testphase bereit, in der sich die Cloud ohne Zahlungsdaten ausprobieren lässt.
+
+::: {.callout-note}
+Tarife, Preise und die Dauer der Testphase ändern sich von Zeit zu Zeit. Die aktuelle Übersicht steht auf der Preisseite von n8n. Die Größenordnung: ein Einstiegstarif ab etwa 24 € im Monat für rund 2.500 Workflow-Ausführungen, ein Pro-Tarif ab etwa 50 € im Monat.
+:::
+
+### Schritt 2: Instanz benennen
+
+Die Cloud vergibt eine eigene Subdomain, etwa `meinteam.app.n8n.cloud`. Unter dieser Adresse ist die Instanz danach erreichbar, auch für eingehende Webhooks externer Dienste.
+
+### Schritt 3: Editor öffnen und einrichten
+
+Der Editor öffnet sich direkt im Browser. Die Instanz ist sofort einsatzbereit; Credentials und Workflows entstehen unmittelbar darin. Updates, Backups und die Verschlüsselung laufen im Hintergrund.
+
+## Was die Cloud übernimmt, und was nicht
+
+::: {.callout-tip title="Komfort gegen Kontrolle"}
+Die Cloud übernimmt die Server-Pflege vollständig: Updates, Backups, TLS-Zertifikate und die Erreichbarkeit. Dafür liegt der Betrieb beim Anbieter. Wer volle Kontrolle über Daten und Speicherort braucht, betreibt n8n selbst, etwa auf dem eigenen Rechner oder einem eigenen Server.
+:::
+
+## Daten und Standort
+
+::: {.callout-important title="Personenbezogene Daten in der Cloud"}
+Sobald in der Cloud personenbezogene Daten verarbeitet werden, verarbeitet der Anbieter diese im Auftrag. Dafür ist ein Auftragsverarbeitungsvertrag nötig, und der Verarbeitungsstandort sollte vorab geprüft werden. Die Datenschutz-Aspekte behandelt das Modul zur Souveränität ausführlich.
+:::
+
+## Wann die Cloud passt
+
+- kein eigenes IT-Team vorhanden
+- ein schneller Start ist wichtiger als volle Kontrolle
+- das Volumen an Ausführungen ist kalkulierbar
+- keine besonderen Anforderungen an den Speicherort der Daten
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| keine Bestätigungs-Mail | Mail im Spam-Ordner oder Tippfehler | Spam prüfen, Adresse kontrollieren, erneut anfordern |
+| Instanz lädt nicht | Bereitstellung noch nicht abgeschlossen | kurz warten und die Seite neu laden |
+| Webhook erreicht die Instanz nicht | falsche oder veraltete URL beim externen Dienst | die Cloud-Adresse `…app.n8n.cloud` exakt übernehmen |
+
+## Kontrollpunkt
+
+- ein n8n-Cloud-Konto anlegen
+- eine Instanz bereitstellen und den Editor öffnen
+- einordnen, welche Aufgaben die Cloud übernimmt und wo die Daten liegen

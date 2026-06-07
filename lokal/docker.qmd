@@ -1,0 +1,94 @@
+# Dauerhaft mit Docker
+
+Der `npx`-Weg eignet sich für den ersten Blick. Wer lokal dauerhaft mit n8n arbeitet, betreibt es als Docker-Container. Die Daten liegen dann in einem benannten Volume und bleiben über Neustarts und Aktualisierungen hinweg erhalten.
+
+## Zielbild
+
+n8n läuft als Docker-Container, erreichbar unter `http://localhost:5678`, die Daten in einem Volume namens `n8n_data`. Die Stationen:
+
+- Docker ist installiert und gestartet
+- ein Volume hält die Daten unabhängig vom Container
+- ein Container stellt n8n bereit
+
+## Voraussetzung: Docker
+
+::: {.callout-note}
+Auf macOS und Windows übernimmt das Docker Desktop, auf Linux die Docker Engine. Ein Aufruf von `docker --version` bestätigt die Installation. Docker Desktop muss laufen, erkennbar am Wal-Symbol in der Menüleiste, sonst schlagen die folgenden Befehle fehl.
+:::
+
+## Schritt für Schritt selbst bauen
+
+### Schritt 1: Daten-Volume anlegen
+
+```bash
+docker volume create n8n_data
+```
+
+::: {.callout-tip title="Wozu ein benanntes Volume?"}
+Ein benanntes Volume ist ein von Docker verwalteter Speicherort, der unabhängig vom Container besteht. Dadurch überleben Workflows und Einstellungen ein Entfernen oder Aktualisieren des Containers. Ohne Volume wären die Daten beim Stoppen des Containers verloren.
+:::
+
+### Schritt 2: n8n starten
+
+```bash
+docker run -it --rm \
+  --name n8n \
+  -p 5678:5678 \
+  -e GENERIC_TIMEZONE="Europe/Berlin" \
+  -e TZ="Europe/Berlin" \
+  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true \
+  -e N8N_RUNNERS_ENABLED=true \
+  -v n8n_data:/home/node/.n8n \
+  docker.n8n.io/n8nio/n8n
+```
+
+::: {.callout-tip title="Die Optionen im Befehl"}
+`-p 5678:5678` verbindet den Port des Containers mit dem des Rechners, sodass der Editor unter `localhost:5678` erreichbar ist. `-v n8n_data:/home/node/.n8n` hängt das Volume an die Stelle ein, an der n8n seine Daten ablegt. Die `-e`-Optionen setzen Umgebungsvariablen, hier Zeitzone und zwei empfohlene Voreinstellungen. `docker.n8n.io/n8nio/n8n` ist das offizielle Image. Mit `-it --rm` läuft der Container im Vordergrund und wird beim Beenden entfernt; das Volume und damit die Daten bleiben bestehen.
+:::
+
+### Schritt 3: Editor öffnen
+
+Im Browser `http://localhost:5678` aufrufen und das Owner-Konto anlegen. Die Oberfläche ist dieselbe wie bei allen anderen Wegen.
+
+### Schritt 4: Beenden und neu starten
+
+`Strg + C` beendet den Container. Ein erneuter Aufruf desselben `docker run`-Befehls startet n8n wieder, mit allen vorherigen Workflows, denn die liegen im Volume.
+
+## Im Hintergrund laufen lassen
+
+Wer n8n nicht im Vordergrund halten möchte, startet den Container losgelöst mit `-d` statt `-it --rm`:
+
+```bash
+docker run -d \
+  --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  -e GENERIC_TIMEZONE="Europe/Berlin" -e TZ="Europe/Berlin" \
+  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e N8N_RUNNERS_ENABLED=true \
+  docker.n8n.io/n8nio/n8n
+```
+
+::: {.callout-note}
+Mit `-d` läuft der Container im Hintergrund. `docker stop n8n` hält ihn an, `docker start n8n` startet ihn wieder. Anders als bei `--rm` bleibt der Container bestehen, bis er ausdrücklich mit `docker rm n8n` entfernt wird.
+:::
+
+## Postgres statt SQLite
+
+::: {.callout-note}
+Lokal nutzt n8n standardmäßig eine SQLite-Datei im Volume, was zum Lernen und Entwickeln genügt. Für den produktiven Betrieb empfiehlt sich Postgres als Datenbank. Wie n8n mit Postgres und einem Reverse Proxy zu einem produktionsähnlichen Stack zusammengesetzt wird, zeigt das Hetzner-Modul.
+:::
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| `Cannot connect to the Docker daemon` | Docker läuft nicht | Docker Desktop starten und erneut versuchen |
+| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit `-p 5679:5678` starten und `localhost:5679` aufrufen |
+| Daten nach Neustart verschwunden | Container ohne Volume gestartet | `-v n8n_data:/home/node/.n8n` ergänzen |
+| Meldung zu Datei-Rechten der Settings | zu offene Rechte der Settings-Datei | `N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true` gesetzt lassen |
+
+## Kontrollpunkt
+
+- ein Daten-Volume anlegen und in den Container einbinden
+- n8n als Docker-Container starten und im Browser erreichen
+- den Container anhalten und neu starten, ohne Daten zu verlieren

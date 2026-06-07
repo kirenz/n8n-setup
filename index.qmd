@@ -1,0 +1,24 @@
+# Willkommen {.unnumbered}
+
+Willkommen zum Einrichtungsbuch für n8n. Dieses Buch zeigt, wie eine eigene n8n-Instanz entsteht, und zwar auf dem Weg, der zur jeweiligen Situation passt. Am Ende steht eine laufende Instanz mit einem Editor, in dem sich Workflows bauen, testen und produktiv betreiben lassen.
+
+n8n ist eine visuelle Workflow-Plattform. Bevor der erste Workflow entstehen kann, braucht es eine Stelle, an der n8n läuft. Genau darum geht es hier: vom schnellen Test auf dem eigenen Rechner bis zur dauerhaften, datenschutzkonformen Instanz auf einem eigenen Server in der EU.
+
+## Vier Wege zu einer n8n-Instanz
+
+Dieses Buch beschreibt vier Wege. Sie unterscheiden sich in Aufwand, Kosten und Kontrolle über die Daten:
+
+1. **Lokal auf dem eigenen Rechner.** Kostenlos und in einer Minute gestartet, ideal zum Ausprobieren und zum Entwickeln von Workflows.
+2. **n8n Cloud.** Von n8n selbst betrieben, ohne eigenen Server, schneller Einstieg gegen eine monatliche Gebühr.
+3. **Managed Hosting.** Ein spezialisierter Anbieter betreibt eine eigenständige Instanz, die Datenkontrolle bleibt, die Server-Pflege entfällt.
+4. **Eigener Server bei Hetzner.** Eine selbst betriebene Instanz auf einem europäischen Server, mit voller Kontrolle über Daten, Backups und Updates.
+
+Die Module folgen einem roten Faden: zuerst lokal ausprobieren, dann den Betrieb an einen Anbieter auslagern, danach eine eigene Instanz auf Hetzner aufsetzen, sie im laufenden Betrieb pflegen und schließlich verantwortungsvoll betreiben.
+
+::: {.callout-note}
+Dieses Buch ist das Einrichtungs-Begleitbuch zum n8n-Kurs. Wer n8n grundsätzlich einordnen möchte (was die Plattform leistet, wie das Pricing gegen Zapier oder Make abschneidet, welche Hosting-Variante prinzipiell zu welchem Team passt), findet diese Abwägung im Grundlagenkurs. Hier liegt der Fokus auf der praktischen Durchführung.
+:::
+
+::: {.callout-tip title="Lernempfehlung"}
+Die Module bauen aufeinander auf. Wer den größten Nutzen mitnehmen möchte, arbeitet sie in der Reihenfolge durch. Wer nur einen bestimmten Weg braucht, springt direkt in das passende Modul: Jeder Weg ist in sich abgeschlossen beschrieben.
+:::

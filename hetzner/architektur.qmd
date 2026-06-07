@@ -1,0 +1,86 @@
+# Wie die Instanz aufgebaut ist
+
+Bevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start entsteht. Das Setup besteht aus drei Bausteinen, die zusammenarbeiten, und zwei Schutzschichten davor. Wer dieses Bild im Kopf hat, versteht später jeden Schritt und kann Fehler gezielt eingrenzen.
+
+## Zielbild: drei Container, zwei Firewalls
+
+```
+                             Internet
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │ Hetzner Cloud Firewall │   Provider-Ebene
+                    └───────────┬───────────┘
+                                │  nur 22 / 80 / 443
+                                ▼
+                    ┌───────────────────────┐
+                    │   UFW (Server-Ebene)   │   zweite Schicht
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │   Caddy   (80 / 443)   │   TLS, Reverse Proxy
+                    └───────────┬───────────┘
+                                │  HTTP intern
+                                ▼
+                    ┌───────────────────────┐
+                    │     n8n     (5678)     │   Workflow-Engine
+                    └───────────┬───────────┘
+                                │  Postgres-Verbindung
+                                ▼
+                    ┌───────────────────────┐
+                    │   Postgres  (5432)     │   Workflows, Credentials
+                    └───────────────────────┘
+                            (nur intern)
+```
+
+Eine Anfrage aus dem Internet passiert zuerst zwei Firewalls, erreicht dann Caddy, der die Verschlüsselung übernimmt und intern an n8n weiterreicht. n8n speichert alles Dauerhafte in Postgres. Nur Caddy ist von außen erreichbar.
+
+## Die drei Container
+
+### Caddy: Reverse Proxy und Verschlüsselung
+
+Caddy ist der einzige Baustein, der von außen erreichbar ist. Er nimmt Anfragen auf den Ports 80 und 443 entgegen, holt automatisch ein TLS-Zertifikat von Let's Encrypt und reicht den Verkehr intern an n8n weiter. Dabei setzt er die Header, die n8n braucht, um eingehende Webhooks der richtigen URL zuzuordnen.
+
+### n8n: die Workflow-Engine
+
+n8n hört intern auf Port 5678 und ist nicht direkt aus dem Internet erreichbar. Es führt die Workflows aus und speichert Workflows, Credentials und Ausführungsprotokolle in der Datenbank.
+
+### Postgres: die Datenbank
+
+Postgres hält alle Daten dauerhaft und hat bewusst keinen Port nach außen. Ein Healthcheck prüft, ob die Datenbank Anfragen beantwortet; n8n startet erst, wenn Postgres bereit ist.
+
+::: {.callout-tip title="Analogie: Empfang, Sachbearbeitung, Archiv" collapse="true"}
+Caddy ist der Empfang im Erdgeschoss: Er nimmt Besucher entgegen, prüft die Verschlüsselung wie einen Ausweis und leitet weiter. n8n ist die Sachbearbeitung, die die eigentliche Arbeit erledigt. Postgres ist das Archiv im Keller, ohne Publikumsverkehr, in dem alle Vorgänge dauerhaft abgelegt werden. Nur der Empfang hat eine Tür nach draußen.
+:::
+
+## Zwei Firewall-Schichten
+
+Der Server ist durch zwei voneinander unabhängige Firewalls geschützt. Die Hetzner Cloud Firewall arbeitet auf Provider-Ebene und filtert Pakete, bevor sie den Server überhaupt erreichen. Die UFW (Uncomplicated Firewall) läuft zusätzlich auf dem Server selbst und wird beim Provisioning mit denselben Regeln eingerichtet. Beide erlauben eingehend nur drei Ports: 22 für SSH, 80 und 443 für den Web-Zugriff.
+
+::: {.callout-note}
+Dieses Prinzip heißt Defense-in-Depth: Sollte eine Schicht versehentlich falsch konfiguriert sein, schützt die zweite weiterhin. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.
+:::
+
+## Warum diese Bausteine
+
+Die Auswahl folgt dem Ziel, eine produktionsähnliche und zugleich nachvollziehbare Umgebung zu schaffen:
+
+| Entscheidung | Begründung |
+|---|---|
+| Postgres statt SQLite | produktionsnah, trägt auch reale Projekte |
+| Caddy als Reverse Proxy | automatisches TLS, deutlich weniger Konfiguration als Alternativen |
+| sslip.io statt eigener Domain | sofort startklar, ohne eigenes DNS-Setup |
+| feste Versions-Tags | reproduzierbar, keine Überraschungen durch automatische Updates |
+
+## Reproduzierbarkeit durch Versionspinning
+
+::: {.callout-important title="Feste Versionen statt latest"}
+Alle Container-Images sind auf konkrete Versionen festgelegt (n8n auf `2.20.6`, Postgres auf `16.13-alpine3.23`, Caddy auf `2.11.2-alpine`), kein `latest`-Tag. So startet jede Installation dieselbe Fassung, und ein Update ist ein bewusster, geplanter Schritt statt einer stillen Veränderung im Hintergrund.
+:::
+
+## Kontrollpunkt
+
+- die drei Container und ihre jeweilige Aufgabe benennen
+- erklären, warum nur Caddy von außen erreichbar ist
+- die zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben

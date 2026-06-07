@@ -23,3 +23,12 @@ n8n-setup.log
 # Caddy-Daten (wird nur im Container persistiert)
 caddy_data/
 caddy_config/
+
+# Quarto-Build-Output (Buch wird über die gh-pages-Branch veröffentlicht)
+.quarto/
+_book/
+_freeze/
+**/*_files/
+**/*.quarto_ipynb
+
+/.quarto/

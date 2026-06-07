@@ -1,0 +1,79 @@
+project:
+  type: book
+  output-dir: _book
+  # Nur die Buch-Dateien werden gerendert. Die kursbegleitende Infrastruktur
+  # (docker-compose.yml, Caddyfile, cloud-init.yaml, scripts/, docs/) ist
+  # kein Buch-Inhalt und bleibt vom Build unberührt.
+  render:
+    - "*.qmd"
+    - "lokal/*.qmd"
+    - "gehostet/*.qmd"
+    - "hetzner/*.qmd"
+    - "betrieb/*.qmd"
+    - "souveraenitaet/*.qmd"
+
+lang: de
+
+bibliography: references.bib
+
+execute:
+  freeze: auto
+
+book:
+  title: "n8n einrichten"
+  description: "Vier Wege zur eigenen Instanz, von der Cloud bis zum eigenen Server"
+  author: "Jan Kirenz"
+  site-url: https://kirenz.github.io/n8n-setup/
+  repo-url: https://github.com/kirenz/n8n-setup
+  repo-actions: [source, issue]
+
+  search:
+    type: overlay
+  page-footer:
+    left: |
+      © [Jan Kirenz](https://www.kirenz.com/), 2026
+
+  chapters:
+    - index.qmd
+    - introduction.qmd
+
+    - part: lokal/index.qmd
+      chapters:
+        - lokal/npx.qmd
+        - lokal/docker.qmd
+
+    - part: gehostet/index.qmd
+      chapters:
+        - gehostet/cloud.qmd
+        - gehostet/managed-hosting.qmd
+
+    - part: hetzner/index.qmd
+      chapters:
+        - hetzner/architektur.qmd
+        - hetzner/server-anlegen.qmd
+        - hetzner/einrichten.qmd
+
+    - part: betrieb/index.qmd
+      chapters:
+        - betrieb/backups.qmd
+        - betrieb/aktualisieren.qmd
+        - betrieb/server-loeschen.qmd
+
+    - part: souveraenitaet/index.qmd
+      chapters:
+        - souveraenitaet/datenschutz.qmd
+        - souveraenitaet/eu-ai-act.qmd
+
+format:
+  html:
+    toc: true
+    # Theme-Stack wie im Schwester-Repo n8n-grundlagen: cosmo als Bootstrap-Basis,
+    # book-theme.scss zieht den Hausstil (Geist/Lato, Cream-Paper, Ink) durch.
+    theme:
+      - cosmo
+      - book-theme.scss
+    code-copy: true
+    highlight-style: github
+    code-overflow: wrap
+    author-meta: "Jan Kirenz"
+    callout-appearance: simple

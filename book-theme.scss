@@ -1,0 +1,467 @@
+/*-- scss:defaults --*/
+// =========================================
+// Buch-Theme — Pure Platform-Mirror
+//
+// Schwester-Datei zu slides/redesign/{tokens-platform,variant-a-pure}.scss.
+// Gleiche DNA: Geist + Cream-Paper + Ink + Ochre/Terracotta — angewendet auf
+// die Quarto-Book-HTML-Komponenten (Sidebar, TOC, Callouts, Code, Tables).
+//
+// Bootstrap 5 (über cosmo) ruft lighten()/darken()/rgba() auf $primary,
+// $body-color etc. — diese Funktionen funktionieren nur mit Hex/RGB. Daher:
+// Bootstrap-Variablen als Hex-Annäherungen, das echte Rendering läuft über
+// CSS Custom Properties (--paper, --ink) in OKLch.
+// =========================================
+
+// Geist via Google Fonts (Sans + Mono).
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap");
+
+// Hex-Annäherungen für Bootstrap-Color-Functions
+$body-bg:        #faf9f4 !default;   // ≈ oklch(0.985 0.004 85) Papier
+$body-color:     #16182c !default;   // ≈ oklch(0.18 0.02 255) Tinte
+$primary:        #c08a3e !default;   // ≈ oklch(0.72 0.13 70)  Ochre
+$link-color:     #c08a3e !default;
+$link-hover-color: #a36f1f !default;
+$border-color:   #e2dfd6 !default;   // ≈ oklch(0.88 0.008 85) Rule
+$secondary:      #b85a3a !default;   // ≈ oklch(0.6 0.15 35)   Terracotta
+
+// Typografie
+$font-family-sans-serif: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-family-monospace:  "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+$headings-font-family:   $font-family-sans-serif;
+$headings-font-weight:   500;
+$headings-letter-spacing: -0.025em;
+
+$font-size-base:  1rem;
+$line-height-base: 1.65;
+
+// Code-Look
+$code-bg:                #f3f0e8 !default;   // ≈ oklch(0.965 0.007 85) Paper-Deep
+$code-color:             $body-color;
+$code-block-bg:          $code-bg !default;
+
+/*-- scss:rules --*/
+
+// CSS Custom Properties — die eigentlichen Plattform-Tokens in OKLch.
+:root {
+  --paper:        oklch(0.985 0.004 85);
+  --paper-deep:   oklch(0.965 0.007 85);
+  --ink:          oklch(0.18 0.02 255);
+  --ink-soft:     oklch(0.42 0.018 255);
+  --rule:         oklch(0.88 0.008 85);
+  --ochre:        oklch(0.72 0.13 70);
+  --ochre-soft:   oklch(0.92 0.055 80);
+  --ochre-deep:   oklch(0.52 0.13 65);   // Reading-Kontrast auf Cream — Callout-Header, Hover-Links
+  --terracotta:   oklch(0.6 0.15 35);
+  --terracotta-soft: oklch(0.94 0.04 35);
+  --tracking-display: -0.035em;
+  --tracking-kicker:  0.14em;
+  --radius:       0.5rem;
+}
+
+// ---------- Body / Reading Surface ----------
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: $font-family-sans-serif;
+  font-feature-settings: "ss01", "cv11";
+  line-height: $line-height-base;
+}
+
+// Reading width — Quarto rendert die Hauptspalte standardmäßig recht breit;
+// editorial-Buch-Tonalität verträgt ~70ch besser als 90ch.
+main.content {
+  max-width: 72ch;
+}
+
+// ---------- Headings ----------
+h1, h2, h3, h4, h5, h6 {
+  color: var(--ink);
+  font-family: $font-family-sans-serif;
+  font-weight: $headings-font-weight;
+  letter-spacing: $headings-letter-spacing;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.4rem; margin: 1.5em 0 0.6em; font-weight: 600; }
+h2 { font-size: 1.7rem; margin: 1.8em 0 0.6em; }
+h3 { font-size: 1.3rem; margin: 1.6em 0 0.5em; }
+h4 { font-size: 1.1rem; margin: 1.4em 0 0.4em; font-weight: 600; }
+
+// Section-Numbering (1.1, 1.2, …) — Bootstrap/cosmo färbt sie sonst Link-blau.
+// Gleiche Farbe wie der Heading-Text → ruhig, kein zweiter Akzent.
+.header-section-number {
+  color: inherit;
+  margin-right: 0.35em;
+}
+
+// ---------- Links ----------
+a {
+  color: var(--ochre);
+  text-decoration: none;
+  background-image: linear-gradient(to right, var(--ochre), var(--ochre));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size 0.2s ease;
+
+  &:hover {
+    color: var(--ochre);
+    background-size: 100% 1px;
+  }
+}
+
+// ---------- Sidebar (Kapitel-Navigation links) ----------
+#quarto-sidebar,
+.sidebar.sidebar-navigation {
+  background-color: var(--paper);
+  border-right: 1px solid var(--rule);
+
+  .sidebar-title {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: $headings-letter-spacing;
+  }
+
+  .sidebar-item {
+    .sidebar-item-text {
+      color: var(--ink-soft);
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: var(--ink);
+      }
+    }
+
+    &.active > .sidebar-link,
+    > .sidebar-link.active {
+      color: var(--ochre);
+      font-weight: 600;
+    }
+  }
+
+  .sidebar-item-section {
+    .sidebar-item-text {
+      color: var(--ink);
+      font-weight: 500;
+    }
+  }
+
+  // Search-Eingabefeld
+  .sidebar-search {
+    input[type="search"] {
+      background-color: var(--paper-deep);
+      border: 1px solid var(--rule);
+      color: var(--ink);
+      border-radius: var(--radius);
+
+      &:focus {
+        border-color: var(--ochre);
+        box-shadow: 0 0 0 2px rgba(192, 138, 62, 0.15);
+        outline: none;
+      }
+    }
+  }
+}
+
+// ---------- Inhaltsverzeichnis (rechte Spalte) ----------
+#TOC,
+.sidebar.toc-right,
+nav[role="doc-toc"] {
+  .toc-title {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-kicker);
+    font-weight: 500;
+  }
+
+  ul {
+    border-left: 1px solid var(--rule);
+    padding-left: 0.9em;
+    list-style: none;
+  }
+
+  a {
+    background-image: none;
+    color: var(--ink-soft);
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: var(--ink);
+    }
+  }
+
+  .active > a,
+  a.active {
+    color: var(--ochre);
+    font-weight: 500;
+  }
+}
+
+// ---------- Callouts ----------
+// callout-appearance: simple → 5px linke Border + farbiger Titel, kein
+// Header-Hintergrund. Dreifarb-System aus der Plattform-DNA:
+//   Note     → Ink-Soft   (ruhig, informativ)
+//   Tip      → Ochre      (positiv, weiterführend)
+//   Imp/Warn/Caut → Terracotta (Achtung)
+//
+// Zwei Override-Schichten gegen die Bootstrap-Defaults (Blau/Grün/Rot):
+//   1. Border + Header-Farbe via `div.callout-X.callout` (Spezifität 0,2,1)
+//      matcht Quartos Regel `div.callout-X.callout { border-left-color: ... }`.
+//   2. Icons: Bootstrap rendert sie als SVG-`background-image` mit hartcodierter
+//      Fill-Farbe — `color` wirkt nicht. Trick: `background-image: none`,
+//      stattdessen `mask-image` mit demselben SVG-Pfad und `background-color:
+//      currentColor`. So zieht das Icon seine Farbe aus dem Header.
+
+.callout {
+  background-color: var(--paper-deep);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  margin: 1.5em 0;
+  padding: 0;
+
+  .callout-header {
+    background-color: transparent;
+    border-bottom: none;
+    color: var(--ink);
+    font-weight: 600;
+    padding: 0.8em 1em 0.3em;
+  }
+
+  .callout-body-container,
+  .callout-body {
+    padding: 0.4em 1em 1em;
+    color: var(--ink);
+
+    > p:last-child { margin-bottom: 0; }
+  }
+
+  // Bootstrap-Icon-SVGs ausblenden, durch Mask-Variante ersetzen.
+  .callout-icon::before {
+    background-image: none !important;
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-size: 1rem 1rem;
+            mask-size: 1rem 1rem;
+    -webkit-mask-position: center;
+            mask-position: center;
+  }
+}
+
+// Border + Header-Farbe — Spezifität 0,2,1 schlägt Bootstraps Defaults.
+div.callout-note.callout {
+  border-left-color: var(--ink-soft);
+  > .callout-header { color: var(--ink-soft); }
+}
+
+div.callout-tip.callout {
+  border-left-color: var(--ochre);
+  > .callout-header { color: var(--ochre-deep); }
+}
+
+div.callout-important.callout,
+div.callout-caution.callout {
+  border-left-color: var(--terracotta);
+  > .callout-header { color: var(--terracotta); }
+}
+
+div.callout-warning.callout {
+  border-left-color: var(--terracotta);
+  background-color: var(--terracotta-soft);
+  > .callout-header { color: var(--terracotta); }
+}
+
+// Icon-Shapes (Bootstrap-Icons-Pfade als Mask). Fill ist irrelevant — die
+// Maske nutzt nur den Alpha-Kanal; Farbe kommt aus background-color.
+div.callout-note .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+          mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+}
+
+div.callout-tip .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/></svg>');
+          mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/></svg>');
+}
+
+div.callout-important .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>');
+          mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>');
+}
+
+div.callout-warning .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/></svg>');
+          mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/></svg>');
+}
+
+div.callout-caution .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M9.97 4.88l.953 3.811C10.158 8.878 9.14 9 8 9c-1.14 0-2.159-.122-2.923-.309L6.03 4.88C6.635 4.957 7.3 5 8 5s1.365-.043 1.97-.12zm-.245-.978L8.97.88C8.718-.13 7.282-.13 7.03.88L6.274 3.9C6.8 3.965 7.382 4 8 4c.618 0 1.2-.036 1.725-.098zm4.396 8.613a.5.5 0 0 1 .037.96l-6 2a.5.5 0 0 1-.316 0l-6-2a.5.5 0 0 1 .037-.96l2.391-.598.565-2.257c.862.212 1.964.339 3.165.339s2.303-.127 3.165-.339l.565 2.257 2.391.598z"/></svg>');
+          mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M9.97 4.88l.953 3.811C10.158 8.878 9.14 9 8 9c-1.14 0-2.159-.122-2.923-.309L6.03 4.88C6.635 4.957 7.3 5 8 5s1.365-.043 1.97-.12zm-.245-.978L8.97.88C8.718-.13 7.282-.13 7.03.88L6.274 3.9C6.8 3.965 7.382 4 8 4c.618 0 1.2-.036 1.725-.098zm4.396 8.613a.5.5 0 0 1 .037.96l-6 2a.5.5 0 0 1-.316 0l-6-2a.5.5 0 0 1 .037-.96l2.391-.598.565-2.257c.862.212 1.964.339 3.165.339s2.303-.127 3.165-.339l.565 2.257 2.391.598z"/></svg>');
+}
+
+// ---------- Bildunterschriften ----------
+// Cosmo färbt figcaptions/Quarto-Captions Link-blau. Ruhig auf Ink-Soft.
+figcaption,
+.figure-caption,
+.quarto-figure figcaption,
+caption {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-style: normal;
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+// ---------- Inline-Code ----------
+code:not(.sourceCode) {
+  background-color: var(--paper-deep);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+  font-size: 0.88em;
+}
+
+// ---------- Code-Blocks ----------
+div.sourceCode,
+pre.sourceCode,
+pre {
+  background-color: var(--paper-deep);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+div.sourceCode {
+  margin: 1.2em 0;
+}
+
+pre.sourceCode,
+pre {
+  padding: 1em 1.2em;
+  font-family: $font-family-monospace;
+  font-size: 0.92em;
+  line-height: 1.55;
+  overflow-x: auto;
+}
+
+// Code-Copy-Button passt sich farblich an
+.code-copy-button {
+  color: var(--ink-soft);
+
+  &:hover {
+    color: var(--ochre);
+  }
+}
+
+// ---------- Tabellen ----------
+table {
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  width: 100%;
+  font-size: 0.95em;
+
+  th, td {
+    padding: 0.6em 0.9em;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  thead th {
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom: 2px solid var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  tbody tr:hover {
+    background-color: var(--paper-deep);
+  }
+}
+
+// ---------- Blockquotes ----------
+blockquote {
+  border-left: 3px solid var(--ochre);
+  background-color: transparent;
+  color: var(--ink);
+  font-style: normal;
+  margin: 1.5em 0;
+  padding: 0.5em 0 0.5em 1.2em;
+
+  p:last-child { margin-bottom: 0; }
+}
+
+// ---------- Horizontal Rules ----------
+hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2.5em 0;
+}
+
+// ---------- Page Footer ----------
+.page-footer,
+footer.footer {
+  background-color: transparent;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.85em;
+  padding: 1.5em 0;
+
+  a {
+    color: var(--ink-soft);
+    background-image: none;
+
+    &:hover { color: var(--ochre); }
+  }
+}
+
+// ---------- Top-Navbar (falls aktiv) ----------
+.navbar {
+  background-color: var(--paper) !important;
+  border-bottom: 1px solid var(--rule);
+
+  .navbar-brand,
+  .navbar-title {
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: $headings-letter-spacing;
+  }
+
+  .nav-link {
+    color: var(--ink-soft);
+
+    &:hover, &.active {
+      color: var(--ochre);
+    }
+  }
+}
+
+// ---------- Search-Overlay ----------
+.aa-DetachedOverlay {
+  background-color: rgba(22, 24, 44, 0.4);
+}
+
+.aa-Panel,
+.aa-DetachedFormContainer {
+  background-color: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+// ---------- Buttons (Bootstrap-Defaults überschreiben) ----------
+.btn-primary {
+  background-color: var(--ochre);
+  border-color: var(--ochre);
+  color: var(--paper);
+
+  &:hover, &:focus {
+    background-color: oklch(0.66 0.13 70);
+    border-color: oklch(0.66 0.13 70);
+    color: var(--paper);
+  }
+}
+
+// ---------- Selection ----------
+::selection {
+  background-color: var(--ochre-soft);
+  color: var(--ink);
+}
