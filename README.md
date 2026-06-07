@@ -4,6 +4,7 @@ DSGVO-konformer, produktionsähnlicher n8n-Stack auf Hetzner Cloud, fertig in
 unter zehn Minuten. Begleitmaterial zur Lehre an der HdM Stuttgart und zu
 Trainings über kirenz.de.
 
+
 Der Stack besteht aus n8n + Postgres + Caddy als Reverse Proxy mit
 automatischem TLS. Provisioning per Cloud-Init, alle Container-Images
 versionsgepinnt.
