@@ -200,7 +200,7 @@
     "href": "lokal/npx.html#kontrollpunkt",
     "title": "1  Schnelltest mit npx",
     "section": "1.6 Kontrollpunkt",
-    "text": "1.6 Kontrollpunkt\n\nn8n lokal mit einem einzigen Befehl starten\nden Editor unter localhost:5678 öffnen und ein Owner-Konto anlegen\ndie Instanz beenden und wissen, wo die Daten liegen",
+    "text": "1.6 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nn8n lokal mit einem einzigen Befehl starten\nden Editor unter localhost:5678 öffnen und ein Owner-Konto anlegen\ndie Instanz beenden und wissen, wo die Daten liegen",
     "crumbs": [
       "Lokal auf dem eigenen Rechner",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
@@ -288,7 +288,7 @@
     "href": "lokal/docker.html#kontrollpunkt",
     "title": "2  Dauerhaft mit Docker",
     "section": "2.7 Kontrollpunkt",
-    "text": "2.7 Kontrollpunkt\n\nein Daten-Volume anlegen und in den Container einbinden\nn8n als Docker-Container starten und im Browser erreichen\nden Container anhalten und neu starten, ohne Daten zu verlieren",
+    "text": "2.7 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nein Daten-Volume anlegen und in den Container einbinden\nn8n als Docker-Container starten und im Browser erreichen\nden Container anhalten und neu starten, ohne Daten zu verlieren",
     "crumbs": [
       "Lokal auf dem eigenen Rechner",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
@@ -386,7 +386,7 @@
     "href": "gehostet/cloud.html#kontrollpunkt",
     "title": "3  n8n Cloud einrichten",
     "section": "3.7 Kontrollpunkt",
-    "text": "3.7 Kontrollpunkt\n\nein n8n-Cloud-Konto anlegen\neine Instanz bereitstellen und den Editor öffnen\neinordnen, welche Aufgaben die Cloud übernimmt und wo die Daten liegen",
+    "text": "3.7 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nein n8n-Cloud-Konto anlegen\neine Instanz bereitstellen und den Editor öffnen\neinordnen, welche Aufgaben die Cloud übernimmt und wo die Daten liegen",
     "crumbs": [
       "Gehostete Optionen ohne eigene Server-Pflege",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
@@ -452,7 +452,7 @@
     "href": "gehostet/managed-hosting.html#kontrollpunkt",
     "title": "4  Managed Hosting nutzen",
     "section": "4.6 Kontrollpunkt",
-    "text": "4.6 Kontrollpunkt\n\nManaged Hosting von der n8n Cloud und vom eigenen Server abgrenzen\ndie vier Kriterien für die Anbieterwahl benennen\neinordnen, für welche Situation Managed Hosting passt",
+    "text": "4.6 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nManaged Hosting von der n8n Cloud und vom eigenen Server abgrenzen\ndie vier Kriterien für die Anbieterwahl benennen\neinordnen, für welche Situation Managed Hosting passt",
     "crumbs": [
       "Gehostete Optionen ohne eigene Server-Pflege",
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
@@ -539,7 +539,7 @@
     "href": "hetzner/architektur.html#kontrollpunkt",
     "title": "5  Wie die Instanz aufgebaut ist",
     "section": "5.6 Kontrollpunkt",
-    "text": "5.6 Kontrollpunkt\n\ndie drei Container und ihre jeweilige Aufgabe benennen\nerklären, warum nur Caddy von außen erreichbar ist\ndie zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben",
+    "text": "5.6 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\ndie drei Container und ihre jeweilige Aufgabe benennen\nerklären, warum nur Caddy von außen erreichbar ist\ndie zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben",
     "crumbs": [
       "Eigene Instanz auf Hetzner Cloud",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
@@ -605,7 +605,7 @@
     "href": "hetzner/server-anlegen.html#kontrollpunkt",
     "title": "6  Server anlegen und starten",
     "section": "6.5 Kontrollpunkt",
-    "text": "6.5 Kontrollpunkt\n\neine Provider-Firewall mit drei erlaubten Ports anlegen\neinen Server mit hinterlegtem Cloud-Init starten\ndie Instanz-URL über SSH oder das Setup-Log ermitteln",
+    "text": "6.5 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\neine Provider-Firewall mit drei erlaubten Ports anlegen\neinen Server mit hinterlegtem Cloud-Init starten\ndie Instanz-URL über SSH oder das Setup-Log ermitteln",
     "crumbs": [
       "Eigene Instanz auf Hetzner Cloud",
       "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
@@ -627,7 +627,7 @@
     "href": "hetzner/einrichten.html#schritt-für-schritt-selbst-bauen",
     "title": "7  n8n aufrufen und einrichten",
     "section": "7.2 Schritt für Schritt selbst bauen",
-    "text": "7.2 Schritt für Schritt selbst bauen\n\n7.2.1 Schritt 1: URL im Browser öffnen\nDie in der vorigen Lektion ermittelte Adresse der Form https://1-2-3-4.sslip.io im Browser aufrufen.\n\n\n\n\n\n\nHinweisDer erste Aufruf dauert etwas länger\n\n\n\nCaddy holt das TLS-Zertifikat bedarfsgesteuert, also erst beim ersten Aufruf. Deshalb dauert die erste Anfrage 5 bis 10 Sekunden länger als spätere. Erscheint kurz eine Sicherheitswarnung, hilft ein erneutes Laden nach wenigen Sekunden, sobald das Zertifikat ausgestellt ist.\n\n\n\n\n7.2.2 Schritt 2: Owner-Konto anlegen\nBeim ersten Aufruf zeigt n8n den Setup-Wizard. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.\n\n\n7.2.3 Schritt 3: Erste Orientierung\nNach der Anmeldung öffnet sich der Editor. Hier entstehen Workflows, hier liegen Projekte, Credentials und das Ausführungsprotokoll. Die Instanz ist nun vollständig eigenständig: Alle Daten bleiben auf dem eigenen Server.",
+    "text": "7.2 Schritt für Schritt selbst bauen\n\n7.2.1 Schritt 1: URL im Browser öffnen\nDie zuvor ermittelte Adresse der Form https://1-2-3-4.sslip.io im Browser aufrufen.\n\n\n\n\n\n\nHinweisDer erste Aufruf dauert etwas länger\n\n\n\nCaddy holt das TLS-Zertifikat bedarfsgesteuert, also erst beim ersten Aufruf. Deshalb dauert die erste Anfrage 5 bis 10 Sekunden länger als spätere. Erscheint kurz eine Sicherheitswarnung, hilft ein erneutes Laden nach wenigen Sekunden, sobald das Zertifikat ausgestellt ist.\n\n\n\n\n7.2.2 Schritt 2: Owner-Konto anlegen\nBeim ersten Aufruf zeigt n8n den Setup-Wizard. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.\n\n\n7.2.3 Schritt 3: Erste Orientierung\nNach der Anmeldung öffnet sich der Editor. Hier entstehen Workflows, hier liegen Projekte, Credentials und das Ausführungsprotokoll. Die Instanz ist nun vollständig eigenständig: Alle Daten bleiben auf dem eigenen Server.",
     "crumbs": [
       "Eigene Instanz auf Hetzner Cloud",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>n8n aufrufen und einrichten</span>"
@@ -649,7 +649,7 @@
     "href": "hetzner/einrichten.html#kontrollpunkt",
     "title": "7  n8n aufrufen und einrichten",
     "section": "7.4 Kontrollpunkt",
-    "text": "7.4 Kontrollpunkt\n\ndie Instanz über die eigene https-Adresse aufrufen\ndas Owner-Konto im Setup-Wizard anlegen\neinen Zertifikats- oder Erreichbarkeitsfehler eingrenzen",
+    "text": "7.4 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\ndie Instanz über die eigene https-Adresse aufrufen\ndas Owner-Konto im Setup-Wizard anlegen\neinen Zertifikats- oder Erreichbarkeitsfehler eingrenzen",
     "crumbs": [
       "Eigene Instanz auf Hetzner Cloud",
       "<span class='chapter-number'>7</span>  <span class='chapter-title'>n8n aufrufen und einrichten</span>"
@@ -703,7 +703,7 @@
     "href": "betrieb/backups.html#kontrollpunkt",
     "title": "8  Backups einrichten",
     "section": "8.4 Kontrollpunkt",
-    "text": "8.4 Kontrollpunkt\n\nein Backup manuell erzeugen und den Inhalt benennen\nden Backup-Satz per scp lokal sichern\nein tägliches Backup per Cron einrichten",
+    "text": "8.4 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nein Backup manuell erzeugen und den Inhalt benennen\nden Backup-Satz per scp lokal sichern\nein tägliches Backup per Cron einrichten",
     "crumbs": [
       "Betrieb und Pflege",
       "<span class='chapter-number'>8</span>  <span class='chapter-title'>Backups einrichten</span>"
@@ -758,7 +758,7 @@
     "href": "betrieb/aktualisieren.html#kontrollpunkt",
     "title": "9  Aktualisieren",
     "section": "9.5 Kontrollpunkt",
-    "text": "9.5 Kontrollpunkt\n\neine Zielversion bewusst auswählen\nden Image-Tag in der .env setzen und das Update-Skript ausführen\nbegründen, warum Updates geplant statt automatisch erfolgen",
+    "text": "9.5 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\neine Zielversion bewusst auswählen\nden Image-Tag in der .env setzen und das Update-Skript ausführen\nbegründen, warum Updates geplant statt automatisch erfolgen",
     "crumbs": [
       "Betrieb und Pflege",
       "<span class='chapter-number'>9</span>  <span class='chapter-title'>Aktualisieren</span>"
@@ -813,7 +813,7 @@
     "href": "betrieb/server-loeschen.html#kontrollpunkt",
     "title": "10  Server geordnet beenden",
     "section": "10.5 Kontrollpunkt",
-    "text": "10.5 Kontrollpunkt\n\nWorkflows als JSON exportieren\nein Voll-Backup samt Encryption-Key lokal sichern\nden Server in der Console löschen und wissen, was sich später wiederherstellen lässt",
+    "text": "10.5 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nWorkflows als JSON exportieren\nein Voll-Backup samt Encryption-Key lokal sichern\nden Server in der Console löschen und wissen, was sich später wiederherstellen lässt",
     "crumbs": [
       "Betrieb und Pflege",
       "<span class='chapter-number'>10</span>  <span class='chapter-title'>Server geordnet beenden</span>"
@@ -856,7 +856,7 @@
     "href": "souveraenitaet/datenschutz.html#drittlandtransfer-durch-ki-knoten",
     "title": "11  Datensouveränität und DSGVO",
     "section": "11.2 Drittlandtransfer durch KI-Knoten",
-    "text": "11.2 Drittlandtransfer durch KI-Knoten\nEU-Hosting ist nur die halbe Miete. Sobald in einem Workflow ein KI-Knoten mit OpenAI, Anthropic oder einem anderen US-Anbieter steckt, fließen die übergebenen Daten in die USA. Das ist ein Drittlandtransfer und braucht eine eigene Rechtsgrundlage, etwa Standardvertragsklauseln und ein Transfer-Impact-Assessment.\n\n\n\n\n\n\nWichtigJeder KI-Knoten ist ein Datenfluss-Punkt\n\n\n\nDer Speicherort des Servers schützt nicht vor dem Datenabfluss über einen KI-Knoten. Jede KI-Node in einem produktiven Workflow ist ein Punkt, an dem Daten die eigene Infrastruktur verlassen können, und gehört dokumentiert.\n\n\n\n11.2.1 Souveränere Alternativen\nFür KI-Knoten mit sensiblen Daten gibt es Alternativen mit EU-Bezug oder lokalem Betrieb:\n\n\n\nAnbieter\nSitz\nBetrieb\nBemerkung\n\n\n\n\nMistral\nFrankreich\nEU\nAPI-kompatibel mit OpenAI\n\n\nAleph Alpha\nDeutschland\nDE\nEnterprise-Fokus\n\n\nOllama\noffen\nlokal\nOpen-Source-Modelle auf dem eigenen Server\n\n\n\nFür besonders sensible Daten ist Ollama auf einem eigenen Server ein gangbarer Weg. Dabei sind die Hardware-Anforderungen zu beachten: Für kleinere Modelle reichen einige Gigabyte Arbeitsspeicher, größere Modelle verlangen deutlich mehr oder eine GPU.",
+    "text": "11.2 Drittlandtransfer durch KI-Knoten\nEU-Hosting ist nur die halbe Miete. Sobald in einem Workflow ein KI-Knoten mit OpenAI, Anthropic oder einem anderen US-Anbieter steckt, fließen die übergebenen Daten in die USA. Das ist ein Drittlandtransfer und braucht eine eigene Rechtsgrundlage, etwa Standardvertragsklauseln und ein Transfer-Impact-Assessment.\n\n\n\n\n\n\nWichtigJeder KI-Knoten ist ein Datenfluss-Punkt\n\n\n\nDer Speicherort des Servers schützt nicht vor dem Datenabfluss über einen KI-Knoten. Jeder KI-Knoten in einem produktiven Workflow ist ein Punkt, an dem Daten die eigene Infrastruktur verlassen können, und gehört dokumentiert.\n\n\n\n11.2.1 Souveränere Alternativen\nFür KI-Knoten mit sensiblen Daten gibt es Alternativen mit EU-Bezug oder lokalem Betrieb:\n\n\n\nAnbieter\nSitz\nBetrieb\nBemerkung\n\n\n\n\nMistral\nFrankreich\nEU\nAPI-kompatibel mit OpenAI\n\n\nAleph Alpha\nDeutschland\nDE\nEnterprise-Fokus\n\n\nOllama\noffen\nlokal\nOpen-Source-Modelle auf dem eigenen Server\n\n\n\nFür besonders sensible Daten ist Ollama auf einem eigenen Server ein gangbarer Weg. Dabei sind die Hardware-Anforderungen zu beachten: Für kleinere Modelle reichen einige Gigabyte Arbeitsspeicher, größere Modelle verlangen deutlich mehr oder eine GPU.",
     "crumbs": [
       "Souveränität, Datenschutz und EU AI Act",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
@@ -867,7 +867,7 @@
     "href": "souveraenitaet/datenschutz.html#der-telemetrie-reflex",
     "title": "11  Datensouveränität und DSGVO",
     "section": "11.3 Der Telemetrie-Reflex",
-    "text": "11.3 Der Telemetrie-Reflex\nn8n sendet im Standard drei Datenströme an n8n.io. Im Kurs-Setup sind alle drei deaktiviert, nicht weil sie gefährlich wären, sondern als Übung: Bei jeder neuen Software lohnt die Frage, was sie nach Hause schickt.\n\n\n\n\n\n\n\n\n\nVariable\nWas passiert\nKurs-Standard\nFür eigene Nutzung\n\n\n\n\nN8N_DIAGNOSTICS_ENABLED\nanonyme Nutzungs-Telemetrie\nfalse\nmeist weiter false\n\n\nN8N_VERSION_NOTIFICATIONS_ENABLED\nPrüfung auf neue Versionen\nfalse\ntrue durchaus sinnvoll, macht Sicherheits-Updates sichtbar\n\n\nN8N_PERSONALIZATION_ENABLED\nProfil-Abfrage im Onboarding\nfalse\ntrue ist ein fairer Tausch für passendere Vorlagen\n\n\n\n\n\n\n\n\n\nTippDie Reflexfrage\n\n\n\nDer Punkt ist nicht, jede Telemetrie pauschal abzuschalten. Der Punkt ist, jede Option bewusst zu prüfen, statt Voreinstellungen blind zu übernehmen. Bei n8n ist die Dokumentation dazu gut auffindbar; bei vielen anderen Werkzeugen muss man im Quellcode danach suchen.",
+    "text": "11.3 Der Telemetrie-Reflex\nn8n sendet im Standard drei Datenströme an n8n.io. Im Kurs-Setup sind alle drei deaktiviert, nicht weil sie gefährlich wären, sondern als Übung: Bei jeder neuen Software lohnt die Frage, was sie nach Hause schickt.\n\n\n\n\n\n\n\n\n\nVariable\nWas passiert\nKurs-Standard\nFür eigene Nutzung\n\n\n\n\nN8N_DIAGNOSTICS_ENABLED\nanonyme Nutzungs-Telemetrie\nfalse\nmeist weiter false\n\n\nN8N_VERSION_NOTIFICATIONS_ENABLED\nPrüfung auf neue Versionen\nfalse\ntrue durchaus sinnvoll, macht Sicherheits-Updates sichtbar\n\n\nN8N_PERSONALIZATION_ENABLED\nProfil-Abfrage im Onboarding\nfalse\ntrue ist ein fairer Tausch für passendere Vorlagen\n\n\n\n\n\n\n\n\n\nTippDie Reflexfrage\n\n\n\nDer Punkt ist nicht, jede Telemetrie pauschal abzuschalten. Der Punkt ist, jede Option bewusst zu prüfen, statt Voreinstellungen blind zu übernehmen. Bei n8n ist die Dokumentation dazu gut auffindbar; bei vielen anderen Werkzeugen findet sich diese Information oft nur im Quellcode.",
     "crumbs": [
       "Souveränität, Datenschutz und EU AI Act",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
@@ -889,7 +889,7 @@
     "href": "souveraenitaet/datenschutz.html#kontrollpunkt",
     "title": "11  Datensouveränität und DSGVO",
     "section": "11.5 Kontrollpunkt",
-    "text": "11.5 Kontrollpunkt\n\nden AVV-Schritt beim Hoster benennen\nerklären, warum EU-Hosting den Drittlandtransfer durch KI-Knoten nicht automatisch löst\nden Telemetrie-Reflex auf eine neue Software anwenden\n\n\n\n\n\nBitkom e.V. 2025. „Cloud Report 2025: Wirtschaft ruft nach deutscher Cloud“. Bitkom Research, repräsentative Befragung von 604 Unternehmen. https://www.bitkom.org/.",
+    "text": "11.5 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nden AVV-Schritt beim Hoster benennen\nerklären, warum EU-Hosting den Drittlandtransfer durch KI-Knoten nicht automatisch löst\nden Telemetrie-Reflex auf eine neue Software anwenden\n\n\n\n\n\nBitkom e.V. 2025. „Cloud Report 2025: Wirtschaft ruft nach deutscher Cloud“. Bitkom Research, repräsentative Befragung von 604 Unternehmen. https://www.bitkom.org/.",
     "crumbs": [
       "Souveränität, Datenschutz und EU AI Act",
       "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
@@ -955,7 +955,7 @@
     "href": "souveraenitaet/eu-ai-act.html#kontrollpunkt",
     "title": "12  Der EU AI Act für eigene Workflows",
     "section": "12.6 Kontrollpunkt",
-    "text": "12.6 Kontrollpunkt\n\nerklären, warum der AI Act den Use Case und nicht das Werkzeug reguliert\ndie vier Risikoklassen an je einem n8n-Beispiel benennen\neinen Punkt für menschliche Aufsicht in einem Workflow verorten\n\n\n\n\n\nEuropäische Union. 2024. „Verordnung (EU) 2024/1689 zur Festlegung harmonisierter Vorschriften für künstliche Intelligenz (KI-Verordnung)“. Amtsblatt der Europäischen Union. https://eur-lex.europa.eu/eli/reg/2024/1689.",
+    "text": "12.6 Kontrollpunkt\nAm Ende dieses Kapitels sollten folgende Punkte bekannt sein:\n\nerklären, warum der AI Act den Use Case und nicht das Werkzeug reguliert\ndie vier Risikoklassen an je einem n8n-Beispiel benennen\neinen Punkt für menschliche Aufsicht in einem Workflow verorten\n\n\n\n\n\nEuropäische Union. 2024. „Verordnung (EU) 2024/1689 zur Festlegung harmonisierter Vorschriften für künstliche Intelligenz (KI-Verordnung)“. Amtsblatt der Europäischen Union. https://eur-lex.europa.eu/eli/reg/2024/1689.",
     "crumbs": [
       "Souveränität, Datenschutz und EU AI Act",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
