@@ -54,6 +54,8 @@ n8n legt seine Daten im Ordner `~/.n8n` im Heimatverzeichnis ab, standardmäßig
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - n8n lokal mit einem einzigen Befehl starten
 - den Editor unter `localhost:5678` öffnen und ein Owner-Konto anlegen
 - die Instanz beenden und wissen, wo die Daten liegen

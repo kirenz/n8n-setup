@@ -81,6 +81,8 @@ Alle Container-Images sind auf konkrete Versionen festgelegt (n8n auf `2.20.6`, 
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - die drei Container und ihre jeweilige Aufgabe benennen
 - erklären, warum nur Caddy von außen erreichbar ist
 - die zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben

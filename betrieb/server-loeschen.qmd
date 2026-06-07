@@ -47,6 +47,8 @@ Auf einem frischen, mit dieser Anleitung aufgesetzten Server lässt sich der Sta
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - Workflows als JSON exportieren
 - ein Voll-Backup samt Encryption-Key lokal sichern
 - den Server in der Console löschen und wissen, was sich später wiederherstellen lässt

@@ -41,6 +41,8 @@ Gegenüber einer eigenen Maschine ist die Anpassbarkeit begrenzt: kein freier Zu
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - Managed Hosting von der n8n Cloud und vom eigenen Server abgrenzen
 - die vier Kriterien für die Anbieterwahl benennen
 - einordnen, für welche Situation Managed Hosting passt

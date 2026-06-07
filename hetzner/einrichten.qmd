@@ -10,7 +10,7 @@ Der n8n-Editor ist unter der eigenen `https`-Adresse geöffnet, ein Owner-Konto 
 
 ### Schritt 1: URL im Browser öffnen
 
-Die in der vorigen Lektion ermittelte Adresse der Form `https://1-2-3-4.sslip.io` im Browser aufrufen.
+Die zuvor ermittelte Adresse der Form `https://1-2-3-4.sslip.io` im Browser aufrufen.
 
 ::: {.callout-note title="Der erste Aufruf dauert etwas länger"}
 Caddy holt das TLS-Zertifikat bedarfsgesteuert, also erst beim ersten Aufruf. Deshalb dauert die erste Anfrage 5 bis 10 Sekunden länger als spätere. Erscheint kurz eine Sicherheitswarnung, hilft ein erneutes Laden nach wenigen Sekunden, sobald das Zertifikat ausgestellt ist.
@@ -50,6 +50,8 @@ Wer die Knoten „Execute Command" oder „Local File Trigger" sucht und nicht f
 :::
 
 ## Kontrollpunkt
+
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 
 - die Instanz über die eigene `https`-Adresse aufrufen
 - das Owner-Konto im Setup-Wizard anlegen

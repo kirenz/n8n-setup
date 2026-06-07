@@ -48,6 +48,8 @@ Kein Image trägt den Tag `latest`. Automatische Updates im laufenden Betrieb k�
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - eine Zielversion bewusst auswählen
 - den Image-Tag in der `.env` setzen und das Update-Skript ausführen
 - begründen, warum Updates geplant statt automatisch erfolgen

@@ -57,6 +57,8 @@ Sobald in der Cloud personenbezogene Daten verarbeitet werden, verarbeitet der A
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - ein n8n-Cloud-Konto anlegen
 - eine Instanz bereitstellen und den Editor öffnen
 - einordnen, welche Aufgaben die Cloud übernimmt und wo die Daten liegen

@@ -15,7 +15,7 @@ Ein praktischer Schritt vor dem ersten Echt-Workflow: den AVV in der Console abs
 EU-Hosting ist nur die halbe Miete. Sobald in einem Workflow ein KI-Knoten mit OpenAI, Anthropic oder einem anderen US-Anbieter steckt, fließen die übergebenen Daten in die USA. Das ist ein Drittlandtransfer und braucht eine eigene Rechtsgrundlage, etwa Standardvertragsklauseln und ein Transfer-Impact-Assessment.
 
 ::: {.callout-important title="Jeder KI-Knoten ist ein Datenfluss-Punkt"}
-Der Speicherort des Servers schützt nicht vor dem Datenabfluss über einen KI-Knoten. Jede KI-Node in einem produktiven Workflow ist ein Punkt, an dem Daten die eigene Infrastruktur verlassen können, und gehört dokumentiert.
+Der Speicherort des Servers schützt nicht vor dem Datenabfluss über einen KI-Knoten. Jeder KI-Knoten in einem produktiven Workflow ist ein Punkt, an dem Daten die eigene Infrastruktur verlassen können, und gehört dokumentiert.
 :::
 
 ### Souveränere Alternativen
@@ -41,7 +41,7 @@ n8n sendet im Standard drei Datenströme an n8n.io. Im Kurs-Setup sind alle drei
 | `N8N_PERSONALIZATION_ENABLED` | Profil-Abfrage im Onboarding | `false` | `true` ist ein fairer Tausch für passendere Vorlagen |
 
 ::: {.callout-tip title="Die Reflexfrage"}
-Der Punkt ist nicht, jede Telemetrie pauschal abzuschalten. Der Punkt ist, jede Option bewusst zu prüfen, statt Voreinstellungen blind zu übernehmen. Bei n8n ist die Dokumentation dazu gut auffindbar; bei vielen anderen Werkzeugen muss man im Quellcode danach suchen.
+Der Punkt ist nicht, jede Telemetrie pauschal abzuschalten. Der Punkt ist, jede Option bewusst zu prüfen, statt Voreinstellungen blind zu übernehmen. Bei n8n ist die Dokumentation dazu gut auffindbar; bei vielen anderen Werkzeugen findet sich diese Information oft nur im Quellcode.
 :::
 
 ## Encryption-Key bedeutet Datenzugang
@@ -51,6 +51,8 @@ Die in n8n gespeicherten Credentials sind mit dem `N8N_ENCRYPTION_KEY` verschlü
 :::
 
 ## Kontrollpunkt
+
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 
 - den AVV-Schritt beim Hoster benennen
 - erklären, warum EU-Hosting den Drittlandtransfer durch KI-Knoten nicht automatisch löst

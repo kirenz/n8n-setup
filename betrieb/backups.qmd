@@ -53,6 +53,8 @@ Der Ausdruck `0 3 * * *` steht für „täglich um 03:00 Uhr". Die Ausgabe lande
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - ein Backup manuell erzeugen und den Inhalt benennen
 - den Backup-Satz per `scp` lokal sichern
 - ein tägliches Backup per Cron einrichten

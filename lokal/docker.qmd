@@ -89,6 +89,8 @@ Lokal nutzt n8n standardmäßig eine SQLite-Datei im Volume, was zum Lernen und 
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - ein Daten-Volume anlegen und in den Container einbinden
 - n8n als Docker-Container starten und im Browser erreichen
 - den Container anhalten und neu starten, ohne Daten zu verlieren

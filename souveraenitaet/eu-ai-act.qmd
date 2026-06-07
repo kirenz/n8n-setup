@@ -61,6 +61,8 @@ Für einen typischen Hochrisiko-Workflow lohnt es sich, den Punkt der menschlich
 
 ## Kontrollpunkt
 
+Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
+
 - erklären, warum der AI Act den Use Case und nicht das Werkzeug reguliert
 - die vier Risikoklassen an je einem n8n-Beispiel benennen
 - einen Punkt für menschliche Aufsicht in einem Workflow verorten
