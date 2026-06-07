@@ -1,0 +1,964 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "n8n einrichten",
+    "section": "",
+    "text": "Willkommen\nWillkommen zum Einrichtungsbuch für n8n. Dieses Buch zeigt, wie eine eigene n8n-Instanz entsteht, und zwar auf dem Weg, der zur jeweiligen Situation passt. Am Ende steht eine laufende Instanz mit einem Editor, in dem sich Workflows bauen, testen und produktiv betreiben lassen.\nn8n ist eine visuelle Workflow-Plattform. Bevor der erste Workflow entstehen kann, braucht es eine Stelle, an der n8n läuft. Genau darum geht es hier: vom schnellen Test auf dem eigenen Rechner bis zur dauerhaften, datenschutzkonformen Instanz auf einem eigenen Server in der EU.",
+    "crumbs": [
+      "Willkommen"
+    ]
+  },
+  {
+    "objectID": "index.html#vier-wege-zu-einer-n8n-instanz",
+    "href": "index.html#vier-wege-zu-einer-n8n-instanz",
+    "title": "n8n einrichten",
+    "section": "Vier Wege zu einer n8n-Instanz",
+    "text": "Vier Wege zu einer n8n-Instanz\nDieses Buch beschreibt vier Wege. Sie unterscheiden sich in Aufwand, Kosten und Kontrolle über die Daten:\n\nLokal auf dem eigenen Rechner. Kostenlos und in einer Minute gestartet, ideal zum Ausprobieren und zum Entwickeln von Workflows.\nn8n Cloud. Von n8n selbst betrieben, ohne eigenen Server, schneller Einstieg gegen eine monatliche Gebühr.\nManaged Hosting. Ein spezialisierter Anbieter betreibt eine eigenständige Instanz, die Datenkontrolle bleibt, die Server-Pflege entfällt.\nEigener Server bei Hetzner. Eine selbst betriebene Instanz auf einem europäischen Server, mit voller Kontrolle über Daten, Backups und Updates.\n\nDie Module folgen einem roten Faden: zuerst lokal ausprobieren, dann den Betrieb an einen Anbieter auslagern, danach eine eigene Instanz auf Hetzner aufsetzen, sie im laufenden Betrieb pflegen und schließlich verantwortungsvoll betreiben.\n\n\n\n\n\n\nDieses Buch ist das Einrichtungs-Begleitbuch zum n8n-Kurs. Wer n8n grundsätzlich einordnen möchte (was die Plattform leistet, wie das Pricing gegen Zapier oder Make abschneidet, welche Hosting-Variante prinzipiell zu welchem Team passt), findet diese Abwägung im Grundlagenkurs. Hier liegt der Fokus auf der praktischen Durchführung.\n\n\n\n\n\n\n\n\n\nTippLernempfehlung\n\n\n\nDie Module bauen aufeinander auf. Wer den größten Nutzen mitnehmen möchte, arbeitet sie in der Reihenfolge durch. Wer nur einen bestimmten Weg braucht, springt direkt in das passende Modul: Jeder Weg ist in sich abgeschlossen beschrieben.",
+    "crumbs": [
+      "Willkommen"
+    ]
+  },
+  {
+    "objectID": "introduction.html",
+    "href": "introduction.html",
+    "title": "Einführung",
+    "section": "",
+    "text": "Welcher Weg passt?\nBevor wir die erste Instanz einrichten, lohnt sich ein Überblick über die Bausteine, mit denen alle vier Wege arbeiten. Jeder Baustein hat eine bestimmte Rolle. Diese Einführung erklärt die zentralen Begriffe in je zwei Sätzen, damit klar ist, worauf die folgenden Module aufbauen.\nDie vier Wege unterscheiden sich vor allem darin, wie viel wir selbst betreiben und wo die Daten liegen. Die folgende Übersicht ordnet sie ein:\nDie Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#welcher-weg-passt",
+    "href": "introduction.html#welcher-weg-passt",
+    "title": "Einführung",
+    "section": "",
+    "text": "Weg\nAufwand\nKosten pro Monat\nDatenkontrolle\nGut geeignet für\n\n\n\n\nLokal (eigener Rechner)\nsehr gering\nkeine\nvollständig, lokal\nAusprobieren, Lernen, Entwicklung\n\n\nn8n Cloud\ngering\nab ca. 24 €\nbeim Anbieter\nschneller Start ohne Technik\n\n\nManaged Hosting\ngering\nab ca. 7 €\neigene Instanz, fremd betrieben\nDatenkontrolle ohne Server-Pflege\n\n\nEigener Hetzner-Server\nmittel\nca. 4 bis 7 €\nvollständig\nproduktiver, souveräner Betrieb",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#instanz",
+    "href": "introduction.html#instanz",
+    "title": "Einführung",
+    "section": "Instanz",
+    "text": "Instanz\nEine Instanz ist eine laufende Kopie von n8n, erreichbar über den Browser. Unabhängig vom gewählten Weg ist das Ergebnis immer eine Instanz mit einem Editor, in dem Workflows entstehen.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#container-und-docker",
+    "href": "introduction.html#container-und-docker",
+    "title": "Einführung",
+    "section": "Container und Docker",
+    "text": "Container und Docker\nEin Container bündelt eine Anwendung mit allem, was sie zum Laufen braucht, in eine isolierte, immer gleich startende Einheit. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#image-und-tag",
+    "href": "introduction.html#image-und-tag",
+    "title": "Einführung",
+    "section": "Image und Tag",
+    "text": "Image und Tag\nEin Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa 2.20.6) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#reverse-proxy",
+    "href": "introduction.html#reverse-proxy",
+    "title": "Einführung",
+    "section": "Reverse Proxy",
+    "text": "Reverse Proxy\nEin Reverse Proxy nimmt Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#tls-und-lets-encrypt",
+    "href": "introduction.html#tls-und-lets-encrypt",
+    "title": "Einführung",
+    "section": "TLS und Let’s Encrypt",
+    "text": "TLS und Let’s Encrypt\nTLS ist die Verschlüsselung hinter dem https in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Let’s Encrypt ist eine kostenlose Zertifizierungsstelle, von der Caddy die nötigen Zertifikate automatisch bezieht.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#domain-und-sslip.io",
+    "href": "introduction.html#domain-und-sslip.io",
+    "title": "Einführung",
+    "section": "Domain und sslip.io",
+    "text": "Domain und sslip.io\nEine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa n8n.example.com). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form 1-2-3-4.sslip.io automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#credentials-und-encryption-key",
+    "href": "introduction.html#credentials-und-encryption-key",
+    "title": "Einführung",
+    "section": "Credentials und Encryption-Key",
+    "text": "Credentials und Encryption-Key\nCredentials sind Zugangsdaten zu externen Diensten (API-Schlüssel, Passwörter, OAuth-Token), die n8n getrennt von den Workflows speichert. Sie werden mit dem Encryption-Key verschlüsselt abgelegt; geht dieser Schlüssel verloren, sind alle gespeicherten Credentials unbrauchbar.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "introduction.html#provisioning-und-cloud-init",
+    "href": "introduction.html#provisioning-und-cloud-init",
+    "title": "Einführung",
+    "section": "Provisioning und Cloud-Init",
+    "text": "Provisioning und Cloud-Init\nProvisioning bezeichnet das automatische Einrichten eines frischen Servers, vom Installieren der Pakete bis zum laufenden Dienst. Cloud-Init ist der Standard, mit dem ein Server beim ersten Start ein hinterlegtes Skript ausführt; im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.",
+    "crumbs": [
+      "Einführung"
+    ]
+  },
+  {
+    "objectID": "lokal/index.html",
+    "href": "lokal/index.html",
+    "title": "Lokal auf dem eigenen Rechner",
+    "section": "",
+    "text": "Der schnellste Weg zu einer laufenden n8n-Instanz führt über den eigenen Rechner. Es entstehen keine Kosten, kein Server muss gemietet werden, und nichts verlässt das eigene Gerät. Dieser Weg eignet sich, um die Oberfläche kennenzulernen und Workflows zu entwickeln, bevor sie auf einen dauerhaften Betrieb umziehen.\nWir werden:\n\nn8n mit einem einzigen Befehl per npx starten und den Editor öffnen\nn8n dauerhaft mit Docker betreiben, sodass Workflows und Einstellungen erhalten bleiben\nden Unterschied zwischen einem schnellen Test und einer dauerhaften lokalen Instanz einordnen",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html",
+    "href": "lokal/npx.html",
+    "title": "1  Schnelltest mit npx",
+    "section": "",
+    "text": "1.1 Zielbild\nFür einen ersten Blick in n8n genügt ein einziger Befehl. Ohne Installation, ohne Konto und ohne Server startet n8n direkt auf dem eigenen Rechner.\nAm Ende läuft n8n lokal und der Editor ist im Browser unter http://localhost:5678 geöffnet. Die Stationen auf dem Weg dorthin:",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html#zielbild",
+    "href": "lokal/npx.html#zielbild",
+    "title": "1  Schnelltest mit npx",
+    "section": "",
+    "text": "Node.js ist auf dem Rechner vorhanden\nein Befehl lädt n8n und startet es\nder Browser zeigt den Editor",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html#voraussetzung-node.js",
+    "href": "lokal/npx.html#voraussetzung-node.js",
+    "title": "1  Schnelltest mit npx",
+    "section": "1.2 Voraussetzung: Node.js",
+    "text": "1.2 Voraussetzung: Node.js\nnpx gehört zu Node.js. Wer im Terminal node --version ausführt und eine Versionsnummer ab 18 sieht, ist startklar.\n\n\n\n\n\n\nFehlt Node.js, lässt es sich über die LTS-Version von nodejs.org installieren. LTS steht für „Long Term Support” und bezeichnet die Fassung mit der längsten Pflegezusage, also die richtige Wahl für einen stabilen Start.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html#schritt-für-schritt-selbst-bauen",
+    "href": "lokal/npx.html#schritt-für-schritt-selbst-bauen",
+    "title": "1  Schnelltest mit npx",
+    "section": "1.3 Schritt für Schritt selbst bauen",
+    "text": "1.3 Schritt für Schritt selbst bauen\n\n1.3.1 Schritt 1: n8n starten\nnpx n8n\n\n\n\n\n\n\nTippWas npx hier macht\n\n\n\nnpx lädt n8n einmalig herunter und führt es aus, ohne es dauerhaft zu installieren. Der erste Start dauert ein bis zwei Minuten, weil die Pakete geladen werden. Danach erscheint in der Terminal-Ausgabe die Zeile, dass der Editor erreichbar ist.\n\n\n\n\n1.3.2 Schritt 2: Editor öffnen\nSobald das Terminal Editor is now accessible via … meldet, rufen wir im Browser http://localhost:5678 auf. Beim ersten Aufruf legt n8n ein Owner-Konto an, also E-Mail-Adresse und Passwort. Diese Anmeldedaten gelten nur für diese lokale Instanz.\n\n\n1.3.3 Schritt 3: n8n wieder beenden\nIm Terminal beenden wir n8n mit Strg + C (auf macOS Ctrl + C). Der Prozess hält an, und der Rechner ist wieder frei.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html#wo-die-daten-liegen",
+    "href": "lokal/npx.html#wo-die-daten-liegen",
+    "title": "1  Schnelltest mit npx",
+    "section": "1.4 Wo die Daten liegen",
+    "text": "1.4 Wo die Daten liegen\n\n\n\n\n\n\nn8n legt seine Daten im Ordner ~/.n8n im Heimatverzeichnis ab, standardmäßig in einer SQLite-Datei. Diese Daten bleiben zwischen den Starts erhalten, solange der Ordner besteht. Für einen dauerhaften Betrieb eignet sich der Weg über Docker, der die Daten in einem klar benannten Volume hält.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html#fehler-diagnostizieren",
+    "href": "lokal/npx.html#fehler-diagnostizieren",
+    "title": "1  Schnelltest mit npx",
+    "section": "1.5 Fehler diagnostizieren",
+    "text": "1.5 Fehler diagnostizieren\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\ncommand not found: npx\nNode.js fehlt\nNode.js LTS von nodejs.org installieren\n\n\nPort 5678 is already in use\nein anderer Dienst belegt den Port\nmit anderem Port starten: N8N_PORT=5679 npx n8n\n\n\nBrowser zeigt nichts an\nn8n startet noch\nwarten, bis das Terminal „Editor is now accessible” meldet",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/npx.html#kontrollpunkt",
+    "href": "lokal/npx.html#kontrollpunkt",
+    "title": "1  Schnelltest mit npx",
+    "section": "1.6 Kontrollpunkt",
+    "text": "1.6 Kontrollpunkt\n\nn8n lokal mit einem einzigen Befehl starten\nden Editor unter localhost:5678 öffnen und ein Owner-Konto anlegen\ndie Instanz beenden und wissen, wo die Daten liegen",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Schnelltest mit npx</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html",
+    "href": "lokal/docker.html",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "",
+    "text": "2.1 Zielbild\nDer npx-Weg eignet sich für den ersten Blick. Wer lokal dauerhaft mit n8n arbeitet, betreibt es als Docker-Container. Die Daten liegen dann in einem benannten Volume und bleiben über Neustarts und Aktualisierungen hinweg erhalten.\nn8n läuft als Docker-Container, erreichbar unter http://localhost:5678, die Daten in einem Volume namens n8n_data. Die Stationen:",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#zielbild",
+    "href": "lokal/docker.html#zielbild",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "",
+    "text": "Docker ist installiert und gestartet\nein Volume hält die Daten unabhängig vom Container\nein Container stellt n8n bereit",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#voraussetzung-docker",
+    "href": "lokal/docker.html#voraussetzung-docker",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "2.2 Voraussetzung: Docker",
+    "text": "2.2 Voraussetzung: Docker\n\n\n\n\n\n\nAuf macOS und Windows übernimmt das Docker Desktop, auf Linux die Docker Engine. Ein Aufruf von docker --version bestätigt die Installation. Docker Desktop muss laufen, erkennbar am Wal-Symbol in der Menüleiste, sonst schlagen die folgenden Befehle fehl.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#schritt-für-schritt-selbst-bauen",
+    "href": "lokal/docker.html#schritt-für-schritt-selbst-bauen",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "2.3 Schritt für Schritt selbst bauen",
+    "text": "2.3 Schritt für Schritt selbst bauen\n\n2.3.1 Schritt 1: Daten-Volume anlegen\ndocker volume create n8n_data\n\n\n\n\n\n\nTippWozu ein benanntes Volume?\n\n\n\nEin benanntes Volume ist ein von Docker verwalteter Speicherort, der unabhängig vom Container besteht. Dadurch überleben Workflows und Einstellungen ein Entfernen oder Aktualisieren des Containers. Ohne Volume wären die Daten beim Stoppen des Containers verloren.\n\n\n\n\n2.3.2 Schritt 2: n8n starten\ndocker run -it --rm \\\n  --name n8n \\\n  -p 5678:5678 \\\n  -e GENERIC_TIMEZONE=\"Europe/Berlin\" \\\n  -e TZ=\"Europe/Berlin\" \\\n  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true \\\n  -e N8N_RUNNERS_ENABLED=true \\\n  -v n8n_data:/home/node/.n8n \\\n  docker.n8n.io/n8nio/n8n\n\n\n\n\n\n\nTippDie Optionen im Befehl\n\n\n\n-p 5678:5678 verbindet den Port des Containers mit dem des Rechners, sodass der Editor unter localhost:5678 erreichbar ist. -v n8n_data:/home/node/.n8n hängt das Volume an die Stelle ein, an der n8n seine Daten ablegt. Die -e-Optionen setzen Umgebungsvariablen, hier Zeitzone und zwei empfohlene Voreinstellungen. docker.n8n.io/n8nio/n8n ist das offizielle Image. Mit -it --rm läuft der Container im Vordergrund und wird beim Beenden entfernt; das Volume und damit die Daten bleiben bestehen.\n\n\n\n\n2.3.3 Schritt 3: Editor öffnen\nIm Browser http://localhost:5678 aufrufen und das Owner-Konto anlegen. Die Oberfläche ist dieselbe wie bei allen anderen Wegen.\n\n\n2.3.4 Schritt 4: Beenden und neu starten\nStrg + C beendet den Container. Ein erneuter Aufruf desselben docker run-Befehls startet n8n wieder, mit allen vorherigen Workflows, denn die liegen im Volume.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#im-hintergrund-laufen-lassen",
+    "href": "lokal/docker.html#im-hintergrund-laufen-lassen",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "2.4 Im Hintergrund laufen lassen",
+    "text": "2.4 Im Hintergrund laufen lassen\nWer n8n nicht im Vordergrund halten möchte, startet den Container losgelöst mit -d statt -it --rm:\ndocker run -d \\\n  --name n8n \\\n  -p 5678:5678 \\\n  -v n8n_data:/home/node/.n8n \\\n  -e GENERIC_TIMEZONE=\"Europe/Berlin\" -e TZ=\"Europe/Berlin\" \\\n  -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e N8N_RUNNERS_ENABLED=true \\\n  docker.n8n.io/n8nio/n8n\n\n\n\n\n\n\nMit -d läuft der Container im Hintergrund. docker stop n8n hält ihn an, docker start n8n startet ihn wieder. Anders als bei --rm bleibt der Container bestehen, bis er ausdrücklich mit docker rm n8n entfernt wird.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#postgres-statt-sqlite",
+    "href": "lokal/docker.html#postgres-statt-sqlite",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "2.5 Postgres statt SQLite",
+    "text": "2.5 Postgres statt SQLite\n\n\n\n\n\n\nLokal nutzt n8n standardmäßig eine SQLite-Datei im Volume, was zum Lernen und Entwickeln genügt. Für den produktiven Betrieb empfiehlt sich Postgres als Datenbank. Wie n8n mit Postgres und einem Reverse Proxy zu einem produktionsähnlichen Stack zusammengesetzt wird, zeigt das Hetzner-Modul.",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#fehler-diagnostizieren",
+    "href": "lokal/docker.html#fehler-diagnostizieren",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "2.6 Fehler diagnostizieren",
+    "text": "2.6 Fehler diagnostizieren\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\nCannot connect to the Docker daemon\nDocker läuft nicht\nDocker Desktop starten und erneut versuchen\n\n\nPort 5678 is already in use\nein anderer Dienst belegt den Port\nmit -p 5679:5678 starten und localhost:5679 aufrufen\n\n\nDaten nach Neustart verschwunden\nContainer ohne Volume gestartet\n-v n8n_data:/home/node/.n8n ergänzen\n\n\nMeldung zu Datei-Rechten der Settings\nzu offene Rechte der Settings-Datei\nN8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true gesetzt lassen",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "lokal/docker.html#kontrollpunkt",
+    "href": "lokal/docker.html#kontrollpunkt",
+    "title": "2  Dauerhaft mit Docker",
+    "section": "2.7 Kontrollpunkt",
+    "text": "2.7 Kontrollpunkt\n\nein Daten-Volume anlegen und in den Container einbinden\nn8n als Docker-Container starten und im Browser erreichen\nden Container anhalten und neu starten, ohne Daten zu verlieren",
+    "crumbs": [
+      "Lokal auf dem eigenen Rechner",
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Dauerhaft mit Docker</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/index.html",
+    "href": "gehostet/index.html",
+    "title": "Gehostete Optionen ohne eigene Server-Pflege",
+    "section": "",
+    "text": "Nicht jeder Betrieb braucht einen selbst verwalteten Server. Zwei Wege überlassen den laufenden Betrieb einem Anbieter: die n8n Cloud, betrieben von n8n selbst, und Managed Hosting, bei dem ein spezialisierter Anbieter eine eigenständige Instanz für seine Kunden betreibt. Beide Wege sparen die Server-Pflege, unterscheiden sich aber darin, wo die Daten liegen und wie viel sich anpassen lässt.\nWir werden:\n\nein Konto in der n8n Cloud anlegen und die erste Instanz öffnen\neinordnen, wann Managed Hosting die passende Wahl ist, und einen Anbieter auswählen\ndie laufenden Kosten und die Datenkontrolle beider Wege vergleichen",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html",
+    "href": "gehostet/cloud.html",
+    "title": "3  n8n Cloud einrichten",
+    "section": "",
+    "text": "3.1 Zielbild\nDie n8n Cloud ist die von n8n selbst betriebene Variante. Ein Konto anlegen, und wenige Minuten später steht eine Instanz, ohne eigenen Server und ohne Wartung.\nEine laufende Cloud-Instanz, erreichbar unter einer eigenen Adresse der Form &lt;name&gt;.app.n8n.cloud, mit geöffnetem Editor. Die Stationen:",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#zielbild",
+    "href": "gehostet/cloud.html#zielbild",
+    "title": "3  n8n Cloud einrichten",
+    "section": "",
+    "text": "Konto anlegen\nInstanz wird vom Anbieter bereitgestellt\nEditor öffnen und einrichten",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#schritt-für-schritt-selbst-bauen",
+    "href": "gehostet/cloud.html#schritt-für-schritt-selbst-bauen",
+    "title": "3  n8n Cloud einrichten",
+    "section": "3.2 Schritt für Schritt selbst bauen",
+    "text": "3.2 Schritt für Schritt selbst bauen\n\n3.2.1 Schritt 1: Konto anlegen\nAuf n8n.io führt der Einstieg über „Get started” in die Cloud-Registrierung. Dort genügen E-Mail-Adresse und Passwort. In der Regel steht eine kostenlose Testphase bereit, in der sich die Cloud ohne Zahlungsdaten ausprobieren lässt.\n\n\n\n\n\n\nTarife, Preise und die Dauer der Testphase ändern sich von Zeit zu Zeit. Die aktuelle Übersicht steht auf der Preisseite von n8n. Die Größenordnung: ein Einstiegstarif ab etwa 24 € im Monat für rund 2.500 Workflow-Ausführungen, ein Pro-Tarif ab etwa 50 € im Monat.\n\n\n\n\n\n3.2.2 Schritt 2: Instanz benennen\nDie Cloud vergibt eine eigene Subdomain, etwa meinteam.app.n8n.cloud. Unter dieser Adresse ist die Instanz danach erreichbar, auch für eingehende Webhooks externer Dienste.\n\n\n3.2.3 Schritt 3: Editor öffnen und einrichten\nDer Editor öffnet sich direkt im Browser. Die Instanz ist sofort einsatzbereit; Credentials und Workflows entstehen unmittelbar darin. Updates, Backups und die Verschlüsselung laufen im Hintergrund.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#was-die-cloud-übernimmt-und-was-nicht",
+    "href": "gehostet/cloud.html#was-die-cloud-übernimmt-und-was-nicht",
+    "title": "3  n8n Cloud einrichten",
+    "section": "3.3 Was die Cloud übernimmt, und was nicht",
+    "text": "3.3 Was die Cloud übernimmt, und was nicht\n\n\n\n\n\n\nTippKomfort gegen Kontrolle\n\n\n\nDie Cloud übernimmt die Server-Pflege vollständig: Updates, Backups, TLS-Zertifikate und die Erreichbarkeit. Dafür liegt der Betrieb beim Anbieter. Wer volle Kontrolle über Daten und Speicherort braucht, betreibt n8n selbst, etwa auf dem eigenen Rechner oder einem eigenen Server.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#daten-und-standort",
+    "href": "gehostet/cloud.html#daten-und-standort",
+    "title": "3  n8n Cloud einrichten",
+    "section": "3.4 Daten und Standort",
+    "text": "3.4 Daten und Standort\n\n\n\n\n\n\nWichtigPersonenbezogene Daten in der Cloud\n\n\n\nSobald in der Cloud personenbezogene Daten verarbeitet werden, verarbeitet der Anbieter diese im Auftrag. Dafür ist ein Auftragsverarbeitungsvertrag nötig, und der Verarbeitungsstandort sollte vorab geprüft werden. Die Datenschutz-Aspekte behandelt das Modul zur Souveränität ausführlich.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#wann-die-cloud-passt",
+    "href": "gehostet/cloud.html#wann-die-cloud-passt",
+    "title": "3  n8n Cloud einrichten",
+    "section": "3.5 Wann die Cloud passt",
+    "text": "3.5 Wann die Cloud passt\n\nkein eigenes IT-Team vorhanden\nein schneller Start ist wichtiger als volle Kontrolle\ndas Volumen an Ausführungen ist kalkulierbar\nkeine besonderen Anforderungen an den Speicherort der Daten",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#fehler-diagnostizieren",
+    "href": "gehostet/cloud.html#fehler-diagnostizieren",
+    "title": "3  n8n Cloud einrichten",
+    "section": "3.6 Fehler diagnostizieren",
+    "text": "3.6 Fehler diagnostizieren\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\nkeine Bestätigungs-Mail\nMail im Spam-Ordner oder Tippfehler\nSpam prüfen, Adresse kontrollieren, erneut anfordern\n\n\nInstanz lädt nicht\nBereitstellung noch nicht abgeschlossen\nkurz warten und die Seite neu laden\n\n\nWebhook erreicht die Instanz nicht\nfalsche oder veraltete URL beim externen Dienst\ndie Cloud-Adresse …app.n8n.cloud exakt übernehmen",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/cloud.html#kontrollpunkt",
+    "href": "gehostet/cloud.html#kontrollpunkt",
+    "title": "3  n8n Cloud einrichten",
+    "section": "3.7 Kontrollpunkt",
+    "text": "3.7 Kontrollpunkt\n\nein n8n-Cloud-Konto anlegen\neine Instanz bereitstellen und den Editor öffnen\neinordnen, welche Aufgaben die Cloud übernimmt und wo die Daten liegen",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>n8n Cloud einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/managed-hosting.html",
+    "href": "gehostet/managed-hosting.html",
+    "title": "4  Managed Hosting nutzen",
+    "section": "",
+    "text": "4.1 Wie Managed Hosting funktioniert\nManaged Hosting liegt zwischen der Cloud und dem eigenen Server. Ein spezialisierter Anbieter betreibt eine eigenständige n8n-Instanz; die Datenkontrolle einer eigenen Instanz bleibt, die Server-Pflege entfällt.\nAnbieter wie InstaPods stellen eine dedizierte n8n-Instanz bereit und kümmern sich um Server, Updates und Backups. Im Unterschied zur n8n Cloud handelt es sich um eine eigenständige Self-Host-Instanz, oft auf einem wählbaren europäischen Standort. Damit eignet sich dieser Weg für Teams, die die Kostenstruktur und Datenlage von Self-Hosting nutzen möchten, ohne den Server-Betrieb selbst zu übernehmen.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/managed-hosting.html#eigenschaften",
+    "href": "gehostet/managed-hosting.html#eigenschaften",
+    "title": "4  Managed Hosting nutzen",
+    "section": "4.2 Eigenschaften",
+    "text": "4.2 Eigenschaften\n\nab etwa 7 € im Monat für eine Basis-Instanz\nkeine Lizenzkosten und keine eigene Server-Pflege\nDaten auf europäischen Servern, je nach Anbieter wählbar\nbegrenzte Anpassbarkeit gegenüber einer eigenen Maschine",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/managed-hosting.html#schritt-für-schritt-selbst-bauen",
+    "href": "gehostet/managed-hosting.html#schritt-für-schritt-selbst-bauen",
+    "title": "4  Managed Hosting nutzen",
+    "section": "4.3 Schritt für Schritt selbst bauen",
+    "text": "4.3 Schritt für Schritt selbst bauen\n\n4.3.1 Schritt 1: Anbieter auswählen\nBei der Auswahl helfen vier Kriterien: der Standort der Server (für europäische Anforderungen ein EU-Standort), der Preis, die angebotene n8n-Version und die Backup-Praxis des Anbieters.\n\n\n4.3.2 Schritt 2: Instanz bestellen und Adresse festlegen\nNach der Bestellung richtet der Anbieter die Instanz ein und stellt eine Adresse bereit. Je nach Anbieter lässt sich eine eigene Domain hinterlegen.\n\n\n4.3.3 Schritt 3: Editor öffnen und Owner-Konto anlegen\nUnter der bereitgestellten Adresse öffnet sich der Editor. Das Owner-Konto wird wie bei jeder n8n-Instanz beim ersten Aufruf angelegt.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/managed-hosting.html#wann-managed-hosting-passt",
+    "href": "gehostet/managed-hosting.html#wann-managed-hosting-passt",
+    "title": "4  Managed Hosting nutzen",
+    "section": "4.4 Wann Managed Hosting passt",
+    "text": "4.4 Wann Managed Hosting passt\n\n\n\n\n\n\nTippDatenkontrolle ohne Server-Betrieb\n\n\n\nManaged Hosting ist eine passende Wahl, wenn sensible Daten verarbeitet werden, aber keine IT-Kapazität für den Server-Betrieb vorhanden ist. Die Daten liegen in einer eigenständigen Instanz auf wählbarem EU-Standort, ohne dass Linux, Docker oder TLS selbst betreut werden müssen.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/managed-hosting.html#grenzen",
+    "href": "gehostet/managed-hosting.html#grenzen",
+    "title": "4  Managed Hosting nutzen",
+    "section": "4.5 Grenzen",
+    "text": "4.5 Grenzen\n\n\n\n\n\n\nGegenüber einer eigenen Maschine ist die Anpassbarkeit begrenzt: kein freier Zugriff auf das Betriebssystem, keine beliebigen System-Pakete. Wer volle Kontrolle und Anpassbarkeit braucht, etwa um zusätzliche Dienste neben n8n zu betreiben, richtet eine eigene Instanz ein.",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
+    ]
+  },
+  {
+    "objectID": "gehostet/managed-hosting.html#kontrollpunkt",
+    "href": "gehostet/managed-hosting.html#kontrollpunkt",
+    "title": "4  Managed Hosting nutzen",
+    "section": "4.6 Kontrollpunkt",
+    "text": "4.6 Kontrollpunkt\n\nManaged Hosting von der n8n Cloud und vom eigenen Server abgrenzen\ndie vier Kriterien für die Anbieterwahl benennen\neinordnen, für welche Situation Managed Hosting passt",
+    "crumbs": [
+      "Gehostete Optionen ohne eigene Server-Pflege",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Managed Hosting nutzen</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/index.html",
+    "href": "hetzner/index.html",
+    "title": "Eigene Instanz auf Hetzner Cloud",
+    "section": "",
+    "text": "Der ausführlichste Weg führt zu einer selbst betriebenen Instanz auf einem europäischen Server. Sie bietet volle Kontrolle über Daten, Backups und den Zeitpunkt von Updates und kostet bei einem kleinen Server nur wenige Euro im Monat. Dieser Weg verlangt etwas mehr Einrichtung, dafür entsteht eine produktionsähnliche Umgebung, die auch reale Projekte trägt.\nWir nutzen Hetzner Cloud, einen deutschen Anbieter mit Rechenzentren in Deutschland und Finnland. Die Einrichtung läuft fast vollständig automatisch: Ein hinterlegtes Skript richtet beim ersten Start des Servers den kompletten Stack ein.\nWir werden:\n\nverstehen, wie die Instanz aufgebaut ist: n8n, Datenbank und Reverse Proxy mit automatischer Verschlüsselung\neinen Server bei Hetzner anlegen und ihn sich selbst einrichten lassen\nn8n im Browser aufrufen, das Owner-Konto anlegen und typische Startprobleme lösen",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html",
+    "href": "hetzner/architektur.html",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "",
+    "text": "5.1 Zielbild: drei Container, zwei Firewalls\nBevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start entsteht. Das Setup besteht aus drei Bausteinen, die zusammenarbeiten, und zwei Schutzschichten davor. Wer dieses Bild im Kopf hat, versteht später jeden Schritt und kann Fehler gezielt eingrenzen.\nEine Anfrage aus dem Internet passiert zuerst zwei Firewalls, erreicht dann Caddy, der die Verschlüsselung übernimmt und intern an n8n weiterreicht. n8n speichert alles Dauerhafte in Postgres. Nur Caddy ist von außen erreichbar.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html#zielbild-drei-container-zwei-firewalls",
+    "href": "hetzner/architektur.html#zielbild-drei-container-zwei-firewalls",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "",
+    "text": "Internet\n                                │\n                                ▼\n                    ┌───────────────────────┐\n                    │ Hetzner Cloud Firewall │   Provider-Ebene\n                    └───────────┬───────────┘\n                                │  nur 22 / 80 / 443\n                                ▼\n                    ┌───────────────────────┐\n                    │   UFW (Server-Ebene)   │   zweite Schicht\n                    └───────────┬───────────┘\n                                │\n                                ▼\n                    ┌───────────────────────┐\n                    │   Caddy   (80 / 443)   │   TLS, Reverse Proxy\n                    └───────────┬───────────┘\n                                │  HTTP intern\n                                ▼\n                    ┌───────────────────────┐\n                    │     n8n     (5678)     │   Workflow-Engine\n                    └───────────┬───────────┘\n                                │  Postgres-Verbindung\n                                ▼\n                    ┌───────────────────────┐\n                    │   Postgres  (5432)     │   Workflows, Credentials\n                    └───────────────────────┘\n                            (nur intern)",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html#die-drei-container",
+    "href": "hetzner/architektur.html#die-drei-container",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "5.2 Die drei Container",
+    "text": "5.2 Die drei Container\n\n5.2.1 Caddy: Reverse Proxy und Verschlüsselung\nCaddy ist der einzige Baustein, der von außen erreichbar ist. Er nimmt Anfragen auf den Ports 80 und 443 entgegen, holt automatisch ein TLS-Zertifikat von Let’s Encrypt und reicht den Verkehr intern an n8n weiter. Dabei setzt er die Header, die n8n braucht, um eingehende Webhooks der richtigen URL zuzuordnen.\n\n\n5.2.2 n8n: die Workflow-Engine\nn8n hört intern auf Port 5678 und ist nicht direkt aus dem Internet erreichbar. Es führt die Workflows aus und speichert Workflows, Credentials und Ausführungsprotokolle in der Datenbank.\n\n\n5.2.3 Postgres: die Datenbank\nPostgres hält alle Daten dauerhaft und hat bewusst keinen Port nach außen. Ein Healthcheck prüft, ob die Datenbank Anfragen beantwortet; n8n startet erst, wenn Postgres bereit ist.\n\n\n\n\n\n\nTippAnalogie: Empfang, Sachbearbeitung, Archiv\n\n\n\n\n\nCaddy ist der Empfang im Erdgeschoss: Er nimmt Besucher entgegen, prüft die Verschlüsselung wie einen Ausweis und leitet weiter. n8n ist die Sachbearbeitung, die die eigentliche Arbeit erledigt. Postgres ist das Archiv im Keller, ohne Publikumsverkehr, in dem alle Vorgänge dauerhaft abgelegt werden. Nur der Empfang hat eine Tür nach draußen.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html#zwei-firewall-schichten",
+    "href": "hetzner/architektur.html#zwei-firewall-schichten",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "5.3 Zwei Firewall-Schichten",
+    "text": "5.3 Zwei Firewall-Schichten\nDer Server ist durch zwei voneinander unabhängige Firewalls geschützt. Die Hetzner Cloud Firewall arbeitet auf Provider-Ebene und filtert Pakete, bevor sie den Server überhaupt erreichen. Die UFW (Uncomplicated Firewall) läuft zusätzlich auf dem Server selbst und wird beim Provisioning mit denselben Regeln eingerichtet. Beide erlauben eingehend nur drei Ports: 22 für SSH, 80 und 443 für den Web-Zugriff.\n\n\n\n\n\n\nDieses Prinzip heißt Defense-in-Depth: Sollte eine Schicht versehentlich falsch konfiguriert sein, schützt die zweite weiterhin. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html#warum-diese-bausteine",
+    "href": "hetzner/architektur.html#warum-diese-bausteine",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "5.4 Warum diese Bausteine",
+    "text": "5.4 Warum diese Bausteine\nDie Auswahl folgt dem Ziel, eine produktionsähnliche und zugleich nachvollziehbare Umgebung zu schaffen:\n\n\n\n\n\n\n\nEntscheidung\nBegründung\n\n\n\n\nPostgres statt SQLite\nproduktionsnah, trägt auch reale Projekte\n\n\nCaddy als Reverse Proxy\nautomatisches TLS, deutlich weniger Konfiguration als Alternativen\n\n\nsslip.io statt eigener Domain\nsofort startklar, ohne eigenes DNS-Setup\n\n\nfeste Versions-Tags\nreproduzierbar, keine Überraschungen durch automatische Updates",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html#reproduzierbarkeit-durch-versionspinning",
+    "href": "hetzner/architektur.html#reproduzierbarkeit-durch-versionspinning",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "5.5 Reproduzierbarkeit durch Versionspinning",
+    "text": "5.5 Reproduzierbarkeit durch Versionspinning\n\n\n\n\n\n\nWichtigFeste Versionen statt latest\n\n\n\nAlle Container-Images sind auf konkrete Versionen festgelegt (n8n auf 2.20.6, Postgres auf 16.13-alpine3.23, Caddy auf 2.11.2-alpine), kein latest-Tag. So startet jede Installation dieselbe Fassung, und ein Update ist ein bewusster, geplanter Schritt statt einer stillen Veränderung im Hintergrund.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/architektur.html#kontrollpunkt",
+    "href": "hetzner/architektur.html#kontrollpunkt",
+    "title": "5  Wie die Instanz aufgebaut ist",
+    "section": "5.6 Kontrollpunkt",
+    "text": "5.6 Kontrollpunkt\n\ndie drei Container und ihre jeweilige Aufgabe benennen\nerklären, warum nur Caddy von außen erreichbar ist\ndie zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Wie die Instanz aufgebaut ist</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/server-anlegen.html",
+    "href": "hetzner/server-anlegen.html",
+    "title": "6  Server anlegen und starten",
+    "section": "",
+    "text": "6.1 Zielbild\nJetzt entsteht der Server. Hetzner stellt eine virtuelle Maschine bereit; ein hinterlegtes Cloud-Init-Skript richtet darauf den kompletten Stack ein. Nach dem Start müssen wir uns nicht einmal einloggen, um n8n zum Laufen zu bringen.\nEin laufender Server bei Hetzner, der sich selbst eingerichtet hat und unter einer Adresse der Form https://1-2-3-4.sslip.io erreichbar ist. Die Stationen:",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/server-anlegen.html#zielbild",
+    "href": "hetzner/server-anlegen.html#zielbild",
+    "title": "6  Server anlegen und starten",
+    "section": "",
+    "text": "Konto und SSH-Schlüssel vorbereiten\nFirewall anlegen\nServer mit Cloud-Init erstellen\nURL ermitteln",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/server-anlegen.html#voraussetzungen",
+    "href": "hetzner/server-anlegen.html#voraussetzungen",
+    "title": "6  Server anlegen und starten",
+    "section": "6.2 Voraussetzungen",
+    "text": "6.2 Voraussetzungen\n\nein Konto bei console.hetzner.cloud\nein SSH-Schlüssel, in der Hetzner-Console hinterlegt\nBudget von etwa 4 bis 7 € im Monat; der Server lässt sich jederzeit wieder löschen\n\n\n\n\n\n\n\nHinweisSSH-Schlüssel anlegen\n\n\n\nEin SSH-Schlüssel besteht aus einem privaten und einem öffentlichen Teil. Wer noch keinen hat, erzeugt ihn lokal mit ssh-keygen -t ed25519. Der öffentliche Teil (Datei ~/.ssh/id_ed25519.pub) wird in der Hetzner-Console unter „SSH-Keys” hinterlegt, der private Teil bleibt auf dem eigenen Rechner.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/server-anlegen.html#schritt-für-schritt-selbst-bauen",
+    "href": "hetzner/server-anlegen.html#schritt-für-schritt-selbst-bauen",
+    "title": "6  Server anlegen und starten",
+    "section": "6.3 Schritt für Schritt selbst bauen",
+    "text": "6.3 Schritt für Schritt selbst bauen\n\n6.3.1 Schritt 1: Firewall anlegen\nIn der Hetzner-Console unter Firewalls → Firewall erstellen:\n\nName: n8n-firewall\neingehende Regeln: nur SSH (22), HTTP (80) und HTTPS (443), jeweils von überall\nausgehende Regeln: alle erlauben\n\n\n\n\n\n\n\nDiese Firewall arbeitet auf Provider-Ebene und blockiert Verkehr, bevor er den Server erreicht. Die zweite Schicht (UFW) richtet das Cloud-Init-Skript später automatisch auf dem Server selbst ein.\n\n\n\n\n\n6.3.2 Schritt 2: Server erstellen\nIn der Hetzner-Console unter Server → Server erstellen die folgenden Einstellungen wählen:\n\n\n\n\n\n\n\nEinstellung\nWert\n\n\n\n\nStandort\nNürnberg oder Falkenstein\n\n\nImage\nUbuntu 24.04\n\n\nServer-Typ\nCPX11 (2 vCPU, 2 GB RAM) als Minimum, oder CPX21 (4 GB RAM), wenn KI-Knoten geplant sind\n\n\nSSH-Key\nden hinterlegten Schlüssel auswählen\n\n\nFirewall\nn8n-firewall aus Schritt 1\n\n\nCloud-Config\nden kompletten Inhalt der Datei cloud-init.yaml einfügen\n\n\nName\nfrei wählbar, etwa n8n-kurs\n\n\n\n\n\n\n\n\n\nWichtigCloud-Config nicht vergessen\n\n\n\nDer entscheidende Schritt ist das Feld „Cloud-Config” (manchmal unter „Erweitert” zu finden). Dort wird der vollständige Inhalt der Datei cloud-init.yaml aus diesem Repo eingefügt. Ohne diesen Inhalt startet zwar ein leerer Server, aber n8n wird nicht eingerichtet.\n\n\n\n\n\n\n\n\nTippCPX11 oder CPX21?\n\n\n\nFür reine Workflows ohne KI genügt der kleinere CPX11. Sobald KI-Knoten mit größeren Datenmengen im Spiel sind, sind 2 GB RAM schnell knapp; dann ist der CPX21 mit 4 GB die ruhigere Wahl. Ein späterer Wechsel auf einen größeren Typ ist in der Console ohne Datenverlust möglich.\n\n\n\n\n6.3.3 Schritt 3: Provisioning abwarten\nNach dem Start richtet sich der Server in etwa 5 bis 8 Minuten selbst ein. In dieser Zeit installiert er Docker, klont das Repo, erzeugt die Geheimnisse und startet die Container.\n\n\n\n\n\n\nTippWas im Hintergrund läuft\n\n\n\n\n\nDas Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UFW-Firewall einrichten, das Repo nach /opt/n8n klonen, die Server-IP ermitteln und daraus die sslip.io-Domain bilden. Anschließend erzeugt es mit openssl rand ein Datenbank-Passwort und den Encryption-Key, schreibt sie in die .env-Datei und startet den Stack mit docker compose up. Die Schritte sind so geschrieben, dass ein erneuter Lauf bestehende Geheimnisse nicht überschreibt.\n\n\n\n\n\n6.3.4 Schritt 4: URL ermitteln\nSobald der Server läuft, loggen wir uns einmal per SSH ein. Die Begrüßungsnachricht zeigt die fertige URL:\nssh root@&lt;server-ip&gt;\nDie Ausgabe nennt die Adresse, etwa:\nn8n läuft. Aufrufen unter:\n  https://1-2-3-4.sslip.io\nErscheint die Begrüßung noch nicht, läuft das Provisioning noch. Der Stand lässt sich prüfen mit:\ntail -n 30 /var/log/n8n-setup.log",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/server-anlegen.html#fehler-diagnostizieren",
+    "href": "hetzner/server-anlegen.html#fehler-diagnostizieren",
+    "title": "6  Server anlegen und starten",
+    "section": "6.4 Fehler diagnostizieren",
+    "text": "6.4 Fehler diagnostizieren\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\nkeine Begrüßungs-URL nach dem Login\nProvisioning läuft noch\nsudo cloud-init status --long prüfen, dann abwarten\n\n\nSetup ist gescheitert\nFehler im Setup-Skript\nsudo tail -n 100 /var/log/n8n-setup.log zeigt den Schritt\n\n\nSSH meldet „connection refused”\nServer noch im Boot-Vorgang\neine Minute warten, IP-Adresse prüfen",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/server-anlegen.html#kontrollpunkt",
+    "href": "hetzner/server-anlegen.html#kontrollpunkt",
+    "title": "6  Server anlegen und starten",
+    "section": "6.5 Kontrollpunkt",
+    "text": "6.5 Kontrollpunkt\n\neine Provider-Firewall mit drei erlaubten Ports anlegen\neinen Server mit hinterlegtem Cloud-Init starten\ndie Instanz-URL über SSH oder das Setup-Log ermitteln",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Server anlegen und starten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/einrichten.html",
+    "href": "hetzner/einrichten.html",
+    "title": "7  n8n aufrufen und einrichten",
+    "section": "",
+    "text": "7.1 Zielbild\nDer Server läuft, die URL steht. Jetzt rufen wir n8n im Browser auf und legen das Owner-Konto an. Danach ist die Instanz einsatzbereit.\nDer n8n-Editor ist unter der eigenen https-Adresse geöffnet, ein Owner-Konto ist angelegt, die Instanz ist bereit für den ersten Workflow.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>n8n aufrufen und einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/einrichten.html#schritt-für-schritt-selbst-bauen",
+    "href": "hetzner/einrichten.html#schritt-für-schritt-selbst-bauen",
+    "title": "7  n8n aufrufen und einrichten",
+    "section": "7.2 Schritt für Schritt selbst bauen",
+    "text": "7.2 Schritt für Schritt selbst bauen\n\n7.2.1 Schritt 1: URL im Browser öffnen\nDie in der vorigen Lektion ermittelte Adresse der Form https://1-2-3-4.sslip.io im Browser aufrufen.\n\n\n\n\n\n\nHinweisDer erste Aufruf dauert etwas länger\n\n\n\nCaddy holt das TLS-Zertifikat bedarfsgesteuert, also erst beim ersten Aufruf. Deshalb dauert die erste Anfrage 5 bis 10 Sekunden länger als spätere. Erscheint kurz eine Sicherheitswarnung, hilft ein erneutes Laden nach wenigen Sekunden, sobald das Zertifikat ausgestellt ist.\n\n\n\n\n7.2.2 Schritt 2: Owner-Konto anlegen\nBeim ersten Aufruf zeigt n8n den Setup-Wizard. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.\n\n\n7.2.3 Schritt 3: Erste Orientierung\nNach der Anmeldung öffnet sich der Editor. Hier entstehen Workflows, hier liegen Projekte, Credentials und das Ausführungsprotokoll. Die Instanz ist nun vollständig eigenständig: Alle Daten bleiben auf dem eigenen Server.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>n8n aufrufen und einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/einrichten.html#fehler-diagnostizieren",
+    "href": "hetzner/einrichten.html#fehler-diagnostizieren",
+    "title": "7  n8n aufrufen und einrichten",
+    "section": "7.3 Fehler diagnostizieren",
+    "text": "7.3 Fehler diagnostizieren\nDie meisten Startprobleme betreffen das TLS-Zertifikat oder die Erreichbarkeit. Die folgende Tabelle nennt die häufigsten Fälle:\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\nZertifikatsfehler oder Timeout\nZertifikat wird gerade erst geholt\neinige Sekunden warten, neu laden; Caddy-Logs prüfen\n\n\nSeite gar nicht erreichbar\nProvisioning noch nicht fertig\neine Minute warten; http://&lt;ip&gt; ergibt einen Redirect und ist ein guter Test\n\n\ndauerhafter Zertifikatsfehler\nLet’s-Encrypt-Limit erreicht\nsiehe Hinweis unten\n\n\n\nDie Caddy-Logs lassen sich auf dem Server einsehen:\ncd /opt/n8n\ndocker compose logs caddy | tail -n 50\n\n\n\n\n\n\nWichtigsslip.io und das Let’s-Encrypt-Limit\n\n\n\nsslip.io ist nicht auf der „Public Suffix List” eingetragen, daher zählt Let’s Encrypt alle *.sslip.io-Adressen als eine einzige Domain mit einem gemeinsamen Limit von 50 Zertifikaten pro Woche, weltweit. Im Einzelbetrieb ist das selten ein Problem. Starten dagegen viele Personen gleichzeitig ihren ersten Server (etwa eine ganze Kursgruppe), kann das Limit greifen. Dann hilft: das Onboarding über mehrere Tage staffeln, einige Stunden warten und erneut versuchen, oder für den produktiven Einsatz eine eigene Domain hinterlegen und in der .env als DOMAIN eintragen.\n\n\n\n\n\n\n\n\nHinweisBestimmte Knoten fehlen im Editor\n\n\n\nWer die Knoten „Execute Command” oder „Local File Trigger” sucht und nicht findet: Das ist Absicht. n8n 2.x deaktiviert diese beiden Knoten standardmäßig, weil sie beliebige Shell-Befehle beziehungsweise Dateisystem-Zugriff erlauben. Eine gezielte Reaktivierung ist über die Variable NODES_EXCLUDE in der .env möglich, sollte aber bewusst abgewogen werden, da sie weitreichenden Zugriff auf den Container öffnet.",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>n8n aufrufen und einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "hetzner/einrichten.html#kontrollpunkt",
+    "href": "hetzner/einrichten.html#kontrollpunkt",
+    "title": "7  n8n aufrufen und einrichten",
+    "section": "7.4 Kontrollpunkt",
+    "text": "7.4 Kontrollpunkt\n\ndie Instanz über die eigene https-Adresse aufrufen\ndas Owner-Konto im Setup-Wizard anlegen\neinen Zertifikats- oder Erreichbarkeitsfehler eingrenzen",
+    "crumbs": [
+      "Eigene Instanz auf Hetzner Cloud",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>n8n aufrufen und einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/index.html",
+    "href": "betrieb/index.html",
+    "title": "Betrieb und Pflege",
+    "section": "",
+    "text": "Eine selbst betriebene Instanz braucht etwas laufende Pflege. Drei Routinen halten sie gesund: regelmäßige Backups, kontrollierte Updates und ein geordnetes Beenden, wenn der Server nicht mehr gebraucht wird. Dieses Modul betrifft vor allem den Hetzner-Weg; bei der n8n Cloud und beim Managed Hosting übernimmt der Anbieter diese Aufgaben.\nWir werden:\n\nBackups einrichten und zusätzlich lokal sichern\ndie Instanz kontrolliert auf eine neue Version heben\nden Server geordnet beenden, ohne Workflows oder Schlüssel zu verlieren",
+    "crumbs": [
+      "Betrieb und Pflege"
+    ]
+  },
+  {
+    "objectID": "betrieb/backups.html",
+    "href": "betrieb/backups.html",
+    "title": "8  Backups einrichten",
+    "section": "",
+    "text": "8.1 Zielbild\nWorkflows und Credentials liegen in der Datenbank. Ein Backup sichert sie, zusammen mit dem Encryption-Key, ohne den die gesicherten Credentials wertlos sind. Auf dem Hetzner-Server steht dafür ein fertiges Skript bereit.\nEin Backup-Satz im Verzeichnis backups/ auf dem Server, regelmäßig erzeugt und zusätzlich lokal gesichert.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Backups einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/backups.html#schritt-für-schritt-selbst-bauen",
+    "href": "betrieb/backups.html#schritt-für-schritt-selbst-bauen",
+    "title": "8  Backups einrichten",
+    "section": "8.2 Schritt für Schritt selbst bauen",
+    "text": "8.2 Schritt für Schritt selbst bauen\n\n8.2.1 Schritt 1: Backup manuell laufen lassen\nssh root@&lt;server-ip&gt;\n/opt/n8n/scripts/backup.sh\n\n\n\n\n\n\nTippWas gesichert wird\n\n\n\nDas Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflows, Credentials und Ausführungen, einen Tarball des n8n-Daten-Volumes und eine Kopie der .env mit dem Encryption-Key. Es behält die sieben jüngsten Sätze und entfernt ältere automatisch.\n\n\n\n\n8.2.2 Schritt 2: Backup lokal sichern\n\n\n\n\n\n\nWichtigDas Backup liegt auf demselben Server\n\n\n\nSolange das Backup nur auf dem Server liegt, ist es bei einem Server-Verlust ebenfalls weg. Wer Workflows behalten möchte, kopiert den Ordner regelmäßig auf den eigenen Rechner.\n\n\nscp -r root@&lt;server-ip&gt;:/opt/n8n/backups ./n8n-backup-$(date +%F)\nDamit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum.\n\n\n8.2.3 Schritt 3: Tägliches Backup per Cron\nFür einen automatischen täglichen Lauf um 03:00 Uhr richten wir auf dem Server einen Cron-Eintrag ein:\n( crontab -l 2&gt;/dev/null; echo \"0 3 * * * /opt/n8n/scripts/backup.sh &gt;&gt; /var/log/n8n-backup.log 2&gt;&1\" ) | crontab -\n\n\n\n\n\n\nDer Ausdruck 0 3 * * * steht für „täglich um 03:00 Uhr”. Die Ausgabe landet in /var/log/n8n-backup.log, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Backups einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/backups.html#fehler-diagnostizieren",
+    "href": "betrieb/backups.html#fehler-diagnostizieren",
+    "title": "8  Backups einrichten",
+    "section": "8.3 Fehler diagnostizieren",
+    "text": "8.3 Fehler diagnostizieren\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\npermission denied beim Skript\nSkript nicht ausführbar oder falscher Nutzer\nals root ausführen, Pfad /opt/n8n/scripts/backup.sh prüfen\n\n\nSpeicher voll\nalte Backups oder viele Ausführungsdaten\ndf -h prüfen, Ausführungsdaten in n8n prunen\n\n\nscp: no such file\nfalscher Pfad auf dem Server\nPfad /opt/n8n/backups kontrollieren",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Backups einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/backups.html#kontrollpunkt",
+    "href": "betrieb/backups.html#kontrollpunkt",
+    "title": "8  Backups einrichten",
+    "section": "8.4 Kontrollpunkt",
+    "text": "8.4 Kontrollpunkt\n\nein Backup manuell erzeugen und den Inhalt benennen\nden Backup-Satz per scp lokal sichern\nein tägliches Backup per Cron einrichten",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Backups einrichten</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/aktualisieren.html",
+    "href": "betrieb/aktualisieren.html",
+    "title": "9  Aktualisieren",
+    "section": "",
+    "text": "9.1 Zielbild\nUpdates sind ein bewusster Schritt. Die Versionen sind festgelegt, damit jede Installation dieselbe Fassung nutzt; ein Update ändert den gewünschten Tag und zieht die neue Version kontrolliert nach. Davor wird automatisch gesichert.\nEine aktualisierte Instanz auf einer bewusst gewählten Version, mit einem frischen Backup als Sicherheitsnetz.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Aktualisieren</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/aktualisieren.html#schritt-für-schritt-selbst-bauen",
+    "href": "betrieb/aktualisieren.html#schritt-für-schritt-selbst-bauen",
+    "title": "9  Aktualisieren",
+    "section": "9.2 Schritt für Schritt selbst bauen",
+    "text": "9.2 Schritt für Schritt selbst bauen\n\n9.2.1 Schritt 1: Zielversion wählen\nVor dem Update prüfen wir, welche Version aktuell stabil ist. Die n8n-Release-Notes und die Tag-Übersicht auf Docker Hub zeigen die verfügbaren Fassungen.\n\n\n9.2.2 Schritt 2: Tag in der .env setzen\nssh root@&lt;server-ip&gt;\ncd /opt/n8n\nnano .env\nIn der .env wird der gewünschte Tag eingetragen, etwa N8N_IMAGE_TAG=2.21.0. Die Datenbank- und Caddy-Tags lassen sich auf dieselbe Weise anheben.\n\n\n9.2.3 Schritt 3: Update-Skript ausführen\n/opt/n8n/scripts/update.sh\n\n\n\n\n\n\nTippWas das Skript tut\n\n\n\nDas Skript zieht zuerst ein vollständiges Backup, zeigt dann die in der .env gesetzten Tags an und führt anschließend docker compose pull und docker compose up -d aus. Der gewünschte Stand bleibt in der .env dokumentiert, das Update ist damit reproduzierbar.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Aktualisieren</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/aktualisieren.html#warum-nicht-latest-und-nicht-automatisch",
+    "href": "betrieb/aktualisieren.html#warum-nicht-latest-und-nicht-automatisch",
+    "title": "9  Aktualisieren",
+    "section": "9.3 Warum nicht latest und nicht automatisch",
+    "text": "9.3 Warum nicht latest und nicht automatisch\n\n\n\n\n\n\nWichtigGeplant statt automatisch\n\n\n\nKein Image trägt den Tag latest. Automatische Updates im laufenden Betrieb könnten unbemerkt eine Version mit Breaking Changes einspielen und Workflows stören. Deshalb ist jedes Update ein geplanter Schritt mit einem Backup davor; so bleibt im Fehlerfall ein klarer Weg zurück.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Aktualisieren</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/aktualisieren.html#fehler-diagnostizieren",
+    "href": "betrieb/aktualisieren.html#fehler-diagnostizieren",
+    "title": "9  Aktualisieren",
+    "section": "9.4 Fehler diagnostizieren",
+    "text": "9.4 Fehler diagnostizieren\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\nContainer startet nach dem Update nicht\nBreaking Change oder offene Migration\nLogs prüfen, im Zweifel den vorherigen Tag in .env setzen und erneut docker compose up -d\n\n\npull schlägt fehl\nTag existiert nicht\nSchreibweise des Tags auf Docker Hub abgleichen\n\n\nUpdate bricht vor dem Pull ab\nPre-Backup gescheitert\nSpeicherplatz und Backup-Pfad prüfen",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Aktualisieren</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/aktualisieren.html#kontrollpunkt",
+    "href": "betrieb/aktualisieren.html#kontrollpunkt",
+    "title": "9  Aktualisieren",
+    "section": "9.5 Kontrollpunkt",
+    "text": "9.5 Kontrollpunkt\n\neine Zielversion bewusst auswählen\nden Image-Tag in der .env setzen und das Update-Skript ausführen\nbegründen, warum Updates geplant statt automatisch erfolgen",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Aktualisieren</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/server-loeschen.html",
+    "href": "betrieb/server-loeschen.html",
+    "title": "10  Server geordnet beenden",
+    "section": "",
+    "text": "10.1 Zielbild\nWird der Server nicht mehr gebraucht, gehört er gelöscht. Ungenutzte Server kosten Geld und vergrößern die Angriffsfläche. Vorher sichern wir, was bleiben soll, denn das Löschen ist unwiderruflich.\nAlles Wichtige ist lokal gesichert, danach ist der Server in der Hetzner-Console gelöscht.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Server geordnet beenden</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/server-loeschen.html#schritt-für-schritt-selbst-bauen",
+    "href": "betrieb/server-loeschen.html#schritt-für-schritt-selbst-bauen",
+    "title": "10  Server geordnet beenden",
+    "section": "10.2 Schritt für Schritt selbst bauen",
+    "text": "10.2 Schritt für Schritt selbst bauen\n\n10.2.1 Schritt 1: Workflows als JSON exportieren\nIm n8n-Editor öffnet das Drei-Punkte-Menü oben rechts die Option „Download”. Damit wird der Workflow als JSON-Datei gesichert. Diese Datei ist portierbar und lässt sich später in eine neue Instanz importieren.\n\n\n\n\n\n\nBeim JSON-Export werden die Credentials bewusst nicht mitgegeben. Wer auch sie behalten möchte, braucht zusätzlich das Voll-Backup aus dem nächsten Schritt.\n\n\n\n\n\n10.2.2 Schritt 2: Voll-Backup mit Encryption-Key sichern\nssh root@&lt;server-ip&gt;\n/opt/n8n/scripts/backup.sh\nexit\n\nscp -r root@&lt;server-ip&gt;:/opt/n8n/backups ./n8n-backup-$(date +%F)\n\n\n\n\n\n\nWichtigOhne Encryption-Key sind die Credentials wertlos\n\n\n\nIm lokal gesicherten Ordner liegen der Postgres-Dump, der n8n-Daten-Tarball und die env-…backup mit dem Encryption-Key. Die Schlüssel-Datei muss zusammen mit dem Dump aufbewahrt werden, idealerweise an einem sicheren Ort wie einem Passwort-Manager. Geht der Key verloren, lassen sich die im Dump enthaltenen Credentials nicht mehr entschlüsseln.\n\n\n\n\n10.2.3 Schritt 3: Server in der Console löschen\nIn der Hetzner-Console unter Server → Server auswählen → Aktionen → Löschen den Server-Namen zur Bestätigung eintippen und löschen. Der Server, alle Volumes und alle Daten werden dabei entfernt.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Server geordnet beenden</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/server-loeschen.html#aufräumen",
+    "href": "betrieb/server-loeschen.html#aufräumen",
+    "title": "10  Server geordnet beenden",
+    "section": "10.3 Aufräumen",
+    "text": "10.3 Aufräumen\n\nDie Hetzner Cloud Firewall lässt sich löschen, wenn kein weiterer Server sie nutzt.\nDer SSH-Schlüssel kann bleiben; er ist kein Datenleck.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Server geordnet beenden</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/server-loeschen.html#restore-in-eine-neue-instanz",
+    "href": "betrieb/server-loeschen.html#restore-in-eine-neue-instanz",
+    "title": "10  Server geordnet beenden",
+    "section": "10.4 Restore in eine neue Instanz",
+    "text": "10.4 Restore in eine neue Instanz\n\n\n\n\n\n\nHinweisKurzfassung für den Wiederherstellungs-Fall\n\n\n\n\n\nAuf einem frischen, mit dieser Anleitung aufgesetzten Server lässt sich der Stand zurückspielen: den Stack mit docker compose down stoppen, die gesicherte env-…backup als .env einspielen und die DOMAIN auf die neue IP anpassen, Postgres starten, den Dump mit zcat … | docker compose exec -T postgres psql -U n8n n8n einspielen, danach das n8n-Daten-Volume aus dem Tarball zurückspielen und die Container starten. Externe OAuth-Verbindungen müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-URL ändert.",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Server geordnet beenden</span>"
+    ]
+  },
+  {
+    "objectID": "betrieb/server-loeschen.html#kontrollpunkt",
+    "href": "betrieb/server-loeschen.html#kontrollpunkt",
+    "title": "10  Server geordnet beenden",
+    "section": "10.5 Kontrollpunkt",
+    "text": "10.5 Kontrollpunkt\n\nWorkflows als JSON exportieren\nein Voll-Backup samt Encryption-Key lokal sichern\nden Server in der Console löschen und wissen, was sich später wiederherstellen lässt",
+    "crumbs": [
+      "Betrieb und Pflege",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>Server geordnet beenden</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/index.html",
+    "href": "souveraenitaet/index.html",
+    "title": "Souveränität, Datenschutz und EU AI Act",
+    "section": "",
+    "text": "Eine Instanz einzurichten ist das eine, sie verantwortungsvoll zu betreiben das andere. Wer personenbezogene Daten verarbeitet oder KI-Knoten einsetzt, bewegt sich in einem rechtlichen Rahmen. Dieses Modul ordnet die wichtigsten Punkte ein: Datensouveränität und DSGVO beim Hosting sowie die Risiko-Logik des EU AI Act für eigene Workflows.\n\n\n\n\n\n\nDiese Kapitel sind kein Rechtsgutachten. Sie geben den Kontext für ein verantwortungsvolles Setup; im Zweifel rechtlichen Rat einholen.\n\n\n\nWir werden:\n\ndie Datenschutz-Fragen beim Hosting einordnen (Auftragsverarbeitung, Drittlandtransfer, Telemetrie)\nsouveränere Alternativen für KI-Knoten benennen\ndie vier Risikoklassen des EU AI Act auf typische n8n-Workflows übertragen",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/datenschutz.html",
+    "href": "souveraenitaet/datenschutz.html",
+    "title": "11  Datensouveränität und DSGVO",
+    "section": "",
+    "text": "11.1 Auftragsverarbeitung mit dem Hoster\nWo Daten verarbeitet werden, ist nicht nur eine technische Frage. Laut dem Bitkom Cloud Report 2025 halten 78 % der befragten Unternehmen Deutschland für zu abhängig von US-Cloud-Anbietern, und eine große Mehrheit wünscht sich Anbieter aus Deutschland oder der EU (Bitkom e.V. 2025). Wer n8n auf einem europäischen Server betreibt, beantwortet einen Teil dieser Frage bereits durch die Wahl des Hosts. Der andere Teil entscheidet sich in den Workflows selbst.\nWer personenbezogene Daten in n8n speichert, lässt diese durch den Hoster verarbeiten. Damit liegt eine Auftragsverarbeitung nach Art. 28 DSGVO vor, und es braucht einen Auftragsverarbeitungsvertrag (AVV). Hetzner stellt einen Standard-AVV bereit, der sich direkt in der Console abschließen lässt.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/datenschutz.html#auftragsverarbeitung-mit-dem-hoster",
+    "href": "souveraenitaet/datenschutz.html#auftragsverarbeitung-mit-dem-hoster",
+    "title": "11  Datensouveränität und DSGVO",
+    "section": "",
+    "text": "Ein praktischer Schritt vor dem ersten Echt-Workflow: den AVV in der Console abschließen und die Bestätigung lokal sichern. Die Hetzner-Standorte Nürnberg, Falkenstein und Helsinki liegen alle innerhalb der EU.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/datenschutz.html#drittlandtransfer-durch-ki-knoten",
+    "href": "souveraenitaet/datenschutz.html#drittlandtransfer-durch-ki-knoten",
+    "title": "11  Datensouveränität und DSGVO",
+    "section": "11.2 Drittlandtransfer durch KI-Knoten",
+    "text": "11.2 Drittlandtransfer durch KI-Knoten\nEU-Hosting ist nur die halbe Miete. Sobald in einem Workflow ein KI-Knoten mit OpenAI, Anthropic oder einem anderen US-Anbieter steckt, fließen die übergebenen Daten in die USA. Das ist ein Drittlandtransfer und braucht eine eigene Rechtsgrundlage, etwa Standardvertragsklauseln und ein Transfer-Impact-Assessment.\n\n\n\n\n\n\nWichtigJeder KI-Knoten ist ein Datenfluss-Punkt\n\n\n\nDer Speicherort des Servers schützt nicht vor dem Datenabfluss über einen KI-Knoten. Jede KI-Node in einem produktiven Workflow ist ein Punkt, an dem Daten die eigene Infrastruktur verlassen können, und gehört dokumentiert.\n\n\n\n11.2.1 Souveränere Alternativen\nFür KI-Knoten mit sensiblen Daten gibt es Alternativen mit EU-Bezug oder lokalem Betrieb:\n\n\n\nAnbieter\nSitz\nBetrieb\nBemerkung\n\n\n\n\nMistral\nFrankreich\nEU\nAPI-kompatibel mit OpenAI\n\n\nAleph Alpha\nDeutschland\nDE\nEnterprise-Fokus\n\n\nOllama\noffen\nlokal\nOpen-Source-Modelle auf dem eigenen Server\n\n\n\nFür besonders sensible Daten ist Ollama auf einem eigenen Server ein gangbarer Weg. Dabei sind die Hardware-Anforderungen zu beachten: Für kleinere Modelle reichen einige Gigabyte Arbeitsspeicher, größere Modelle verlangen deutlich mehr oder eine GPU.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/datenschutz.html#der-telemetrie-reflex",
+    "href": "souveraenitaet/datenschutz.html#der-telemetrie-reflex",
+    "title": "11  Datensouveränität und DSGVO",
+    "section": "11.3 Der Telemetrie-Reflex",
+    "text": "11.3 Der Telemetrie-Reflex\nn8n sendet im Standard drei Datenströme an n8n.io. Im Kurs-Setup sind alle drei deaktiviert, nicht weil sie gefährlich wären, sondern als Übung: Bei jeder neuen Software lohnt die Frage, was sie nach Hause schickt.\n\n\n\n\n\n\n\n\n\nVariable\nWas passiert\nKurs-Standard\nFür eigene Nutzung\n\n\n\n\nN8N_DIAGNOSTICS_ENABLED\nanonyme Nutzungs-Telemetrie\nfalse\nmeist weiter false\n\n\nN8N_VERSION_NOTIFICATIONS_ENABLED\nPrüfung auf neue Versionen\nfalse\ntrue durchaus sinnvoll, macht Sicherheits-Updates sichtbar\n\n\nN8N_PERSONALIZATION_ENABLED\nProfil-Abfrage im Onboarding\nfalse\ntrue ist ein fairer Tausch für passendere Vorlagen\n\n\n\n\n\n\n\n\n\nTippDie Reflexfrage\n\n\n\nDer Punkt ist nicht, jede Telemetrie pauschal abzuschalten. Der Punkt ist, jede Option bewusst zu prüfen, statt Voreinstellungen blind zu übernehmen. Bei n8n ist die Dokumentation dazu gut auffindbar; bei vielen anderen Werkzeugen muss man im Quellcode danach suchen.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/datenschutz.html#encryption-key-bedeutet-datenzugang",
+    "href": "souveraenitaet/datenschutz.html#encryption-key-bedeutet-datenzugang",
+    "title": "11  Datensouveränität und DSGVO",
+    "section": "11.4 Encryption-Key bedeutet Datenzugang",
+    "text": "11.4 Encryption-Key bedeutet Datenzugang\n\n\n\n\n\n\nWichtigSchlüssel-Verlust gleich Datenverlust\n\n\n\nDie in n8n gespeicherten Credentials sind mit dem N8N_ENCRYPTION_KEY verschlüsselt. Wer diesen Schlüssel verliert, etwa weil der Server ohne lokale Sicherung der .env gelöscht wird, verliert alle Credentials unwiderruflich. Die .env gehört deshalb zu jedem Backup und vor jedem Server-Delete an einen sicheren Ort.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/datenschutz.html#kontrollpunkt",
+    "href": "souveraenitaet/datenschutz.html#kontrollpunkt",
+    "title": "11  Datensouveränität und DSGVO",
+    "section": "11.5 Kontrollpunkt",
+    "text": "11.5 Kontrollpunkt\n\nden AVV-Schritt beim Hoster benennen\nerklären, warum EU-Hosting den Drittlandtransfer durch KI-Knoten nicht automatisch löst\nden Telemetrie-Reflex auf eine neue Software anwenden\n\n\n\n\n\nBitkom e.V. 2025. „Cloud Report 2025: Wirtschaft ruft nach deutscher Cloud“. Bitkom Research, repräsentative Befragung von 604 Unternehmen. https://www.bitkom.org/.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Datensouveränität und DSGVO</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/eu-ai-act.html",
+    "href": "souveraenitaet/eu-ai-act.html",
+    "title": "12  Der EU AI Act für eigene Workflows",
+    "section": "",
+    "text": "12.1 Use Case statt Tool\nDer EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft; die meisten Pflichten gelten gestaffelt zwischen 2025 und 2027 (Europäische Union 2024). Für die eigene Arbeit mit n8n ist weniger der Gesetzestext entscheidend als die Risiko-Logik dahinter, denn sie lässt sich gut auf konkrete Workflows übertragen.\nDer AI Act reguliert, wofür ein KI-System eingesetzt wird, nicht welches Werkzeug dahintersteht. n8n als Plattform ist neutral; ein Workflow, der ein Sprach-Modell nutzt, kann erlaubt oder verboten sein, je nach Anwendungsfall.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/eu-ai-act.html#die-vier-risikoklassen",
+    "href": "souveraenitaet/eu-ai-act.html#die-vier-risikoklassen",
+    "title": "12  Der EU AI Act für eigene Workflows",
+    "section": "12.2 Die vier Risikoklassen",
+    "text": "12.2 Die vier Risikoklassen\n\n12.2.1 Verbotene Praktiken\nBestimmte Anwendungen sind untersagt, etwa Social Scoring von Bürgerinnen und Bürgern, Emotionserkennung am Arbeitsplatz oder in Bildungseinrichtungen sowie manipulative Systeme, die Schwächen gezielt ausnutzen. Solche Workflows dürfen gar nicht erst gebaut werden.\n\n\n12.2.2 Hochrisiko\nHier liegt der größte Teil der praktisch relevanten Pflichten. Typische Anwendungsfälle, die in n8n entstehen können:\n\n\n\nBereich\nTypischer Workflow\n\n\n\n\nBeschäftigung\nBewerbungs-Scoring oder Auswahl-Automation\n\n\nBildung\nautomatisierte Bewertung von Prüfungsleistungen\n\n\nZugang zu Diensten\nKreditvergabe- oder Tarif-Scoring\n\n\nStrafverfolgung\nBetrugs-Erkennung mit Folgen für Betroffene\n\n\n\nFür solche Systeme gelten unter anderem ein Risikomanagement, eine Daten-Governance, die Protokollierung der Verarbeitung, technische Dokumentation und eine menschliche Aufsicht.\n\n\n12.2.3 Begrenztes Risiko\nWorkflows, die KI nutzen, ohne in die Hochrisiko-Klasse zu fallen, brauchen oft Transparenz: Nutzer müssen erkennen können, dass sie mit KI interagieren. Beispiele sind ein Chatbot, der sich als KI zu erkennen gibt, oder generierte Texte und Bilder, die als solche gekennzeichnet werden.\n\n\n12.2.4 Minimales Risiko\nDie Mehrheit der Workflows, etwa Spam-Filterung, das automatische Verschlagworten eingehender E-Mails oder eine Newsletter-Personalisierung. Hier gelten keine spezifischen AI-Act-Pflichten, die DSGVO bleibt selbstverständlich gültig.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/eu-ai-act.html#protokollierung-und-das-execution-log",
+    "href": "souveraenitaet/eu-ai-act.html#protokollierung-und-das-execution-log",
+    "title": "12  Der EU AI Act für eigene Workflows",
+    "section": "12.3 Protokollierung und das Execution-Log",
+    "text": "12.3 Protokollierung und das Execution-Log\nHochrisiko-Systeme müssen ihre Verarbeitungsschritte protokollieren. n8n bringt das von Haus aus mit: Jede Workflow-Ausführung wird im Execution-Log gespeichert, mit Eingaben, Ergebnissen und Fehlern je Knoten.\n\n\n\n\n\n\nFür Hochrisiko-Workflows lohnt es sich, die Aufbewahrungsdauer des Execution-Logs auf den geforderten Zeitraum anzuheben, in n8n über die Variable EXECUTIONS_DATA_PRUNE_MAX_AGE.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/eu-ai-act.html#menschliche-aufsicht-in-n8n",
+    "href": "souveraenitaet/eu-ai-act.html#menschliche-aufsicht-in-n8n",
+    "title": "12  Der EU AI Act für eigene Workflows",
+    "section": "12.4 Menschliche Aufsicht in n8n",
+    "text": "12.4 Menschliche Aufsicht in n8n\nHochrisiko-Workflows brauchen einen Punkt, an dem ein Mensch eingreift. n8n bietet dafür mehrere Muster:\n\nein Approval-Schritt, der per Nachricht in Slack oder Teams zur Freigabe auffordert und erst nach einem Klick weiterläuft\neine Review-Warteschlange, in der Vorschläge gesammelt werden und ein Mensch über jeden Fall entscheidet\nein Schwellenwert, der nur eindeutige Fälle automatisch verarbeitet und Grenzfälle zur Prüfung eskaliert\n\n\n\n\n\n\n\nTippDen Oversight-Punkt sichtbar machen\n\n\n\nFür einen typischen Hochrisiko-Workflow lohnt es sich, den Punkt der menschlichen Aufsicht ausdrücklich im Workflow zu markieren, statt ihn implizit zu lassen. So bleibt nachvollziehbar, wo eine Entscheidung des Modells überprüft wird.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/eu-ai-act.html#drei-fragen-vor-jedem-produktiven-workflow",
+    "href": "souveraenitaet/eu-ai-act.html#drei-fragen-vor-jedem-produktiven-workflow",
+    "title": "12  Der EU AI Act für eigene Workflows",
+    "section": "12.5 Drei Fragen vor jedem produktiven Workflow",
+    "text": "12.5 Drei Fragen vor jedem produktiven Workflow\n\nWelcher Hochrisiko-Kategorie ähnelt der Anwendungsfall? Wenn eine passt, die entsprechenden Pflichten prüfen.\nErkennt der Nutzer, dass KI im Spiel ist? Wenn nein, Transparenz nachrüsten.\nWo greift ein Mensch ein, wenn das Modell falsch liegt? Diesen Punkt konkret im Workflow markieren.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
+    ]
+  },
+  {
+    "objectID": "souveraenitaet/eu-ai-act.html#kontrollpunkt",
+    "href": "souveraenitaet/eu-ai-act.html#kontrollpunkt",
+    "title": "12  Der EU AI Act für eigene Workflows",
+    "section": "12.6 Kontrollpunkt",
+    "text": "12.6 Kontrollpunkt\n\nerklären, warum der AI Act den Use Case und nicht das Werkzeug reguliert\ndie vier Risikoklassen an je einem n8n-Beispiel benennen\neinen Punkt für menschliche Aufsicht in einem Workflow verorten\n\n\n\n\n\nEuropäische Union. 2024. „Verordnung (EU) 2024/1689 zur Festlegung harmonisierter Vorschriften für künstliche Intelligenz (KI-Verordnung)“. Amtsblatt der Europäischen Union. https://eur-lex.europa.eu/eli/reg/2024/1689.",
+    "crumbs": [
+      "Souveränität, Datenschutz und EU AI Act",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
+    ]
+  }
+]
