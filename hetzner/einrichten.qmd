@@ -45,8 +45,10 @@ docker compose logs caddy | tail -n 50
 `cd /opt/n8n` wechselt in das Verzeichnis des Stacks („cd" steht für „change directory", also „Verzeichnis wechseln"). Das senkrechte Zeichen `|` zwischen zwei Befehlen ist eine Pipe: Sie reicht die Ausgabe des linken Befehls direkt an den rechten weiter. Hier gibt `docker compose logs caddy` das gesamte Protokoll von Caddy aus, und `tail -n 50` zeigt davon nur die letzten 50 Zeilen.
 :::
 
-::: {.callout-important title="sslip.io und das Let's-Encrypt-Limit"}
-sslip.io ist nicht auf der „Public Suffix List" eingetragen, daher zählt Let's Encrypt alle `*.sslip.io`-Adressen als eine einzige Domain mit einem gemeinsamen Limit von 50 Zertifikaten pro Woche, weltweit. Im Einzelbetrieb ist das selten ein Problem. Starten dagegen viele Personen gleichzeitig ihren ersten Server (etwa eine ganze Kursgruppe), kann das Limit greifen. Dann hilft: das Onboarding über mehrere Tage staffeln, einige Stunden warten und erneut versuchen, oder für den produktiven Einsatz eine eigene Domain hinterlegen und in der `.env` als `DOMAIN` eintragen.
+::: {.callout-important title="Wenn viele gleichzeitig starten: das Zertifikat-Limit"}
+Die Stelle, die die Verschlüsselungs-Zertifikate kostenlos ausstellt (Let's Encrypt), begrenzt, wie viele davon pro Woche auf `sslip.io`-Adressen ausgegeben werden, und dieses Kontingent gilt weltweit gemeinsam für alle. Im Einzelbetrieb spielt das nie eine Rolle. Startet aber eine ganze Kursgruppe am selben Tag ihren ersten Server, kann das gemeinsame Kontingent erschöpft sein. Dann hilft eines von dreien: die Starts über mehrere Tage verteilen, einige Stunden warten und erneut versuchen, oder eine eigene Domain hinterlegen (in der `.env` als `DOMAIN` eintragen).
+
+Im Hintergrund: sslip.io gilt bei Let's Encrypt technisch als eine einzige Domain, weshalb sich alle Nutzer das Wochenlimit teilen.
 :::
 
 ::: {.callout-note title="Bestimmte Knoten fehlen im Editor"}

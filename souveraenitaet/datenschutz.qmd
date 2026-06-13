@@ -7,7 +7,7 @@ Wo Daten verarbeitet werden, ist nicht nur eine technische Frage. Laut dem Bitko
 Wer personenbezogene Daten in n8n speichert, lässt diese durch den Hoster verarbeiten. Damit liegt eine Auftragsverarbeitung nach Art. 28 DSGVO vor, und es braucht einen Auftragsverarbeitungsvertrag (AVV). Hetzner stellt einen Standard-AVV bereit, der sich direkt in der Console abschließen lässt.
 
 ::: {.callout-note title="Auftragsverarbeitung und AVV"}
-„Personenbezogene Daten" sind alle Angaben, die sich auf eine identifizierbare Person beziehen, etwa Name, E-Mail-Adresse oder Telefonnummer. „Auftragsverarbeitung" bedeutet, dass ein Dienstleister, hier der Hoster, solche Daten in unserem Auftrag verarbeitet, ohne selbst über sie zu bestimmen. Die DSGVO verlangt dafür einen Auftragsverarbeitungsvertrag (AVV), also einen Vertrag, der schriftlich festhält, was der Dienstleister mit den Daten tun darf und wie er sie schützt.
+„Personenbezogene Daten" sind alle Angaben, die sich auf eine identifizierbare Person beziehen, etwa Name, E-Mail-Adresse oder Telefonnummer. „Auftragsverarbeitung" bedeutet, dass ein Dienstleister diese Daten in unserem Auftrag verarbeitet, ohne selbst über sie zu bestimmen, ähnlich einem externen Lohnbüro, das die Gehaltsabrechnung erledigt, die Mitarbeiterdaten aber nur im Auftrag der Firma nutzen darf. Hier ist dieser Dienstleister der Hoster. Die DSGVO verlangt für solche Fälle einen Auftragsverarbeitungsvertrag (AVV), also einen Vertrag, der schriftlich festhält, was der Dienstleister mit den Daten tun darf und wie er sie schützt.
 :::
 
 ::: {.callout-note}

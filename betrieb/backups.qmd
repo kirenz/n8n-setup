@@ -44,7 +44,7 @@ Für einen automatischen täglichen Lauf um 03:00 Uhr richten wir auf dem Server
 ```
 
 ::: {.callout-note title="Cron und der Zeitplan"}
-Cron ist der eingebaute Zeitplaner von Linux, der Befehle automatisch zu festgelegten Zeiten ausführt. Die Liste dieser geplanten Aufgaben heißt „crontab". Der etwas sperrige Befehl liest die bestehende Liste, hängt unsere neue Zeile an und speichert sie zurück. Der Ausdruck `0 3 * * *` steht für „täglich um 03:00 Uhr". Die Ausgabe landet in `/var/log/n8n-backup.log`, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.
+Cron ist der eingebaute Zeitplaner von Linux, der Befehle automatisch zu festgelegten Zeiten ausführt, ähnlich einem Wecker, der jeden Tag zur selben Uhrzeit klingelt. Die Liste dieser geplanten Aufgaben heißt „crontab". Der etwas sperrige Befehl liest die bestehende Liste, hängt unsere neue Zeile an und speichert sie zurück. Der vordere Teil `0 3 * * *` legt den Zeitpunkt fest: Die fünf Felder stehen für Minute, Stunde, Tag, Monat und Wochentag, ein `*` heißt „jeder", und so bedeutet `0 3 * * *` schlicht „täglich um 03:00 Uhr". Die Ausgabe landet in `/var/log/n8n-backup.log`, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.
 :::
 
 ## Fehler diagnostizieren

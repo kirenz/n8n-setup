@@ -25,7 +25,7 @@ Tarife, Preise und die Dauer der Testphase ändern sich von Zeit zu Zeit. Die ak
 Die Cloud vergibt eine eigene Subdomain, etwa `meinteam.app.n8n.cloud`, also einen eigenen Namen unterhalb von `n8n.cloud`. Unter dieser Adresse ist die Instanz danach erreichbar, auch für eingehende Webhooks externer Dienste.
 
 ::: {.callout-note title="Was ist ein Webhook?"}
-Ein Webhook ist eine feste Internetadresse, an die ein externer Dienst automatisch eine Nachricht schickt, sobald dort etwas passiert, etwa ein neuer Formular-Eintrag oder eine eingegangene Zahlung. n8n stellt solche Adressen bereit, damit ein Workflow genau dann startet, wenn die Nachricht eintrifft. Voraussetzung ist, dass die Instanz aus dem Internet erreichbar ist, was bei der Cloud automatisch gegeben ist.
+Ein Webhook ist so etwas wie eine Türklingel für Programme: eine feste Internetadresse, bei der ein externer Dienst automatisch Bescheid gibt, sobald dort etwas passiert, etwa ein neuer Formular-Eintrag oder eine eingegangene Zahlung. Klingelt es an dieser Adresse, startet der zugehörige Workflow von selbst. Damit das funktioniert, muss die Instanz aus dem Internet erreichbar sein, was bei der Cloud automatisch gegeben ist.
 :::
 
 ### Schritt 3: Editor öffnen und einrichten

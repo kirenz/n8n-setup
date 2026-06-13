@@ -50,8 +50,14 @@ docker run -it --rm \
   docker.n8n.io/n8nio/n8n
 ```
 
-::: {.callout-tip title="Die Optionen im Befehl"}
-`-p 5678:5678` verbindet den Port des Containers mit dem des Rechners, sodass der Editor unter `localhost:5678` erreichbar ist. `-v n8n_data:/home/node/.n8n` hängt das Volume an die Stelle ein, an der n8n seine Daten ablegt. Die `-e`-Optionen setzen Umgebungsvariablen, also Einstellungen, die dem Programm beim Start mitgegeben werden, hier die Zeitzone und zwei empfohlene Voreinstellungen. `docker.n8n.io/n8nio/n8n` ist das offizielle Image, die Vorlage für den Container. Mit `-it --rm` läuft der Container im Vordergrund und wird beim Beenden entfernt; das Volume und damit die Daten bleiben bestehen.
+::: {.callout-tip title="Die Optionen im Befehl, Stück für Stück"}
+Der Befehl wirkt lang, besteht aber nur aus mehreren kleinen Anweisungen, je eine pro Zeile:
+
+- `-p 5678:5678` verbindet n8n im Container mit dem eigenen Rechner, sodass der Editor unter `localhost:5678` erreichbar ist.
+- `-v n8n_data:/home/node/.n8n` hängt das Daten-Volume an die Stelle ein, an der n8n seine Daten ablegt.
+- die `-e`-Zeilen setzen Umgebungsvariablen, also Einstellungen, die dem Programm beim Start mitgegeben werden (hier die Zeitzone und zwei empfohlene Voreinstellungen).
+- `docker.n8n.io/n8nio/n8n` ist das offizielle Image, also die Vorlage, aus der der Container entsteht.
+- `-it --rm` lässt den Container im Vordergrund laufen und entfernt ihn beim Beenden wieder; das Volume und damit die Daten bleiben erhalten.
 :::
 
 ### Schritt 3: Editor öffnen

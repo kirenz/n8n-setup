@@ -127,6 +127,22 @@ die ein absoluter Anfänger nicht kennt, wird beim **ersten Auftreten** erklärt
 bevorzugt in einem Erklär-Callout direkt neben dem Schritt, ergänzt durch
 Fließtext. Dafür ist das Callout-Limit aus Abschnitt 3 bewusst aufgehoben.
 
+**Verständnis vor Vollständigkeit.** Entscheidend ist nicht, dass jeder Begriff
+irgendwo definiert ist, sondern dass die Lesende den Gedanken versteht.
+Erschlagende Fachbegriff-Ballungen werden aufgelöst, nicht mit Definitionen
+umstellt:
+
+- **Ein Konzept pro Schritt.** Lieber drei einfache Sätze als ein Satz mit fünf
+  neuen Begriffen. Eine Aufzählung mit je einem Gedanken pro Punkt schlägt einen
+  dichten Absatz.
+- **Bild vor Begriff.** Zuerst eine vertraute Vorstellung (Empfang, Archiv,
+  Türsteher), dann erst das Fachwort als Etikett für das schon Verstandene. Nicht
+  „Caddy ist ein Reverse Proxy, der TLS terminiert", sondern erst die Rolle
+  beschreiben, dann: „So etwas nennt man Reverse Proxy."
+- **Details auslagern.** Was zum Verständnis der Rolle nicht nötig ist (konkrete
+  Ports, Header, Protokoll-Feinheiten), fliegt raus oder in einen
+  `collapse="true"`-Callout „Für Technisch-Interessierte".
+
 Leitplanken, damit „ausführlich" nicht „repetitiv" wird:
 
 - **Quer-Begriffe einmal zentral**: Wiederkehrende Grundbegriffe (Terminal,

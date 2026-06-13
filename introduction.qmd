@@ -57,7 +57,7 @@ Diese Begriffe brauchen wir vor allem für den Hetzner-Weg, auf dem wir n8n selb
 
 ### Container und Docker
 
-Ein Container bündelt eine Anwendung mit allem, was sie zum Laufen braucht, in eine isolierte, immer gleich startende Einheit. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.
+Ein Container verpackt eine Anwendung zusammen mit allem, was sie zum Laufen braucht, in eine abgeschlossene Einheit, ähnlich einem Versandcontainer, der überall gleich gehandhabt wird. Dadurch startet die Anwendung auf jedem Rechner gleich, ohne dass vorher etwas eingerichtet werden muss. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.
 
 ### Image und Tag
 
@@ -73,11 +73,11 @@ SSH (kurz für „Secure Shell") ist ein verschlüsseltes Verfahren, um sich vom
 
 ### Reverse Proxy
 
-Ein Reverse Proxy nimmt Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.
+Ein Reverse Proxy ist so etwas wie der Empfang eines Gebäudes: Er nimmt alle Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter, die selbst nicht direkt erreichbar ist. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.
 
 ### TLS und Let's Encrypt
 
-TLS ist die Verschlüsselung hinter dem `https` in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Let's Encrypt ist eine kostenlose Zertifizierungsstelle, von der Caddy die nötigen Zertifikate automatisch bezieht.
+TLS ist die Verschlüsselung hinter dem `https` und dem Schloss-Symbol in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Damit ein Browser dieser Verschlüsselung vertraut, braucht der Server einen Nachweis, ein sogenanntes Zertifikat. Let's Encrypt ist eine kostenlose Stelle, die solche Zertifikate ausstellt; Caddy bezieht sie automatisch.
 
 ### Domain und sslip.io
 
@@ -89,4 +89,4 @@ Credentials sind Zugangsdaten zu externen Diensten, mit denen ein Workflow sich 
 
 ### Provisioning und Cloud-Init
 
-Provisioning bezeichnet das automatische Einrichten eines frischen Servers, vom Installieren der Pakete bis zum laufenden Dienst. Cloud-Init ist der Standard, mit dem ein Server beim ersten Start ein hinterlegtes Skript ausführt; im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.
+Provisioning bedeutet, einen frischen Server automatisch einzurichten, statt jeden Schritt von Hand zu tippen: Programme installieren, einstellen, starten. Cloud-Init ist das verbreitete Verfahren dafür: Der Server arbeitet beim allerersten Start eine hinterlegte Anleitung (ein Skript) selbsttätig ab. Im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.

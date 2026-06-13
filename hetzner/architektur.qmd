@@ -1,8 +1,18 @@
 # Wie die Instanz aufgebaut ist
 
-Bevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start entsteht. Das Setup besteht aus drei Bausteinen, die zusammenarbeiten, und zwei Schutzschichten davor. Wer dieses Bild im Kopf hat, versteht später jeden Schritt und kann Fehler gezielt eingrenzen.
+Bevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start entsteht. Wer dieses Bild im Kopf hat, versteht später jeden Schritt und kann Fehler gezielt eingrenzen. Wir verwenden dafür den Vergleich mit einem kleinen Bürogebäude.
 
-## Zielbild: drei Container, zwei Firewalls
+## Das Gesamtbild
+
+Stellen wir uns die fertige Instanz als kleines Bürogebäude mit drei Räumen vor:
+
+- Am **Empfang** im Erdgeschoss kommt jeder Besucher an. Nur der Empfang hat eine Tür zur Straße.
+- In der **Sachbearbeitung** wird die eigentliche Arbeit erledigt. Dorthin gelangt man nur über den Empfang.
+- Im **Archiv** im Keller liegen alle Unterlagen geordnet. Von außen kommt niemand hinein, nur die Sachbearbeitung greift darauf zu.
+
+Genau so ist das n8n-Setup aufgebaut. Jeder Raum entspricht einem Programm, und jedes Programm läuft in einem eigenen Container (was ein Container ist, erklärt die [Einführung](../introduction.qmd)). Die drei Programme heißen Caddy (der Empfang), n8n (die Sachbearbeitung) und Postgres (das Archiv). Davor liegen zwei Sicherheitskontrollen, zu denen wir gleich kommen.
+
+Als technische Karte sieht derselbe Aufbau so aus:
 
 ```
                              Internet
@@ -34,55 +44,71 @@ Bevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start e
                             (nur intern)
 ```
 
-Eine Anfrage aus dem Internet passiert zuerst zwei Firewalls, erreicht dann Caddy, der die Verschlüsselung übernimmt und intern an n8n weiterreicht. n8n speichert alles Dauerhafte in Postgres. Nur Caddy ist von außen erreichbar.
+Eine Anfrage aus dem Internet durchläuft das Gebäude von oben nach unten: zuerst die beiden Sicherheitskontrollen, dann den Empfang (Caddy), der sie an die Sachbearbeitung (n8n) weiterreicht; diese greift bei Bedarf auf das Archiv (Postgres) zu. Die Zahlen am Rand sind Ports, also die nummerierten Türen aus der [Einführung](../introduction.qmd); für das Verständnis des Aufbaus müssen wir sie nicht auswendig kennen.
 
-## Die drei Container
+## Die drei Bausteine
 
-### Caddy: Reverse Proxy und Verschlüsselung
+### Caddy: der Empfang
 
-Caddy ist der einzige Baustein, der von außen erreichbar ist. Er nimmt Anfragen auf den Ports 80 und 443 entgegen, holt automatisch ein TLS-Zertifikat von Let's Encrypt und reicht den Verkehr intern an n8n weiter. Dabei setzt er die Header, die n8n braucht, um eingehende Webhooks der richtigen URL zuzuordnen.
+Caddy ist der Empfang im Erdgeschoss und die einzige Stelle, die von draußen, also aus dem Internet, erreichbar ist. Wer die Adresse der Instanz im Browser eingibt, landet zuerst bei Caddy.
 
-### n8n: die Workflow-Engine
+Der Empfang erledigt drei Dinge:
 
-n8n hört intern auf Port 5678 und ist nicht direkt aus dem Internet erreichbar. Es führt die Workflows aus und speichert Workflows, Credentials und Ausführungsprotokolle in der Datenbank.
+- **Er nimmt alle Besucher an.** Jede Anfrage aus dem Internet kommt zuerst bei Caddy an, nicht direkt bei n8n.
+- **Er sorgt für eine sichere Verbindung.** Caddy stellt sicher, dass die Verbindung verschlüsselt ist, erkennbar am `https` und am Schloss-Symbol in der Adresszeile des Browsers. Den dafür nötigen Nachweis, ein sogenanntes Zertifikat, besorgt Caddy automatisch und kostenlos bei einer zuständigen Stelle namens Let's Encrypt. Darum müssen wir uns nicht kümmern.
+- **Er leitet nach innen weiter.** Eine angenommene Anfrage reicht Caddy intern an n8n weiter.
 
-### Postgres: die Datenbank
+Ein Programm, das Anfragen von außen annimmt und an das richtige Programm im Inneren weiterleitet, nennt man Reverse Proxy. Caddy ist also der Reverse Proxy unseres Setups.
 
-Postgres ist eine Datenbank, also ein Programm, das Daten strukturiert speichert und gezielt durchsuchbar macht. Es hält alle Daten dauerhaft und hat bewusst keinen Port nach außen. Ein Healthcheck, also eine wiederkehrende automatische Funktionsprüfung, stellt fest, ob die Datenbank schon Anfragen beantwortet; n8n startet erst, wenn Postgres bereit ist.
+### n8n: die Sachbearbeitung
 
-::: {.callout-tip title="Analogie: Empfang, Sachbearbeitung, Archiv" collapse="true"}
-Caddy ist der Empfang im Erdgeschoss: Er nimmt Besucher entgegen, prüft die Verschlüsselung wie einen Ausweis und leitet weiter. n8n ist die Sachbearbeitung, die die eigentliche Arbeit erledigt. Postgres ist das Archiv im Keller, ohne Publikumsverkehr, in dem alle Vorgänge dauerhaft abgelegt werden. Nur der Empfang hat eine Tür nach draußen.
+n8n ist der Raum, in dem die eigentliche Arbeit geschieht: Hier laufen die Workflows. n8n nimmt keine Besucher direkt von der Straße an, sondern bekommt seine Aufträge immer über den Empfang hereingereicht. Alles, was dauerhaft erhalten bleiben soll, also die Workflows selbst, die gespeicherten Zugangsdaten und das Protokoll jeder Ausführung, behält n8n nicht bei sich, sondern gibt es ins Archiv.
+
+### Postgres: das Archiv
+
+Postgres ist das Archiv im Keller. Hier liegen alle Daten dauerhaft und geordnet. Wie ein Archiv ohne Publikumsverkehr hat Postgres bewusst keine eigene Tür nach außen; nur n8n greift darauf zu. Ein Programm, das Daten strukturiert und dauerhaft speichert, nennt man Datenbank.
+
+::: {.callout-note title="Warum n8n erst nach dem Archiv startet"}
+Beim Hochfahren prüft das Setup automatisch und wiederholt, ob das Archiv schon ansprechbar ist; eine solche Funktionsprüfung heißt Healthcheck. n8n startet erst, wenn Postgres bereit ist, damit keine Anfrage ins Leere läuft.
 :::
 
-## Zwei Firewall-Schichten
-
-Der Server ist durch zwei voneinander unabhängige Firewalls geschützt. Die Hetzner Cloud Firewall arbeitet auf Provider-Ebene und filtert Pakete, bevor sie den Server überhaupt erreichen. Die UFW (Uncomplicated Firewall) läuft zusätzlich auf dem Server selbst und wird beim Provisioning mit denselben Regeln eingerichtet. Beide erlauben eingehend nur drei Ports: 22 für SSH, 80 und 443 für den Web-Zugriff.
-
-::: {.callout-note}
-Dieses Prinzip heißt Defense-in-Depth: Sollte eine Schicht versehentlich falsch konfiguriert sein, schützt die zweite weiterhin. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.
+::: {.callout-note title="Für Technisch-Interessierte: die Webhook-Adresse" collapse="true"}
+Beim Weiterreichen ergänzt Caddy die Anfrage um einige Zusatzangaben (sogenannte Header), aus denen n8n die ursprünglich aufgerufene Adresse rekonstruiert. Das ist nötig, damit von außen aufgerufene Workflow-Adressen (Webhooks) korrekt zugeordnet werden.
 :::
 
-## Warum diese Bausteine
+## Zwei Kontrollen am Eingang
 
-Die Auswahl folgt dem Ziel, eine produktionsähnliche und zugleich nachvollziehbare Umgebung zu schaffen:
+Bevor eine Anfrage überhaupt beim Empfang ankommt, passiert sie zwei voneinander unabhängige Sicherheitskontrollen. Beide lassen nur drei Arten von Verkehr durch und weisen alles andere ab: die Anmeldung per SSH sowie den Web-Zugriff mit und ohne Verschlüsselung. Eine solche Kontrolle, die festlegt, welcher Verkehr durchgelassen wird, heißt Firewall.
+
+Die erste Kontrolle steht schon vor dem Gebäude: Die Hetzner Cloud Firewall filtert den Verkehr beim Anbieter, bevor er den Server überhaupt erreicht. Die zweite Kontrolle steht im Eingang des Servers selbst: die UFW (kurz für „Uncomplicated Firewall"), die beim Einrichten automatisch mit denselben Regeln aufgesetzt wird.
+
+::: {.callout-note title="Warum gleich zwei?"}
+Zwei hintereinandergeschaltete Kontrollen mit denselben Regeln nennt man Defense-in-Depth, also „Schutz in der Tiefe". Der Gedanke dahinter: Sollte eine Kontrolle versehentlich falsch eingestellt sein, fängt die zweite den Fehler auf. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.
+:::
+
+## Warum genau diese Bausteine
+
+Die Auswahl folgt dem Ziel, eine Umgebung zu schaffen, die echten Projekten standhält und zugleich nachvollziehbar bleibt:
 
 | Entscheidung | Begründung |
 |---|---|
-| Postgres statt SQLite | produktionsnah, trägt auch reale Projekte |
-| Caddy als Reverse Proxy | automatisches TLS, deutlich weniger Konfiguration als Alternativen |
-| sslip.io statt eigener Domain | sofort startklar, ohne eigenes DNS-Setup |
-| feste Versions-Tags | reproduzierbar, keine Überraschungen durch automatische Updates |
+| Postgres statt der einfacheren SQLite-Datei | belastbar genug, trägt auch reale Projekte |
+| Caddy als Empfang (Reverse Proxy) | kümmert sich selbst um die Verschlüsselung, wenig einzustellen |
+| sslip.io statt eigener Domain | sofort startklar, ohne einen eigenen Domain-Namen einzurichten |
+| feste Versionen | reproduzierbar, keine Überraschungen durch automatische Updates |
 
-## Reproduzierbarkeit durch Versionspinning
+## Feste Versionen statt automatischer Updates
 
-::: {.callout-important title="Feste Versionen statt latest"}
-Alle Container-Images sind auf konkrete Versionen festgelegt (n8n auf `2.20.6`, Postgres auf `16.13-alpine3.23`, Caddy auf `2.11.2-alpine`), kein `latest`-Tag. So startet jede Installation dieselbe Fassung, und ein Update ist ein bewusster, geplanter Schritt statt einer stillen Veränderung im Hintergrund.
+Jedes der drei Programme ist auf eine ganz bestimmte Version festgelegt, statt einfach „immer die neueste" zu nehmen. So startet jede Installation dieselbe, erprobte Fassung.
+
+::: {.callout-important title="Warum nicht automatisch die neueste Version?"}
+Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte: n8n auf `2.20.6`, Postgres auf `16.13-alpine3.23`, Caddy auf `2.11.2-alpine`). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.
 :::
 
 ## Kontrollpunkt
 
 Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 
-- die drei Container und ihre jeweilige Aufgabe benennen
-- erklären, warum nur Caddy von außen erreichbar ist
-- die zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben
+- die drei Bausteine Empfang, Sachbearbeitung und Archiv und ihre Aufgabe benennen
+- erklären, warum nur der Empfang (Caddy) von außen erreichbar ist
+- die zwei Sicherheitskontrollen und den Zweck fester Versionen beschreiben

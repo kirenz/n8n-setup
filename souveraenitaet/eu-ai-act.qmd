@@ -23,7 +23,13 @@ Hier liegt der größte Teil der praktisch relevanten Pflichten. Typische Anwend
 | Zugang zu Diensten | Kreditvergabe- oder Tarif-Scoring |
 | Strafverfolgung | Betrugs-Erkennung mit Folgen für Betroffene |
 
-Für solche Systeme gelten unter anderem ein Risikomanagement, eine Daten-Governance, die Protokollierung der Verarbeitung, technische Dokumentation und eine menschliche Aufsicht.
+Für solche Systeme gelten dann besondere Pflichten, unter anderem:
+
+- ein Risikomanagement, also die Risiken systematisch erfassen und begrenzen
+- eine Daten-Governance, also ein geregelter und dokumentierter Umgang mit den verwendeten Daten
+- die Protokollierung jeder Verarbeitung, damit nachvollziehbar bleibt, was passiert ist
+- eine technische Dokumentation, die das System beschreibt
+- eine menschliche Aufsicht, die im Zweifel eingreifen kann
 
 ### Begrenztes Risiko
 
