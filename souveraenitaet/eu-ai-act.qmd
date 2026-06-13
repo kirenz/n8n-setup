@@ -4,7 +4,7 @@ Der EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft; die mei
 
 ## Use Case statt Tool
 
-Der AI Act reguliert, wofür ein KI-System eingesetzt wird, nicht welches Werkzeug dahintersteht. n8n als Plattform ist neutral; ein Workflow, der ein Sprach-Modell nutzt, kann erlaubt oder verboten sein, je nach Anwendungsfall.
+Der AI Act reguliert, wofür ein KI-System eingesetzt wird, nicht welches Werkzeug dahintersteht. Ein KI-System ist dabei die konkrete Anwendung, die KI nutzt, also nicht n8n selbst, sondern der einzelne Workflow mitsamt seinem Zweck. n8n als Plattform ist neutral; ein Workflow, der ein Sprach-Modell nutzt, kann erlaubt oder verboten sein, je nach Anwendungsfall.
 
 ## Die vier Risikoklassen
 

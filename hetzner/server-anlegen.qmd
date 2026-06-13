@@ -2,6 +2,10 @@
 
 Jetzt entsteht der Server. Hetzner stellt eine virtuelle Maschine bereit; ein hinterlegtes Cloud-Init-Skript richtet darauf den kompletten Stack ein. Nach dem Start müssen wir uns nicht einmal einloggen, um n8n zum Laufen zu bringen.
 
+::: {.callout-note title="Was ist eine virtuelle Maschine?"}
+Eine virtuelle Maschine ist ein vollständiger Rechner, der nicht als eigenes Gerät auf dem Schreibtisch steht, sondern als Software in einem Rechenzentrum läuft. Für uns verhält sie sich wie ein eigener Server: Sie hat eine eigene IP-Adresse, ein Betriebssystem und Speicher, lässt sich aber per Mausklick anlegen und wieder löschen. Hetzner stellt sie bereit, wir greifen über das Internet darauf zu.
+:::
+
 ## Zielbild
 
 Ein laufender Server bei Hetzner, der sich selbst eingerichtet hat und unter einer Adresse der Form `https://1-2-3-4.sslip.io` erreichbar ist. Die Stationen:
@@ -17,22 +21,30 @@ Ein laufender Server bei Hetzner, der sich selbst eingerichtet hat und unter ein
 - ein SSH-Schlüssel, in der Hetzner-Console hinterlegt
 - Budget von etwa 4 bis 7 € im Monat; der Server lässt sich jederzeit wieder löschen
 
-::: {.callout-note title="SSH-Schlüssel anlegen"}
-Ein SSH-Schlüssel besteht aus einem privaten und einem öffentlichen Teil. Wer noch keinen hat, erzeugt ihn lokal mit `ssh-keygen -t ed25519`. Der öffentliche Teil (Datei `~/.ssh/id_ed25519.pub`) wird in der Hetzner-Console unter „SSH-Keys" hinterlegt, der private Teil bleibt auf dem eigenen Rechner.
+Den SSH-Schlüssel brauchen wir, um uns später sicher auf dem Server anzumelden. Was SSH ist, erklärt die [Einführung](../introduction.qmd); hier erzeugen wir das Schlüsselpaar und hinterlegen es bei Hetzner.
+
+::: {.callout-note title="SSH-Schlüssel erzeugen und hinterlegen"}
+Ein SSH-Schlüssel besteht aus zwei zusammengehörigen Teilen: einem privaten, der geheim auf dem eigenen Rechner bleibt, und einem öffentlichen, den wir beim Server hinterlegen. Wer noch keinen hat, erzeugt ihn im Terminal mit:
+
+```bash
+ssh-keygen -t ed25519
+```
+
+Das Programm fragt nach einem Speicherort (wir bestätigen den Vorschlag mit der Eingabetaste) und optional nach einer Passphrase, also einem zusätzlichen Passwort für den Schlüssel, das leer bleiben darf. Danach liegen zwei Dateien im versteckten Ordner `~/.ssh`: der private Schlüssel `id_ed25519` und der öffentliche `id_ed25519.pub`. Den **öffentlichen** Teil (Endung `.pub`) kopieren wir und fügen ihn in der Hetzner-Console unter „SSH-Keys" ein. Den privaten Teil geben wir niemals weiter.
 :::
 
 ## Schritt für Schritt selbst bauen
 
 ### Schritt 1: Firewall anlegen
 
-In der Hetzner-Console unter **Firewalls → Firewall erstellen**:
+Eine Firewall ist ein Filter, der festlegt, welcher Netzwerkverkehr den Server überhaupt erreichen darf. In der Hetzner-Console unter **Firewalls → Firewall erstellen**:
 
 - Name: `n8n-firewall`
 - eingehende Regeln: nur SSH (22), HTTP (80) und HTTPS (443), jeweils von überall
 - ausgehende Regeln: alle erlauben
 
 ::: {.callout-note}
-Diese Firewall arbeitet auf Provider-Ebene und blockiert Verkehr, bevor er den Server erreicht. Die zweite Schicht (UFW) richtet das Cloud-Init-Skript später automatisch auf dem Server selbst ein.
+Die Zahlen 22, 80 und 443 sind Ports, also die nummerierten Türen aus der [Einführung](../introduction.qmd): 22 für die SSH-Anmeldung, 80 und 443 für den Web-Zugriff (unverschlüsselt und verschlüsselt). Alle anderen Türen bleiben geschlossen. Diese Firewall arbeitet auf Provider-Ebene und blockiert Verkehr, bevor er den Server erreicht. Die zweite Schicht (UFW) richtet das Cloud-Init-Skript später automatisch auf dem Server selbst ein.
 :::
 
 ### Schritt 2: Server erstellen
@@ -48,6 +60,10 @@ In der Hetzner-Console unter **Server → Server erstellen** die folgenden Einst
 | Firewall | `n8n-firewall` aus Schritt 1 |
 | Cloud-Config | den kompletten Inhalt der Datei `cloud-init.yaml` einfügen |
 | Name | frei wählbar, etwa `n8n-kurs` |
+
+::: {.callout-note title="Ubuntu, vCPU und RAM"}
+Ubuntu ist ein verbreitetes Linux-Betriebssystem, das auf Servern üblich ist. „vCPU" steht für virtuelle Prozessorkerne, „RAM" für den Arbeitsspeicher; beide bestimmen zusammen, wie viel der Server gleichzeitig leisten kann. Die Bezeichnungen CPX11 und CPX21 sind Hetzners Namen für unterschiedlich große Server.
+:::
 
 ::: {.callout-important title="Cloud-Config nicht vergessen"}
 Der entscheidende Schritt ist das Feld „Cloud-Config" (manchmal unter „Erweitert" zu finden). Dort wird der vollständige Inhalt der Datei `cloud-init.yaml` aus diesem Repo eingefügt. Ohne diesen Inhalt startet zwar ein leerer Server, aber n8n wird nicht eingerichtet.
@@ -67,13 +83,15 @@ Das Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UF
 
 ### Schritt 4: URL ermitteln
 
-Sobald der Server läuft, loggen wir uns einmal per SSH ein. Die Begrüßungsnachricht zeigt die fertige URL:
+Sobald der Server läuft, melden wir uns einmal per SSH an. Dafür brauchen wir die IP-Adresse des Servers, die in der Hetzner-Console neben dem Server steht. Im Terminal tippen wir:
 
 ```bash
 ssh root@<server-ip>
 ```
 
-Die Ausgabe nennt die Adresse, etwa:
+`<server-ip>` ist ein Platzhalter: Wir ersetzen ihn samt der spitzen Klammern durch die tatsächliche Adresse, aus `ssh root@<server-ip>` wird so zum Beispiel `ssh root@203.0.113.10`. `root` ist der Name des Administrator-Kontos auf dem Server. Beim allerersten Verbinden fragt SSH, ob der Server vertrauenswürdig ist; das bestätigen wir einmalig mit `yes`.
+
+Die Begrüßungsnachricht nach der Anmeldung zeigt die fertige URL:
 
 ```
 n8n läuft. Aufrufen unter:
@@ -85,6 +103,10 @@ Erscheint die Begrüßung noch nicht, läuft das Provisioning noch. Der Stand l�
 ```bash
 tail -n 30 /var/log/n8n-setup.log
 ```
+
+::: {.callout-note title="Die Befehle in diesem Schritt"}
+`tail` zeigt das Ende einer Textdatei; `-n 30` bedeutet „die letzten 30 Zeilen". So sehen wir den aktuellen Stand des Einrichtungs-Protokolls, ohne die ganze Datei zu öffnen. Der Begriff `sudo`, der in der Fehlertabelle auftaucht, wird manchen Befehlen vorangestellt, um sie mit Administrator-Rechten auszuführen; als `root` angemeldet brauchen wir ihn nicht, andere Anleitungen setzen ihn aber oft voraus.
+:::
 
 ## Fehler diagnostizieren
 

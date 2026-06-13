@@ -12,8 +12,14 @@ n8n läuft als Docker-Container, erreichbar unter `http://localhost:5678`, die D
 
 ## Voraussetzung: Docker
 
-::: {.callout-note}
-Auf macOS und Windows übernimmt das Docker Desktop, auf Linux die Docker Engine. Ein Aufruf von `docker --version` bestätigt die Installation. Docker Desktop muss laufen, erkennbar am Wal-Symbol in der Menüleiste, sonst schlagen die folgenden Befehle fehl.
+Dieser Weg setzt Docker voraus, die Software, die Container startet und verwaltet (was ein Container ist, erklärt die [Einführung](../introduction.qmd)). Auf einem privaten Rechner installieren wir dafür Docker Desktop.
+
+::: {.callout-tip title="Docker Desktop installieren"}
+Auf **macOS** und **Windows** laden wir Docker Desktop von [docker.com](https://www.docker.com/products/docker-desktop/) und folgen dem Installationsprogramm. Unter **Linux** lässt sich wahlweise Docker Desktop oder direkt die schlankere Docker Engine installieren. Nach der Installation starten wir Docker Desktop einmal; es muss im Hintergrund laufen, erkennbar am Wal-Symbol in der Menü- oder Taskleiste.
+:::
+
+::: {.callout-note title="Prüfen, ob Docker läuft"}
+Im Terminal bestätigt der Befehl `docker --version` die Installation, indem er eine Versionsnummer ausgibt. Schlägt ein späterer Befehl mit `Cannot connect to the Docker daemon` fehl, läuft die Docker-Desktop-Anwendung gerade nicht; dann starten wir sie und versuchen es erneut.
 :::
 
 ## Schritt für Schritt selbst bauen
@@ -30,6 +36,8 @@ Ein benanntes Volume ist ein von Docker verwalteter Speicherort, der unabhängig
 
 ### Schritt 2: n8n starten
 
+Der folgende Block ist ein einziger Befehl, der nur zur besseren Lesbarkeit auf mehrere Zeilen verteilt ist. Jede Zeile außer der letzten endet mit einem umgekehrten Schrägstrich `\`, der bedeutet „der Befehl geht weiter". Wir kopieren oder tippen den ganzen Block am Stück und bestätigen erst am Ende mit der Eingabetaste:
+
 ```bash
 docker run -it --rm \
   --name n8n \
@@ -43,7 +51,7 @@ docker run -it --rm \
 ```
 
 ::: {.callout-tip title="Die Optionen im Befehl"}
-`-p 5678:5678` verbindet den Port des Containers mit dem des Rechners, sodass der Editor unter `localhost:5678` erreichbar ist. `-v n8n_data:/home/node/.n8n` hängt das Volume an die Stelle ein, an der n8n seine Daten ablegt. Die `-e`-Optionen setzen Umgebungsvariablen, hier Zeitzone und zwei empfohlene Voreinstellungen. `docker.n8n.io/n8nio/n8n` ist das offizielle Image. Mit `-it --rm` läuft der Container im Vordergrund und wird beim Beenden entfernt; das Volume und damit die Daten bleiben bestehen.
+`-p 5678:5678` verbindet den Port des Containers mit dem des Rechners, sodass der Editor unter `localhost:5678` erreichbar ist. `-v n8n_data:/home/node/.n8n` hängt das Volume an die Stelle ein, an der n8n seine Daten ablegt. Die `-e`-Optionen setzen Umgebungsvariablen, also Einstellungen, die dem Programm beim Start mitgegeben werden, hier die Zeitzone und zwei empfohlene Voreinstellungen. `docker.n8n.io/n8nio/n8n` ist das offizielle Image, die Vorlage für den Container. Mit `-it --rm` läuft der Container im Vordergrund und wird beim Beenden entfernt; das Volume und damit die Daten bleiben bestehen.
 :::
 
 ### Schritt 3: Editor öffnen
@@ -52,7 +60,7 @@ Im Browser `http://localhost:5678` aufrufen und das Owner-Konto anlegen. Die Obe
 
 ### Schritt 4: Beenden und neu starten
 
-`Strg + C` beendet den Container. Ein erneuter Aufruf desselben `docker run`-Befehls startet n8n wieder, mit allen vorherigen Workflows, denn die liegen im Volume.
+`Strg + C` (auf macOS `Ctrl + C`) beendet den Container. Ein erneuter Aufruf desselben `docker run`-Befehls startet n8n wieder, mit allen vorherigen Workflows, denn die liegen im Volume.
 
 ## Im Hintergrund laufen lassen
 
@@ -68,8 +76,8 @@ docker run -d \
   docker.n8n.io/n8nio/n8n
 ```
 
-::: {.callout-note}
-Mit `-d` läuft der Container im Hintergrund. `docker stop n8n` hält ihn an, `docker start n8n` startet ihn wieder. Anders als bei `--rm` bleibt der Container bestehen, bis er ausdrücklich mit `docker rm n8n` entfernt wird.
+::: {.callout-note title="Vordergrund und Hintergrund"}
+Im Vordergrund (`-it --rm`) belegt der Container das Terminal-Fenster und zeigt dort laufend seine Ausgabe; schließen wir das Fenster, stoppt n8n. Mit `-d` (für „detached", also losgelöst) läuft der Container im Hintergrund weiter, und das Terminal ist sofort wieder frei. `docker stop n8n` hält ihn dann an, `docker start n8n` startet ihn wieder. Anders als bei `--rm` bleibt der Container bestehen, bis er ausdrücklich mit `docker rm n8n` entfernt wird.
 :::
 
 ## Postgres statt SQLite

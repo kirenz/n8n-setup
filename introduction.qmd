@@ -1,6 +1,6 @@
 # Einführung {.unnumbered}
 
-Bevor wir die erste Instanz einrichten, lohnt sich ein Überblick über die Bausteine, mit denen alle vier Wege arbeiten. Jeder Baustein hat eine bestimmte Rolle. Diese Einführung erklärt die zentralen Begriffe in je zwei Sätzen, damit klar ist, worauf die folgenden Module aufbauen.
+Bevor wir die erste Instanz einrichten, lohnt sich ein Überblick über die Bausteine, mit denen die vier Wege arbeiten. Jeder Baustein hat eine bestimmte Rolle. Diese Einführung erklärt die zentralen Begriffe kompakt und dient zugleich als Nachschlagewerk: Die erste Gruppe betrifft alle Wege, die zweite nur den eigenen Server. Wer einen Begriff später wieder vergisst, findet ihn hier; die Kapitel greifen ihn an der Stelle erneut auf, an der er gebraucht wird.
 
 ## Welcher Weg passt?
 
@@ -15,34 +15,78 @@ Die vier Wege unterscheiden sich vor allem darin, wie viel wir selbst betreiben 
 
 Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.
 
-## Instanz
+## Grundbegriffe für alle Wege
+
+Diese Begriffe begegnen uns unabhängig davon, für welchen Weg wir uns entscheiden.
+
+### Workflow und Node
+
+Ein Workflow ist eine Abfolge automatisierter Schritte, die n8n nacheinander abarbeitet, zum Beispiel „eine neue E-Mail empfangen, den Anhang speichern, eine Zeile in eine Tabelle schreiben". Jeder einzelne Schritt ist ein Node (deutsch „Knoten"), ein Baustein mit einer festen Aufgabe. Im Editor verbinden wir die Knoten mit Linien zu einem Ablauf; das fertige Bild aus Knoten und Linien ist der Workflow.
+
+### Instanz
 
 Eine Instanz ist eine laufende Kopie von n8n, erreichbar über den Browser. Unabhängig vom gewählten Weg ist das Ergebnis immer eine Instanz mit einem Editor, in dem Workflows entstehen.
 
-## Container und Docker
+### Terminal und Kommandozeile
+
+Das Terminal ist ein Programm, in dem wir dem Rechner Befehle als Text geben, statt mit der Maus zu klicken. Es zeigt eine Eingabezeile, in die wir einen Befehl tippen und mit der Eingabetaste bestätigen; die Antwort des Rechners erscheint als Text darunter. „Kommandozeile" und „Konsole" sind andere Wörter für dieselbe textbasierte Eingabe.
+
+::: {.callout-tip title="Das Terminal öffnen"}
+Auf **macOS** öffnen wir die App „Terminal": Cmd + Leertaste drücken, „Terminal" eintippen, mit der Eingabetaste starten. Unter **Windows** nutzen wir „PowerShell": Start-Menü öffnen, „PowerShell" eintippen, starten. Unter **Linux** heißt das Programm meist „Terminal" oder „Konsole" und liegt im Anwendungsmenü. In allen Fällen erscheint ein Fenster mit einer blinkenden Eingabezeile. Dort tippen wir die Befehle aus diesem Buch ein und bestätigen jeden mit der Eingabetaste.
+:::
+
+### Befehl und Platzhalter
+
+Ein Befehl ist eine einzelne Anweisung, die wir ins Terminal tippen, etwa `node --version`. Manche Befehle in diesem Buch enthalten Platzhalter in spitzen Klammern wie `<server-ip>`. Diese ersetzen wir vollständig durch den eigenen Wert, die spitzen Klammern eingeschlossen. Aus `ssh root@<server-ip>` wird so zum Beispiel `ssh root@203.0.113.10`.
+
+::: {.callout-note}
+Längere Befehle in diesem Buch sind oft auf mehrere Zeilen verteilt, wobei jede Zeile außer der letzten mit einem umgekehrten Schrägstrich `\` endet. Dieser Backslash bedeutet „der Befehl geht in der nächsten Zeile weiter". Wir kopieren oder tippen den ganzen Block als einen einzigen Befehl und bestätigen erst am Ende mit der Eingabetaste.
+:::
+
+### localhost und Port
+
+Läuft n8n auf dem eigenen Rechner, rufen wir es im Browser unter `http://localhost:5678` auf. `localhost` steht für den eigenen Rechner, also „dieses Gerät hier". Die Zahl dahinter, `5678`, ist der Port: eine nummerierte Tür, über die genau dieser Dienst erreichbar ist. Ein Rechner kann viele Dienste gleichzeitig betreiben, und der Port sagt, welcher davon gemeint ist.
+
+### IP-Adresse
+
+Eine IP-Adresse ist die numerische Anschrift eines Rechners im Netzwerk, etwa `203.0.113.10`. Ein eigener Server bei Hetzner erhält eine solche öffentliche Adresse, unter der er aus dem Internet erreichbar ist; über sie melden wir uns später per SSH an.
+
+## Begriffe für den eigenen Server
+
+Diese Begriffe brauchen wir vor allem für den Hetzner-Weg, auf dem wir n8n selbst betreiben.
+
+### Container und Docker
 
 Ein Container bündelt eine Anwendung mit allem, was sie zum Laufen braucht, in eine isolierte, immer gleich startende Einheit. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.
 
-## Image und Tag
+### Image und Tag
 
 Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa `2.20.6`) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.
 
-## Reverse Proxy
+### Stack
+
+Als Stack (englisch für „Stapel") bezeichnet man die Gruppe von Programmen, die zusammen einen Dienst bilden und gemeinsam betrieben werden. Beim Hetzner-Weg umfasst der Stack n8n, die Datenbank Postgres und den Reverse Proxy Caddy, die als drei zusammenarbeitende Container laufen.
+
+### SSH
+
+SSH (kurz für „Secure Shell") ist ein verschlüsseltes Verfahren, um sich vom eigenen Terminal aus auf einem entfernten Server anzumelden und dort Befehle auszuführen. Statt eines Passworts dient meist ein Schlüsselpaar: ein privater Teil, der auf dem eigenen Rechner bleibt, und ein öffentlicher Teil, der auf dem Server hinterlegt wird. Der Befehl `ssh root@<server-ip>` öffnet eine solche Sitzung; alles, was wir danach tippen, läuft auf dem Server, bis wir die Sitzung mit `exit` wieder beenden.
+
+### Reverse Proxy
 
 Ein Reverse Proxy nimmt Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.
 
-## TLS und Let's Encrypt
+### TLS und Let's Encrypt
 
 TLS ist die Verschlüsselung hinter dem `https` in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Let's Encrypt ist eine kostenlose Zertifizierungsstelle, von der Caddy die nötigen Zertifikate automatisch bezieht.
 
-## Domain und sslip.io
+### Domain und sslip.io
 
 Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa `n8n.example.com`). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form `1-2-3-4.sslip.io` automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup.
 
-## Credentials und Encryption-Key
+### Credentials und Encryption-Key
 
-Credentials sind Zugangsdaten zu externen Diensten (API-Schlüssel, Passwörter, OAuth-Token), die n8n getrennt von den Workflows speichert. Sie werden mit dem Encryption-Key verschlüsselt abgelegt; geht dieser Schlüssel verloren, sind alle gespeicherten Credentials unbrauchbar.
+Credentials sind Zugangsdaten zu externen Diensten, mit denen ein Workflow sich dort anmeldet, etwa ein API-Schlüssel (eine Art technisches Passwort für eine Programmschnittstelle) oder ein OAuth-Token (eine zeitlich begrenzte Zugriffserlaubnis, die ein Dienst nach erfolgter Anmeldung ausstellt). n8n speichert sie getrennt von den Workflows. Sie werden mit dem Encryption-Key verschlüsselt abgelegt; geht dieser Schlüssel verloren, sind alle gespeicherten Credentials unbrauchbar.
 
-## Provisioning und Cloud-Init
+### Provisioning und Cloud-Init
 
 Provisioning bezeichnet das automatische Einrichten eines frischen Servers, vom Installieren der Pakete bis zum laufenden Dienst. Cloud-Init ist der Standard, mit dem ein Server beim ersten Start ein hinterlegtes Skript ausführt; im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.

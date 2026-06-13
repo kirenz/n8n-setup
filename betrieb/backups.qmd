@@ -31,6 +31,10 @@ scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
 
 Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum.
 
+::: {.callout-note title="scp und das Datum im Namen"}
+`scp` steht für „secure copy" und kopiert Dateien über dieselbe verschlüsselte Verbindung wie SSH, hier vom Server auf den eigenen Rechner. Der Teil `root@<server-ip>:/opt/n8n/backups` benennt die Quelle auf dem Server (Adresse, Doppelpunkt, Pfad), `-r` kopiert den ganzen Ordner samt Inhalt. Das Ziel `./n8n-backup-$(date +%F)` liegt im aktuellen Verzeichnis, wofür das `./` steht. Der Ausdruck `$(date +%F)` wird vor dem Kopieren durch das heutige Datum ersetzt, sodass der Ordner zum Beispiel `n8n-backup-2026-06-13` heißt.
+:::
+
 ### Schritt 3: Tägliches Backup per Cron
 
 Für einen automatischen täglichen Lauf um 03:00 Uhr richten wir auf dem Server einen Cron-Eintrag ein:
@@ -39,8 +43,8 @@ Für einen automatischen täglichen Lauf um 03:00 Uhr richten wir auf dem Server
 ( crontab -l 2>/dev/null; echo "0 3 * * * /opt/n8n/scripts/backup.sh >> /var/log/n8n-backup.log 2>&1" ) | crontab -
 ```
 
-::: {.callout-note}
-Der Ausdruck `0 3 * * *` steht für „täglich um 03:00 Uhr". Die Ausgabe landet in `/var/log/n8n-backup.log`, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.
+::: {.callout-note title="Cron und der Zeitplan"}
+Cron ist der eingebaute Zeitplaner von Linux, der Befehle automatisch zu festgelegten Zeiten ausführt. Die Liste dieser geplanten Aufgaben heißt „crontab". Der etwas sperrige Befehl liest die bestehende Liste, hängt unsere neue Zeile an und speichert sie zurück. Der Ausdruck `0 3 * * *` steht für „täglich um 03:00 Uhr". Die Ausgabe landet in `/var/log/n8n-backup.log`, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.
 :::
 
 ## Fehler diagnostizieren
@@ -48,7 +52,7 @@ Der Ausdruck `0 3 * * *` steht für „täglich um 03:00 Uhr". Die Ausgabe lande
 | Symptom | Wahrscheinliche Ursache | Nächster Schritt |
 |---|---|---|
 | `permission denied` beim Skript | Skript nicht ausführbar oder falscher Nutzer | als `root` ausführen, Pfad `/opt/n8n/scripts/backup.sh` prüfen |
-| Speicher voll | alte Backups oder viele Ausführungsdaten | `df -h` prüfen, Ausführungsdaten in n8n prunen |
+| Speicher voll | alte Backups oder viele Ausführungsdaten | freien Speicher mit `df -h` prüfen, alte Ausführungsdaten in n8n löschen |
 | `scp: no such file` | falscher Pfad auf dem Server | Pfad `/opt/n8n/backups` kontrollieren |
 
 ## Kontrollpunkt

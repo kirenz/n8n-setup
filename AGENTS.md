@@ -73,9 +73,13 @@ Nebensätze, Kommas, Klammern oder Punkte. Für Zahlenbereiche „4 bis 7 €".
 
 Drei Typen sind Standard: `.callout-tip` (Hinweise, Faustregeln, Analogien),
 `.callout-note` (Hintergrund, Querverweise), `.callout-important`
-(Pflicht-Aufmerksamkeit, Sicherheit, Fallstricke). Pro Kapitel **maximal 4 bis
-5 Callouts**. **Title ist Pflicht** bei `.callout-tip` und `.callout-important`.
-Längere Analogien mit `collapse="true"` einklappen.
+(Pflicht-Aufmerksamkeit, Sicherheit, Fallstricke). Im Normalfall pro Kapitel
+**maximal 4 bis 5 Callouts**. **Ausnahme**: Für die bewusst gewählte
+Einsteiger-Tiefe (Abschnitt 9) ist dieses Limit aufgehoben, solange jeder
+zusätzliche Callout einen echten Fachbegriff, ein Werkzeug oder eine
+Befehls-Mechanik erklärt, die ein absoluter Anfänger nicht kennt. **Title ist
+Pflicht** bei `.callout-tip` und `.callout-important`. Längere Analogien mit
+`collapse="true"` einklappen.
 
 ### 4. Analogien aus der Berufsalltagswelt
 
@@ -114,6 +118,29 @@ Querverweise sachlich-beschreibend formulieren, nicht als Teaser.
 - Lange Code-Blöcke ohne erklärenden Folge-Callout
 - Cartoon-Emojis im Fließtext (Ausnahme: Status-Marker in Tabellen)
 - „das LLM" (Neutrum), nicht „der LLM"
+
+### 9. Einsteiger-Tiefe
+
+Die Zielgruppe sind Personen **ohne Vorerfahrung** mit Terminal, Servern, Docker
+oder Kommandozeile. Jeder Fachbegriff, jedes Werkzeug und jede Befehls-Mechanik,
+die ein absoluter Anfänger nicht kennt, wird beim **ersten Auftreten** erklärt,
+bevorzugt in einem Erklär-Callout direkt neben dem Schritt, ergänzt durch
+Fließtext. Dafür ist das Callout-Limit aus Abschnitt 3 bewusst aufgehoben.
+
+Leitplanken, damit „ausführlich" nicht „repetitiv" wird:
+
+- **Quer-Begriffe einmal zentral**: Wiederkehrende Grundbegriffe (Terminal,
+  Befehl, Platzhalter, Port, IP-Adresse, SSH) werden einmal ausführlich im
+  Glossar (`introduction.qmd`) erklärt und in den Kapiteln nur kurz aufgegriffen.
+- **Kapitel bleibt selbsterklärend**: Ein kurzer Wiederaufgriff im Kapitel ist
+  erwünscht, denn jede Lesson wird später ein eigenständiges Deck.
+- **Platzhalter markieren**: Spitze Klammern wie `<server-ip>` immer als „durch
+  den eigenen Wert ersetzen" kenntlich machen.
+- **Befehls-Mechanik zeigen**: Mehrzeilige Befehle mit `\` als einen Befehl
+  ausweisen; bei Terminal-Editoren (`nano`) das Speichern und Beenden erklären.
+- **Stil bleibt**: Wir-Form, kein Gedankenstrich, Callout-Titel-Pflicht, **keine**
+  Lernenden-Anrede, keine Vorgriffe gelten unverändert. Zugänglichkeit entsteht
+  durch mehr Erklärung, nicht durch Ansprache der Zielgruppe.
 
 ---
 

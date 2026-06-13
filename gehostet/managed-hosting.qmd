@@ -6,6 +6,10 @@ Managed Hosting liegt zwischen der Cloud und dem eigenen Server. Ein spezialisie
 
 Anbieter wie InstaPods stellen eine dedizierte n8n-Instanz bereit und kümmern sich um Server, Updates und Backups. Im Unterschied zur n8n Cloud handelt es sich um eine eigenständige Self-Host-Instanz, oft auf einem wählbaren europäischen Standort. Damit eignet sich dieser Weg für Teams, die die Kostenstruktur und Datenlage von Self-Hosting nutzen möchten, ohne den Server-Betrieb selbst zu übernehmen.
 
+::: {.callout-note title="Self-Hosting und dedizierte Instanz"}
+Self-Hosting bedeutet, dass n8n als eigenständige, nur einer Kundin oder einem Kunden zugeordnete Instanz läuft, statt dass sich viele Nutzer eine gemeinsame Plattform teilen. „Dediziert" meint genau das: fest zugeordnet, nicht geteilt. Beim Managed Hosting bleibt dieser eigenständige Charakter erhalten, nur übernimmt ein Anbieter den laufenden Betrieb, statt dass der Server selbst verwaltet wird.
+:::
+
 ## Eigenschaften
 
 - ab etwa 7 € im Monat für eine Basis-Instanz

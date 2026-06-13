@@ -2,7 +2,9 @@
 
 Willkommen zum Einrichtungsbuch für n8n. Dieses Buch zeigt, wie eine eigene n8n-Instanz entsteht, und zwar auf dem Weg, der zur jeweiligen Situation passt. Am Ende steht eine laufende Instanz mit einem Editor, in dem sich Workflows bauen, testen und produktiv betreiben lassen.
 
-n8n ist eine visuelle Workflow-Plattform. Bevor der erste Workflow entstehen kann, braucht es eine Stelle, an der n8n läuft. Genau darum geht es hier: vom schnellen Test auf dem eigenen Rechner bis zur dauerhaften, datenschutzkonformen Instanz auf einem eigenen Server in der EU.
+n8n ist eine visuelle Workflow-Plattform: ein Werkzeug, mit dem sich wiederkehrende Abläufe automatisieren lassen, ohne jede Zeile selbst zu programmieren. Ein Workflow ist dabei eine Kette einzelner Schritte, die n8n der Reihe nach ausführt, zum Beispiel „eine neue E-Mail mit Rechnung im Anhang erkennen, den Anhang in einem Ordner ablegen und die Eckdaten in eine Tabelle eintragen". Die einzelnen Schritte stellen wir im Browser per Mausklick zusammen und verbinden sie mit Linien zu einem Ablauf.
+
+Bevor der erste Workflow entstehen kann, braucht es eine Stelle, an der n8n läuft. Genau darum geht es hier: vom schnellen Test auf dem eigenen Rechner bis zur dauerhaften, datenschutzkonformen Instanz auf einem eigenen Server in der EU.
 
 ## Vier Wege zu einer n8n-Instanz
 

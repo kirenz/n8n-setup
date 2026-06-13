@@ -10,12 +10,28 @@ Am Ende läuft n8n lokal und der Editor ist im Browser unter `http://localhost:5
 - ein Befehl lädt n8n und startet es
 - der Browser zeigt den Editor
 
-## Voraussetzung: Node.js
+## Voraussetzung: Terminal und Node.js
 
-`npx` gehört zu Node.js. Wer im Terminal `node --version` ausführt und eine Versionsnummer ab 18 sieht, ist startklar.
+Alle Schritte in diesem Kapitel laufen über das Terminal, also das Programm, in dem wir dem Rechner Befehle als Text geben. Wie es sich auf den verschiedenen Betriebssystemen öffnet, steht in der [Einführung](../introduction.qmd).
 
-::: {.callout-note}
-Fehlt Node.js, lässt es sich über die LTS-Version von [nodejs.org](https://nodejs.org) installieren. LTS steht für „Long Term Support" und bezeichnet die Fassung mit der längsten Pflegezusage, also die richtige Wahl für einen stabilen Start.
+Der Befehl, mit dem wir n8n gleich starten, heißt `npx` und gehört zu Node.js. Beides ist oft schon vorhanden, falls auf dem Rechner früher mit JavaScript gearbeitet wurde; andernfalls installieren wir es in einem Schritt.
+
+::: {.callout-note title="Was sind Node.js und npx?"}
+Node.js ist eine Laufzeitumgebung, also die Software, in der in JavaScript geschriebene Programme laufen. n8n ist ein solches Programm. `npx` wird zusammen mit Node.js installiert und hat eine praktische Eigenschaft: Es lädt ein Programm bei Bedarf herunter und führt es sofort aus, ohne es dauerhaft auf dem Rechner einzurichten. Genau das nutzen wir für den Schnelltest.
+:::
+
+### Prüfen, ob Node.js vorhanden ist
+
+Wir tippen den folgenden Befehl ins Terminal und bestätigen mit der Eingabetaste:
+
+```bash
+node --version
+```
+
+Erscheint eine Versionsnummer ab 18 (etwa `v20.11.0`), ist alles bereit. Erscheint stattdessen eine Meldung wie `command not found`, fehlt Node.js noch.
+
+::: {.callout-tip title="Node.js installieren"}
+Fehlt Node.js, laden wir die LTS-Version von [nodejs.org](https://nodejs.org) und folgen dem Installationsprogramm. LTS steht für „Long Term Support" und bezeichnet die Fassung mit der längsten Pflegezusage, also die stabile Wahl für einen verlässlichen Start. Nach der Installation schließen wir das Terminal einmal und öffnen es neu, damit der `node`-Befehl erkannt wird.
 :::
 
 ## Schritt für Schritt selbst bauen
@@ -26,30 +42,34 @@ Fehlt Node.js, lässt es sich über die LTS-Version von [nodejs.org](https://nod
 npx n8n
 ```
 
-::: {.callout-tip title="Was npx hier macht"}
-`npx` lädt n8n einmalig herunter und führt es aus, ohne es dauerhaft zu installieren. Der erste Start dauert ein bis zwei Minuten, weil die Pakete geladen werden. Danach erscheint in der Terminal-Ausgabe die Zeile, dass der Editor erreichbar ist.
+::: {.callout-tip title="Was beim ersten Start passiert"}
+`npx` lädt n8n einmalig herunter und führt es aus. Der erste Start dauert ein bis zwei Minuten, weil die Pakete geladen werden. Eventuell fragt npx, ob das Paket installiert werden darf; das bestätigen wir mit `y` und der Eingabetaste. Danach läuft im Terminal viel Text durch, was normal ist. Wichtig ist die Zeile am Ende, die meldet, dass der Editor erreichbar ist.
 :::
 
 ### Schritt 2: Editor öffnen
 
-Sobald das Terminal `Editor is now accessible via …` meldet, rufen wir im Browser `http://localhost:5678` auf. Beim ersten Aufruf legt n8n ein Owner-Konto an, also E-Mail-Adresse und Passwort. Diese Anmeldedaten gelten nur für diese lokale Instanz.
+Sobald das Terminal `Editor is now accessible via …` meldet, rufen wir im Browser `http://localhost:5678` auf. `localhost` ist dabei der eigene Rechner und `5678` der Port, über den n8n antwortet (beides erklärt die [Einführung](../introduction.qmd)). Beim ersten Aufruf legt n8n ein Owner-Konto an, also E-Mail-Adresse und Passwort. Diese Anmeldedaten gelten nur für diese lokale Instanz und werden nirgends nach außen gesendet.
 
 ### Schritt 3: n8n wieder beenden
 
-Im Terminal beenden wir n8n mit `Strg + C` (auf macOS `Ctrl + C`). Der Prozess hält an, und der Rechner ist wieder frei.
+Im Terminal beenden wir n8n mit der Tastenkombination `Strg + C` (auf macOS `Ctrl + C`). Das Programm hält an, die Eingabezeile kehrt zurück, und der Rechner ist wieder frei.
+
+::: {.callout-note title="Was Strg + C bedeutet"}
+`Strg + C` ist im Terminal das allgemeine Signal „laufendes Programm abbrechen". Es schließt nicht das Fenster, sondern beendet nur den Befehl, der gerade läuft. Diese Kombination wirkt bei fast allen Terminal-Programmen gleich und ist der übliche Weg, einen Vordergrund-Prozess zu stoppen.
+:::
 
 ## Wo die Daten liegen
 
 ::: {.callout-note}
-n8n legt seine Daten im Ordner `~/.n8n` im Heimatverzeichnis ab, standardmäßig in einer SQLite-Datei. Diese Daten bleiben zwischen den Starts erhalten, solange der Ordner besteht. Für einen dauerhaften Betrieb eignet sich der Weg über Docker, der die Daten in einem klar benannten Volume hält.
+n8n legt seine Daten im Ordner `~/.n8n` ab. Die Tilde `~` steht für das persönliche Heimatverzeichnis des angemeldeten Nutzers, also etwa `/Users/anna` auf macOS oder `C:\Users\anna` unter Windows. Der Punkt vor dem Namen macht ihn zu einem versteckten Ordner. Darin liegt standardmäßig eine SQLite-Datei, eine schlanke Datenbank in Form einer einzigen Datei. Diese Daten bleiben zwischen den Starts erhalten, solange der Ordner besteht. Für einen dauerhaften Betrieb eignet sich der Weg über Docker, der die Daten in einem klar benannten Volume hält.
 :::
 
 ## Fehler diagnostizieren
 
 | Symptom | Wahrscheinliche Ursache | Nächster Schritt |
 |---|---|---|
-| `command not found: npx` | Node.js fehlt | Node.js LTS von nodejs.org installieren |
-| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit anderem Port starten: `N8N_PORT=5679 npx n8n` |
+| `command not found: npx` | Node.js fehlt | Node.js LTS von nodejs.org installieren, Terminal neu öffnen |
+| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit anderem Port starten: `N8N_PORT=5679 npx n8n`, dann `localhost:5679` aufrufen |
 | Browser zeigt nichts an | n8n startet noch | warten, bis das Terminal „Editor is now accessible" meldet |
 
 ## Kontrollpunkt

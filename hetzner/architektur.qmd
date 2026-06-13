@@ -48,7 +48,7 @@ n8n hört intern auf Port 5678 und ist nicht direkt aus dem Internet erreichbar.
 
 ### Postgres: die Datenbank
 
-Postgres hält alle Daten dauerhaft und hat bewusst keinen Port nach außen. Ein Healthcheck prüft, ob die Datenbank Anfragen beantwortet; n8n startet erst, wenn Postgres bereit ist.
+Postgres ist eine Datenbank, also ein Programm, das Daten strukturiert speichert und gezielt durchsuchbar macht. Es hält alle Daten dauerhaft und hat bewusst keinen Port nach außen. Ein Healthcheck, also eine wiederkehrende automatische Funktionsprüfung, stellt fest, ob die Datenbank schon Anfragen beantwortet; n8n startet erst, wenn Postgres bereit ist.
 
 ::: {.callout-tip title="Analogie: Empfang, Sachbearbeitung, Archiv" collapse="true"}
 Caddy ist der Empfang im Erdgeschoss: Er nimmt Besucher entgegen, prüft die Verschlüsselung wie einen Ausweis und leitet weiter. n8n ist die Sachbearbeitung, die die eigentliche Arbeit erledigt. Postgres ist das Archiv im Keller, ohne Publikumsverkehr, in dem alle Vorgänge dauerhaft abgelegt werden. Nur der Empfang hat eine Tür nach draußen.

@@ -26,6 +26,10 @@ exit
 scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
 ```
 
+::: {.callout-note title="Server-Sitzung und lokaler Befehl"}
+Die ersten Befehle laufen auf dem Server: `ssh` öffnet die Sitzung, `backup.sh` erzeugt das Backup, `exit` beendet die Sitzung wieder und bringt uns zurück auf den eigenen Rechner. Erst der letzte Befehl, `scp`, läuft wieder lokal und holt den Backup-Ordner herüber. Die Reihenfolge ist wichtig: erst auf dem Server sichern und die Sitzung verlassen, dann von zu Hause kopieren.
+:::
+
 ::: {.callout-important title="Ohne Encryption-Key sind die Credentials wertlos"}
 Im lokal gesicherten Ordner liegen der Postgres-Dump, der n8n-Daten-Tarball und die `env-…backup` mit dem Encryption-Key. Die Schlüssel-Datei muss zusammen mit dem Dump aufbewahrt werden, idealerweise an einem sicheren Ort wie einem Passwort-Manager. Geht der Key verloren, lassen sich die im Dump enthaltenen Credentials nicht mehr entschlüsseln.
 :::

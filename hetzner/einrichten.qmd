@@ -18,7 +18,7 @@ Caddy holt das TLS-Zertifikat bedarfsgesteuert, also erst beim ersten Aufruf. De
 
 ### Schritt 2: Owner-Konto anlegen
 
-Beim ersten Aufruf zeigt n8n den Setup-Wizard. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.
+Beim ersten Aufruf zeigt n8n den Setup-Wizard, also einen geführten Einrichtungsdialog, der Schritt für Schritt nach den nötigen Angaben fragt. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.
 
 ### Schritt 3: Erste Orientierung
 
@@ -40,6 +40,10 @@ Die Caddy-Logs lassen sich auf dem Server einsehen:
 cd /opt/n8n
 docker compose logs caddy | tail -n 50
 ```
+
+::: {.callout-note title="cd und das Pipe-Zeichen"}
+`cd /opt/n8n` wechselt in das Verzeichnis des Stacks („cd" steht für „change directory", also „Verzeichnis wechseln"). Das senkrechte Zeichen `|` zwischen zwei Befehlen ist eine Pipe: Sie reicht die Ausgabe des linken Befehls direkt an den rechten weiter. Hier gibt `docker compose logs caddy` das gesamte Protokoll von Caddy aus, und `tail -n 50` zeigt davon nur die letzten 50 Zeilen.
+:::
 
 ::: {.callout-important title="sslip.io und das Let's-Encrypt-Limit"}
 sslip.io ist nicht auf der „Public Suffix List" eingetragen, daher zählt Let's Encrypt alle `*.sslip.io`-Adressen als eine einzige Domain mit einem gemeinsamen Limit von 50 Zertifikaten pro Woche, weltweit. Im Einzelbetrieb ist das selten ein Problem. Starten dagegen viele Personen gleichzeitig ihren ersten Server (etwa eine ganze Kursgruppe), kann das Limit greifen. Dann hilft: das Onboarding über mehrere Tage staffeln, einige Stunden warten und erneut versuchen, oder für den produktiven Einsatz eine eigene Domain hinterlegen und in der `.env` als `DOMAIN` eintragen.

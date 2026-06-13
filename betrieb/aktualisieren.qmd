@@ -22,6 +22,10 @@ nano .env
 
 In der `.env` wird der gewünschte Tag eingetragen, etwa `N8N_IMAGE_TAG=2.21.0`. Die Datenbank- und Caddy-Tags lassen sich auf dieselbe Weise anheben.
 
+::: {.callout-tip title="Mit nano arbeiten"}
+`nano` ist ein einfacher Texteditor, der direkt im Terminal läuft. Mit den Pfeiltasten bewegen wir den Cursor zur richtigen Stelle und ändern den Wert. Gespeichert wird mit `Strg + O` (danach mit der Eingabetaste bestätigen), beendet mit `Strg + X`. Die wichtigsten Tastenkürzel zeigt nano am unteren Rand an; das Zeichen `^` steht dort für die Strg-Taste, `^X` bedeutet also `Strg + X`.
+:::
+
 ### Schritt 3: Update-Skript ausführen
 
 ```bash
@@ -36,6 +40,10 @@ Das Skript zieht zuerst ein vollständiges Backup, zeigt dann die in der `.env` 
 
 ::: {.callout-important title="Geplant statt automatisch"}
 Kein Image trägt den Tag `latest`. Automatische Updates im laufenden Betrieb könnten unbemerkt eine Version mit Breaking Changes einspielen und Workflows stören. Deshalb ist jedes Update ein geplanter Schritt mit einem Backup davor; so bleibt im Fehlerfall ein klarer Weg zurück.
+:::
+
+::: {.callout-note title="Breaking Change und Migration"}
+Ein „Breaking Change" ist eine Änderung in einer neuen Version, die bisher Funktionierendes bewusst anders macht, sodass etwas nicht mehr wie zuvor läuft. Eine „Migration" ist ein automatischer Anpassungsschritt, mit dem n8n beim Update die Datenbank auf die neue Version umstellt; läuft sie noch oder schlägt sie fehl, startet der Container unter Umständen nicht sofort. Beides ist der Grund, warum vor jedem Update ein Backup steht.
 :::
 
 ## Fehler diagnostizieren
