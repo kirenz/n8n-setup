@@ -342,14 +342,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="voraussetzung-docker" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="voraussetzung-docker"><span class="header-section-number">2.2</span> Voraussetzung: Docker</h2>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
+<p>Dieser Weg setzt Docker voraus, die Software, die Container startet und verwaltet (was ein Container ist, erklärt die <a href="../introduction.html">Einführung</a>). Auf einem privaten Rechner installieren wir dafür Docker Desktop.</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Docker Desktop installieren">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-body-container">
-<p>Auf macOS und Windows übernimmt das Docker Desktop, auf Linux die Docker Engine. Ein Aufruf von <code>docker --version</code> bestätigt die Installation. Docker Desktop muss laufen, erkennbar am Wal-Symbol in der Menüleiste, sonst schlagen die folgenden Befehle fehl.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Docker Desktop installieren
 </div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Auf <strong>macOS</strong> und <strong>Windows</strong> laden wir Docker Desktop von <a href="https://www.docker.com/products/docker-desktop/">docker.com</a> und folgen dem Installationsprogramm. Unter <strong>Linux</strong> lässt sich wahlweise Docker Desktop oder direkt die schlankere Docker Engine installieren. Nach der Installation starten wir Docker Desktop einmal; es muss im Hintergrund laufen, erkennbar am Wal-Symbol in der Menü- oder Taskleiste.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled" title="Prüfen, ob Docker läuft">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Prüfen, ob Docker läuft
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Im Terminal bestätigt der Befehl <code>docker --version</code> die Installation, indem er eine Versionsnummer ausgibt. Schlägt ein späterer Befehl mit <code>Cannot connect to the Docker daemon</code> fehl, läuft die Docker-Desktop-Anwendung gerade nicht; dann starten wir sie und versuchen es erneut.</p>
 </div>
 </div>
 </section>
@@ -374,6 +391,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="schritt-2-n8n-starten" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="schritt-2-n8n-starten"><span class="header-section-number">2.3.2</span> Schritt 2: n8n starten</h3>
+<p>Der folgende Block ist ein einziger Befehl, der nur zur besseren Lesbarkeit auf mehrere Zeilen verteilt ist. Jede Zeile außer der letzten endet mit einem umgekehrten Schrägstrich <code>\</code>, der bedeutet „der Befehl geht weiter”. Wir kopieren oder tippen den ganzen Block am Stück und bestätigen erst am Ende mit der Eingabetaste:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="dt">\</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> n8n <span class="dt">\</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 5678:5678 <span class="dt">\</span></span>
@@ -383,17 +401,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> N8N_RUNNERS_ENABLED=true <span class="dt">\</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> n8n_data:/home/node/.n8n <span class="dt">\</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  docker.n8n.io/n8nio/n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-simple callout-tip callout-titled" title="Die Optionen im Befehl">
+<div class="callout callout-style-simple callout-tip callout-titled" title="Die Optionen im Befehl, Stück für Stück">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tipp</span>Die Optionen im Befehl
+<span class="screen-reader-only">Tipp</span>Die Optionen im Befehl, Stück für Stück
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>-p 5678:5678</code> verbindet den Port des Containers mit dem des Rechners, sodass der Editor unter <code>localhost:5678</code> erreichbar ist. <code>-v n8n_data:/home/node/.n8n</code> hängt das Volume an die Stelle ein, an der n8n seine Daten ablegt. Die <code>-e</code>-Optionen setzen Umgebungsvariablen, hier Zeitzone und zwei empfohlene Voreinstellungen. <code>docker.n8n.io/n8nio/n8n</code> ist das offizielle Image. Mit <code>-it --rm</code> läuft der Container im Vordergrund und wird beim Beenden entfernt; das Volume und damit die Daten bleiben bestehen.</p>
+<p>Der Befehl wirkt lang, besteht aber nur aus mehreren kleinen Anweisungen, je eine pro Zeile:</p>
+<ul>
+<li><code>-p 5678:5678</code> verbindet n8n im Container mit dem eigenen Rechner, sodass der Editor unter <code>localhost:5678</code> erreichbar ist.</li>
+<li><code>-v n8n_data:/home/node/.n8n</code> hängt das Daten-Volume an die Stelle ein, an der n8n seine Daten ablegt.</li>
+<li>die <code>-e</code>-Zeilen setzen Umgebungsvariablen, also Einstellungen, die dem Programm beim Start mitgegeben werden (hier die Zeitzone und zwei empfohlene Voreinstellungen).</li>
+<li><code>docker.n8n.io/n8nio/n8n</code> ist das offizielle Image, also die Vorlage, aus der der Container entsteht.</li>
+<li><code>-it --rm</code> lässt den Container im Vordergrund laufen und entfernt ihn beim Beenden wieder; das Volume und damit die Daten bleiben erhalten.</li>
+</ul>
 </div>
 </div>
 </section>
@@ -403,7 +428,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="schritt-4-beenden-und-neu-starten" class="level3" data-number="2.3.4">
 <h3 data-number="2.3.4" class="anchored" data-anchor-id="schritt-4-beenden-und-neu-starten"><span class="header-section-number">2.3.4</span> Schritt 4: Beenden und neu starten</h3>
-<p><code>Strg + C</code> beendet den Container. Ein erneuter Aufruf desselben <code>docker run</code>-Befehls startet n8n wieder, mit allen vorherigen Workflows, denn die liegen im Volume.</p>
+<p><code>Strg + C</code> (auf macOS <code>Ctrl + C</code>) beendet den Container. Ein erneuter Aufruf desselben <code>docker run</code>-Befehls startet n8n wieder, mit allen vorherigen Workflows, denn die liegen im Volume.</p>
 </section>
 </section>
 <section id="im-hintergrund-laufen-lassen" class="level2" data-number="2.4">
@@ -416,14 +441,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GENERIC_TIMEZONE=<span class="st">"Europe/Berlin"</span> <span class="at">-e</span> TZ=<span class="st">"Europe/Berlin"</span> <span class="dt">\</span></span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true <span class="at">-e</span> N8N_RUNNERS_ENABLED=true <span class="dt">\</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  docker.n8n.io/n8nio/n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
+<div class="callout callout-style-simple callout-note callout-titled" title="Vordergrund und Hintergrund">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-body-container">
-<p>Mit <code>-d</code> läuft der Container im Hintergrund. <code>docker stop n8n</code> hält ihn an, <code>docker start n8n</code> startet ihn wieder. Anders als bei <code>--rm</code> bleibt der Container bestehen, bis er ausdrücklich mit <code>docker rm n8n</code> entfernt wird.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Vordergrund und Hintergrund
 </div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Im Vordergrund (<code>-it --rm</code>) belegt der Container das Terminal-Fenster und zeigt dort laufend seine Ausgabe; schließen wir das Fenster, stoppt n8n. Mit <code>-d</code> (für „detached”, also losgelöst) läuft der Container im Hintergrund weiter, und das Terminal ist sofort wieder frei. <code>docker stop n8n</code> hält ihn dann an, <code>docker start n8n</code> startet ihn wieder. Anders als bei <code>--rm</code> bleibt der Container bestehen, bis er ausdrücklich mit <code>docker rm n8n</code> entfernt wird.</p>
 </div>
 </div>
 </section>

@@ -352,7 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="schritt-2-owner-konto-anlegen" class="level3" data-number="7.2.2">
 <h3 data-number="7.2.2" class="anchored" data-anchor-id="schritt-2-owner-konto-anlegen"><span class="header-section-number">7.2.2</span> Schritt 2: Owner-Konto anlegen</h3>
-<p>Beim ersten Aufruf zeigt n8n den Setup-Wizard. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.</p>
+<p>Beim ersten Aufruf zeigt n8n den Setup-Wizard, also einen geführten Einrichtungsdialog, der Schritt für Schritt nach den nötigen Angaben fragt. Dort werden E-Mail-Adresse und Passwort für das Owner-Konto festgelegt. Diese Anmeldedaten gelten nur für diese Instanz und liegen verschlüsselt in der Datenbank.</p>
 </section>
 <section id="schritt-3-erste-orientierung" class="level3" data-number="7.2.3">
 <h3 data-number="7.2.3" class="anchored" data-anchor-id="schritt-3-erste-orientierung"><span class="header-section-number">7.2.3</span> Schritt 3: Erste Orientierung</h3>
@@ -396,17 +396,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Die Caddy-Logs lassen sich auf dem Server einsehen:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /opt/n8n</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs caddy <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 50</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-simple callout-important callout-titled" title="sslip.io und das Let's-Encrypt-Limit">
+<div class="callout callout-style-simple callout-note callout-titled" title="cd und das Pipe-Zeichen">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Wichtig</span>sslip.io und das Let’s-Encrypt-Limit
+<span class="screen-reader-only">Hinweis</span>cd und das Pipe-Zeichen
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>sslip.io ist nicht auf der „Public Suffix List” eingetragen, daher zählt Let’s Encrypt alle <code>*.sslip.io</code>-Adressen als eine einzige Domain mit einem gemeinsamen Limit von 50 Zertifikaten pro Woche, weltweit. Im Einzelbetrieb ist das selten ein Problem. Starten dagegen viele Personen gleichzeitig ihren ersten Server (etwa eine ganze Kursgruppe), kann das Limit greifen. Dann hilft: das Onboarding über mehrere Tage staffeln, einige Stunden warten und erneut versuchen, oder für den produktiven Einsatz eine eigene Domain hinterlegen und in der <code>.env</code> als <code>DOMAIN</code> eintragen.</p>
+<p><code>cd /opt/n8n</code> wechselt in das Verzeichnis des Stacks („cd” steht für „change directory”, also „Verzeichnis wechseln”). Das senkrechte Zeichen <code>|</code> zwischen zwei Befehlen ist eine Pipe: Sie reicht die Ausgabe des linken Befehls direkt an den rechten weiter. Hier gibt <code>docker compose logs caddy</code> das gesamte Protokoll von Caddy aus, und <code>tail -n 50</code> zeigt davon nur die letzten 50 Zeilen.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-important callout-titled" title="Wenn viele gleichzeitig starten: das Zertifikat-Limit">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Wichtig</span>Wenn viele gleichzeitig starten: das Zertifikat-Limit
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Die Stelle, die die Verschlüsselungs-Zertifikate kostenlos ausstellt (Let’s Encrypt), begrenzt, wie viele davon pro Woche auf <code>sslip.io</code>-Adressen ausgegeben werden, und dieses Kontingent gilt weltweit gemeinsam für alle. Im Einzelbetrieb spielt das nie eine Rolle. Startet aber eine ganze Kursgruppe am selben Tag ihren ersten Server, kann das gemeinsame Kontingent erschöpft sein. Dann hilft eines von dreien: die Starts über mehrere Tage verteilen, einige Stunden warten und erneut versuchen, oder eine eigene Domain hinterlegen (in der <code>.env</code> als <code>DOMAIN</code> eintragen).</p>
+<p>Im Hintergrund: sslip.io gilt bei Let’s Encrypt technisch als eine einzige Domain, weshalb sich alle Nutzer das Wochenlimit teilen.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note callout-titled" title="Bestimmte Knoten fehlen im Editor">

@@ -314,6 +314,19 @@ div.csl-indent {
 <section id="auftragsverarbeitung-mit-dem-hoster" class="level2" data-number="11.1">
 <h2 data-number="11.1" class="anchored" data-anchor-id="auftragsverarbeitung-mit-dem-hoster"><span class="header-section-number">11.1</span> Auftragsverarbeitung mit dem Hoster</h2>
 <p>Wer personenbezogene Daten in n8n speichert, lässt diese durch den Hoster verarbeiten. Damit liegt eine Auftragsverarbeitung nach Art. 28 DSGVO vor, und es braucht einen Auftragsverarbeitungsvertrag (AVV). Hetzner stellt einen Standard-AVV bereit, der sich direkt in der Console abschließen lässt.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Auftragsverarbeitung und AVV">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Auftragsverarbeitung und AVV
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>„Personenbezogene Daten” sind alle Angaben, die sich auf eine identifizierbare Person beziehen, etwa Name, E-Mail-Adresse oder Telefonnummer. „Auftragsverarbeitung” bedeutet, dass ein Dienstleister diese Daten in unserem Auftrag verarbeitet, ohne selbst über sie zu bestimmen, ähnlich einem externen Lohnbüro, das die Gehaltsabrechnung erledigt, die Mitarbeiterdaten aber nur im Auftrag der Firma nutzen darf. Hier ist dieser Dienstleister der Hoster. Die DSGVO verlangt für solche Fälle einen Auftragsverarbeitungsvertrag (AVV), also einen Vertrag, der schriftlich festhält, was der Dienstleister mit den Daten tun darf und wie er sie schützt.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -328,6 +341,19 @@ div.csl-indent {
 <section id="drittlandtransfer-durch-ki-knoten" class="level2" data-number="11.2">
 <h2 data-number="11.2" class="anchored" data-anchor-id="drittlandtransfer-durch-ki-knoten"><span class="header-section-number">11.2</span> Drittlandtransfer durch KI-Knoten</h2>
 <p>EU-Hosting ist nur die halbe Miete. Sobald in einem Workflow ein KI-Knoten mit OpenAI, Anthropic oder einem anderen US-Anbieter steckt, fließen die übergebenen Daten in die USA. Das ist ein Drittlandtransfer und braucht eine eigene Rechtsgrundlage, etwa Standardvertragsklauseln und ein Transfer-Impact-Assessment.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Drittland, Standardvertragsklauseln, Transfer-Impact-Assessment">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Drittland, Standardvertragsklauseln, Transfer-Impact-Assessment
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ein „Drittland” ist aus EU-Sicht jedes Land außerhalb der EU und des EWR, also zum Beispiel die USA. Werden personenbezogene Daten dorthin übertragen, spricht man von einem Drittlandtransfer, der eine zusätzliche Rechtsgrundlage braucht. „Standardvertragsklauseln” sind von der EU-Kommission vorformulierte Vertragsbausteine, mit denen sich Datensender und Empfänger zu einem angemessenen Schutzniveau verpflichten. Ein „Transfer-Impact-Assessment” ist die begleitende Prüfung, ob die Daten im Zielland tatsächlich ausreichend geschützt sind.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-important callout-titled" title="Jeder KI-Knoten ist ein Datenfluss-Punkt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

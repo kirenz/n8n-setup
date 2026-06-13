@@ -2,11 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://kirenz.github.io/n8n-setup/index.html</loc>
-    <lastmod>2026-06-07T15:53:20.038Z</lastmod>
+    <lastmod>2026-06-13T12:30:50.457Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/introduction.html</loc>
-    <lastmod>2026-06-07T15:53:27.956Z</lastmod>
+    <lastmod>2026-06-13T13:14:24.292Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/lokal/index.html</loc>
@@ -14,11 +14,11 @@
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/lokal/npx.html</loc>
-    <lastmod>2026-06-07T20:30:50.297Z</lastmod>
+    <lastmod>2026-06-13T12:32:18.216Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/lokal/docker.html</loc>
-    <lastmod>2026-06-07T20:30:50.341Z</lastmod>
+    <lastmod>2026-06-13T13:14:55.425Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/gehostet/index.html</loc>
@@ -26,11 +26,11 @@
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/gehostet/cloud.html</loc>
-    <lastmod>2026-06-07T20:30:50.352Z</lastmod>
+    <lastmod>2026-06-13T13:15:33.436Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/gehostet/managed-hosting.html</loc>
-    <lastmod>2026-06-07T20:30:50.367Z</lastmod>
+    <lastmod>2026-06-13T12:44:47.887Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/hetzner/index.html</loc>
@@ -38,15 +38,15 @@
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/hetzner/architektur.html</loc>
-    <lastmod>2026-06-07T20:30:50.398Z</lastmod>
+    <lastmod>2026-06-13T13:13:20.461Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/hetzner/server-anlegen.html</loc>
-    <lastmod>2026-06-07T20:30:50.422Z</lastmod>
+    <lastmod>2026-06-13T12:36:30.483Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/hetzner/einrichten.html</loc>
-    <lastmod>2026-06-07T20:30:50.433Z</lastmod>
+    <lastmod>2026-06-13T13:16:26.047Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/betrieb/index.html</loc>
@@ -54,15 +54,15 @@
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/betrieb/backups.html</loc>
-    <lastmod>2026-06-07T20:30:50.447Z</lastmod>
+    <lastmod>2026-06-13T13:17:26.662Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/betrieb/aktualisieren.html</loc>
-    <lastmod>2026-06-07T20:30:50.463Z</lastmod>
+    <lastmod>2026-06-13T12:38:53.318Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/betrieb/server-loeschen.html</loc>
-    <lastmod>2026-06-07T20:30:51.870Z</lastmod>
+    <lastmod>2026-06-13T12:39:08.728Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/souveraenitaet/index.html</loc>
@@ -70,10 +70,10 @@
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/souveraenitaet/datenschutz.html</loc>
-    <lastmod>2026-06-07T20:30:53.698Z</lastmod>
+    <lastmod>2026-06-13T13:18:21.077Z</lastmod>
   </url>
   <url>
     <loc>https://kirenz.github.io/n8n-setup/souveraenitaet/eu-ai-act.html</loc>
-    <lastmod>2026-06-07T20:30:56.041Z</lastmod>
+    <lastmod>2026-06-13T13:18:26.652Z</lastmod>
   </url>
 </urlset>

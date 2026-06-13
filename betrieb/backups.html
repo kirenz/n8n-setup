@@ -368,19 +368,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span>:/opt/n8n/backups ./n8n-backup-<span class="va">$(</span><span class="fu">date</span> +%F<span class="va">)</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="scp und das Datum im Namen">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>scp und das Datum im Namen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>scp</code> steht für „secure copy” und kopiert Dateien über dieselbe verschlüsselte Verbindung wie SSH, hier vom Server auf den eigenen Rechner. Der Teil <code>root@&lt;server-ip&gt;:/opt/n8n/backups</code> benennt die Quelle auf dem Server (Adresse, Doppelpunkt, Pfad), <code>-r</code> kopiert den ganzen Ordner samt Inhalt. Das Ziel <code>./n8n-backup-$(date +%F)</code> liegt im aktuellen Verzeichnis, wofür das <code>./</code> steht. Der Ausdruck <code>$(date +%F)</code> wird vor dem Kopieren durch das heutige Datum ersetzt, sodass der Ordner zum Beispiel <code>n8n-backup-2026-06-13</code> heißt.</p>
+</div>
+</div>
 </section>
 <section id="schritt-3-tägliches-backup-per-cron" class="level3" data-number="8.2.3">
 <h3 data-number="8.2.3" class="anchored" data-anchor-id="schritt-3-tägliches-backup-per-cron"><span class="header-section-number">8.2.3</span> Schritt 3: Tägliches Backup per Cron</h3>
 <p>Für einen automatischen täglichen Lauf um 03:00 Uhr richten wir auf dem Server einen Cron-Eintrag ein:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span> <span class="fu">crontab</span> <span class="at">-l</span> <span class="dv">2</span><span class="op">&gt;</span>/dev/null<span class="kw">;</span> <span class="bu">echo</span> <span class="st">"0 3 * * * /opt/n8n/scripts/backup.sh &gt;&gt; /var/log/n8n-backup.log 2&gt;&amp;1"</span> <span class="kw">)</span> <span class="kw">|</span> <span class="fu">crontab</span> <span class="at">-</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
+<div class="callout callout-style-simple callout-note callout-titled" title="Cron und der Zeitplan">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-body-container">
-<p>Der Ausdruck <code>0 3 * * *</code> steht für „täglich um 03:00 Uhr”. Die Ausgabe landet in <code>/var/log/n8n-backup.log</code>, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Cron und der Zeitplan
 </div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Cron ist der eingebaute Zeitplaner von Linux, der Befehle automatisch zu festgelegten Zeiten ausführt, ähnlich einem Wecker, der jeden Tag zur selben Uhrzeit klingelt. Die Liste dieser geplanten Aufgaben heißt „crontab”. Der etwas sperrige Befehl liest die bestehende Liste, hängt unsere neue Zeile an und speichert sie zurück. Der vordere Teil <code>0 3 * * *</code> legt den Zeitpunkt fest: Die fünf Felder stehen für Minute, Stunde, Tag, Monat und Wochentag, ein <code>*</code> heißt „jeder”, und so bedeutet <code>0 3 * * *</code> schlicht „täglich um 03:00 Uhr”. Die Ausgabe landet in <code>/var/log/n8n-backup.log</code>, sodass sich nachvollziehen lässt, ob die Sicherung gelaufen ist. Das ersetzt nicht das lokale Sichern aus Schritt 2, denn auch dieses Backup liegt auf dem Server.</p>
 </div>
 </div>
 </section>
@@ -409,7 +425,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td>Speicher voll</td>
 <td>alte Backups oder viele Ausführungsdaten</td>
-<td><code>df -h</code> prüfen, Ausführungsdaten in n8n prunen</td>
+<td>freien Speicher mit <code>df -h</code> prüfen, alte Ausführungsdaten in n8n löschen</td>
 </tr>
 <tr class="odd">
 <td><code>scp: no such file</code></td>

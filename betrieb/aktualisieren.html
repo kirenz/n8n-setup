@@ -344,6 +344,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /opt/n8n</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> .env</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <p>In der <code>.env</code> wird der gewünschte Tag eingetragen, etwa <code>N8N_IMAGE_TAG=2.21.0</code>. Die Datenbank- und Caddy-Tags lassen sich auf dieselbe Weise anheben.</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Mit nano arbeiten">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Mit nano arbeiten
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>nano</code> ist ein einfacher Texteditor, der direkt im Terminal läuft. Mit den Pfeiltasten bewegen wir den Cursor zur richtigen Stelle und ändern den Wert. Gespeichert wird mit <code>Strg + O</code> (danach mit der Eingabetaste bestätigen), beendet mit <code>Strg + X</code>. Die wichtigsten Tastenkürzel zeigt nano am unteren Rand an; das Zeichen <code>^</code> steht dort für die Strg-Taste, <code>^X</code> bedeutet also <code>Strg + X</code>.</p>
+</div>
+</div>
 </section>
 <section id="schritt-3-update-skript-ausführen" class="level3" data-number="9.2.3">
 <h3 data-number="9.2.3" class="anchored" data-anchor-id="schritt-3-update-skript-ausführen"><span class="header-section-number">9.2.3</span> Schritt 3: Update-Skript ausführen</h3>
@@ -376,6 +389,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-body-container callout-body">
 <p>Kein Image trägt den Tag <code>latest</code>. Automatische Updates im laufenden Betrieb könnten unbemerkt eine Version mit Breaking Changes einspielen und Workflows stören. Deshalb ist jedes Update ein geplanter Schritt mit einem Backup davor; so bleibt im Fehlerfall ein klarer Weg zurück.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled" title="Breaking Change und Migration">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Breaking Change und Migration
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ein „Breaking Change” ist eine Änderung in einer neuen Version, die bisher Funktionierendes bewusst anders macht, sodass etwas nicht mehr wie zuvor läuft. Eine „Migration” ist ein automatischer Anpassungsschritt, mit dem n8n beim Update die Datenbank auf die neue Version umstellt; läuft sie noch oder schlägt sie fehl, startet der Container unter Umständen nicht sofort. Beides ist der Grund, warum vor jedem Update ein Backup steht.</p>
 </div>
 </div>
 </section>

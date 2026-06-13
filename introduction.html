@@ -258,14 +258,27 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#welcher-weg-passt" id="toc-welcher-weg-passt" class="nav-link active" data-scroll-target="#welcher-weg-passt">Welcher Weg passt?</a></li>
+  <li><a href="#grundbegriffe-für-alle-wege" id="toc-grundbegriffe-für-alle-wege" class="nav-link" data-scroll-target="#grundbegriffe-für-alle-wege">Grundbegriffe für alle Wege</a>
+  <ul class="collapse">
+  <li><a href="#workflow-und-node" id="toc-workflow-und-node" class="nav-link" data-scroll-target="#workflow-und-node">Workflow und Node</a></li>
   <li><a href="#instanz" id="toc-instanz" class="nav-link" data-scroll-target="#instanz">Instanz</a></li>
+  <li><a href="#terminal-und-kommandozeile" id="toc-terminal-und-kommandozeile" class="nav-link" data-scroll-target="#terminal-und-kommandozeile">Terminal und Kommandozeile</a></li>
+  <li><a href="#befehl-und-platzhalter" id="toc-befehl-und-platzhalter" class="nav-link" data-scroll-target="#befehl-und-platzhalter">Befehl und Platzhalter</a></li>
+  <li><a href="#localhost-und-port" id="toc-localhost-und-port" class="nav-link" data-scroll-target="#localhost-und-port">localhost und Port</a></li>
+  <li><a href="#ip-adresse" id="toc-ip-adresse" class="nav-link" data-scroll-target="#ip-adresse">IP-Adresse</a></li>
+  </ul></li>
+  <li><a href="#begriffe-für-den-eigenen-server" id="toc-begriffe-für-den-eigenen-server" class="nav-link" data-scroll-target="#begriffe-für-den-eigenen-server">Begriffe für den eigenen Server</a>
+  <ul class="collapse">
   <li><a href="#container-und-docker" id="toc-container-und-docker" class="nav-link" data-scroll-target="#container-und-docker">Container und Docker</a></li>
   <li><a href="#image-und-tag" id="toc-image-und-tag" class="nav-link" data-scroll-target="#image-und-tag">Image und Tag</a></li>
+  <li><a href="#stack" id="toc-stack" class="nav-link" data-scroll-target="#stack">Stack</a></li>
+  <li><a href="#ssh" id="toc-ssh" class="nav-link" data-scroll-target="#ssh">SSH</a></li>
   <li><a href="#reverse-proxy" id="toc-reverse-proxy" class="nav-link" data-scroll-target="#reverse-proxy">Reverse Proxy</a></li>
   <li><a href="#tls-und-lets-encrypt" id="toc-tls-und-lets-encrypt" class="nav-link" data-scroll-target="#tls-und-lets-encrypt">TLS und Let’s Encrypt</a></li>
   <li><a href="#domain-und-sslip.io" id="toc-domain-und-sslip.io" class="nav-link" data-scroll-target="#domain-und-sslip.io">Domain und sslip.io</a></li>
   <li><a href="#credentials-und-encryption-key" id="toc-credentials-und-encryption-key" class="nav-link" data-scroll-target="#credentials-und-encryption-key">Credentials und Encryption-Key</a></li>
   <li><a href="#provisioning-und-cloud-init" id="toc-provisioning-und-cloud-init" class="nav-link" data-scroll-target="#provisioning-und-cloud-init">Provisioning und Cloud-Init</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/kirenz/n8n-setup/blob/main/introduction.qmd" class="toc-action"><i class="bi bi-github"></i>Quellcode anzeigen</a></li><li><a href="https://github.com/kirenz/n8n-setup/issues/new" class="toc-action"><i class="bi empty"></i>Problem melden</a></li></ul></div></nav>
     </div>
@@ -291,7 +304,7 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Bevor wir die erste Instanz einrichten, lohnt sich ein Überblick über die Bausteine, mit denen alle vier Wege arbeiten. Jeder Baustein hat eine bestimmte Rolle. Diese Einführung erklärt die zentralen Begriffe in je zwei Sätzen, damit klar ist, worauf die folgenden Module aufbauen.</p>
+<p>Bevor wir die erste Instanz einrichten, lohnt sich ein Überblick über die Bausteine, mit denen die vier Wege arbeiten. Jeder Baustein hat eine bestimmte Rolle. Diese Einführung erklärt die zentralen Begriffe kompakt und dient zugleich als Nachschlagewerk: Die erste Gruppe betrifft alle Wege, die zweite nur den eigenen Server. Wer einen Begriff später wieder vergisst, findet ihn hier; die Kapitel greifen ihn an der Stelle erneut auf, an der er gebraucht wird.</p>
 <section id="welcher-weg-passt" class="level2">
 <h2 class="anchored" data-anchor-id="welcher-weg-passt">Welcher Weg passt?</h2>
 <p>Die vier Wege unterscheiden sich vor allem darin, wie viel wir selbst betreiben und wo die Daten liegen. Die folgende Übersicht ordnet sie ein:</p>
@@ -345,39 +358,98 @@ ul.task-list li input[type="checkbox"] {
 </table>
 <p>Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.</p>
 </section>
-<section id="instanz" class="level2">
-<h2 class="anchored" data-anchor-id="instanz">Instanz</h2>
+<section id="grundbegriffe-für-alle-wege" class="level2">
+<h2 class="anchored" data-anchor-id="grundbegriffe-für-alle-wege">Grundbegriffe für alle Wege</h2>
+<p>Diese Begriffe begegnen uns unabhängig davon, für welchen Weg wir uns entscheiden.</p>
+<section id="workflow-und-node" class="level3">
+<h3 class="anchored" data-anchor-id="workflow-und-node">Workflow und Node</h3>
+<p>Ein Workflow ist eine Abfolge automatisierter Schritte, die n8n nacheinander abarbeitet, zum Beispiel „eine neue E-Mail empfangen, den Anhang speichern, eine Zeile in eine Tabelle schreiben”. Jeder einzelne Schritt ist ein Node (deutsch „Knoten”), ein Baustein mit einer festen Aufgabe. Im Editor verbinden wir die Knoten mit Linien zu einem Ablauf; das fertige Bild aus Knoten und Linien ist der Workflow.</p>
+</section>
+<section id="instanz" class="level3">
+<h3 class="anchored" data-anchor-id="instanz">Instanz</h3>
 <p>Eine Instanz ist eine laufende Kopie von n8n, erreichbar über den Browser. Unabhängig vom gewählten Weg ist das Ergebnis immer eine Instanz mit einem Editor, in dem Workflows entstehen.</p>
 </section>
-<section id="container-und-docker" class="level2">
-<h2 class="anchored" data-anchor-id="container-und-docker">Container und Docker</h2>
-<p>Ein Container bündelt eine Anwendung mit allem, was sie zum Laufen braucht, in eine isolierte, immer gleich startende Einheit. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.</p>
+<section id="terminal-und-kommandozeile" class="level3">
+<h3 class="anchored" data-anchor-id="terminal-und-kommandozeile">Terminal und Kommandozeile</h3>
+<p>Das Terminal ist ein Programm, in dem wir dem Rechner Befehle als Text geben, statt mit der Maus zu klicken. Es zeigt eine Eingabezeile, in die wir einen Befehl tippen und mit der Eingabetaste bestätigen; die Antwort des Rechners erscheint als Text darunter. „Kommandozeile” und „Konsole” sind andere Wörter für dieselbe textbasierte Eingabe.</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Das Terminal öffnen">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Das Terminal öffnen
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Auf <strong>macOS</strong> öffnen wir die App „Terminal”: Cmd + Leertaste drücken, „Terminal” eintippen, mit der Eingabetaste starten. Unter <strong>Windows</strong> nutzen wir „PowerShell”: Start-Menü öffnen, „PowerShell” eintippen, starten. Unter <strong>Linux</strong> heißt das Programm meist „Terminal” oder „Konsole” und liegt im Anwendungsmenü. In allen Fällen erscheint ein Fenster mit einer blinkenden Eingabezeile. Dort tippen wir die Befehle aus diesem Buch ein und bestätigen jeden mit der Eingabetaste.</p>
+</div>
+</div>
 </section>
-<section id="image-und-tag" class="level2">
-<h2 class="anchored" data-anchor-id="image-und-tag">Image und Tag</h2>
+<section id="befehl-und-platzhalter" class="level3">
+<h3 class="anchored" data-anchor-id="befehl-und-platzhalter">Befehl und Platzhalter</h3>
+<p>Ein Befehl ist eine einzelne Anweisung, die wir ins Terminal tippen, etwa <code>node --version</code>. Manche Befehle in diesem Buch enthalten Platzhalter in spitzen Klammern wie <code>&lt;server-ip&gt;</code>. Diese ersetzen wir vollständig durch den eigenen Wert, die spitzen Klammern eingeschlossen. Aus <code>ssh root@&lt;server-ip&gt;</code> wird so zum Beispiel <code>ssh root@203.0.113.10</code>.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Längere Befehle in diesem Buch sind oft auf mehrere Zeilen verteilt, wobei jede Zeile außer der letzten mit einem umgekehrten Schrägstrich <code>\</code> endet. Dieser Backslash bedeutet „der Befehl geht in der nächsten Zeile weiter”. Wir kopieren oder tippen den ganzen Block als einen einzigen Befehl und bestätigen erst am Ende mit der Eingabetaste.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="localhost-und-port" class="level3">
+<h3 class="anchored" data-anchor-id="localhost-und-port">localhost und Port</h3>
+<p>Läuft n8n auf dem eigenen Rechner, rufen wir es im Browser unter <code>http://localhost:5678</code> auf. <code>localhost</code> steht für den eigenen Rechner, also „dieses Gerät hier”. Die Zahl dahinter, <code>5678</code>, ist der Port: eine nummerierte Tür, über die genau dieser Dienst erreichbar ist. Ein Rechner kann viele Dienste gleichzeitig betreiben, und der Port sagt, welcher davon gemeint ist.</p>
+</section>
+<section id="ip-adresse" class="level3">
+<h3 class="anchored" data-anchor-id="ip-adresse">IP-Adresse</h3>
+<p>Eine IP-Adresse ist die numerische Anschrift eines Rechners im Netzwerk, etwa <code>203.0.113.10</code>. Ein eigener Server bei Hetzner erhält eine solche öffentliche Adresse, unter der er aus dem Internet erreichbar ist; über sie melden wir uns später per SSH an.</p>
+</section>
+</section>
+<section id="begriffe-für-den-eigenen-server" class="level2">
+<h2 class="anchored" data-anchor-id="begriffe-für-den-eigenen-server">Begriffe für den eigenen Server</h2>
+<p>Diese Begriffe brauchen wir vor allem für den Hetzner-Weg, auf dem wir n8n selbst betreiben.</p>
+<section id="container-und-docker" class="level3">
+<h3 class="anchored" data-anchor-id="container-und-docker">Container und Docker</h3>
+<p>Ein Container verpackt eine Anwendung zusammen mit allem, was sie zum Laufen braucht, in eine abgeschlossene Einheit, ähnlich einem Versandcontainer, der überall gleich gehandhabt wird. Dadurch startet die Anwendung auf jedem Rechner gleich, ohne dass vorher etwas eingerichtet werden muss. Docker ist die verbreitetste Software, um solche Container zu starten und zu verwalten; beim Hetzner-Weg laufen n8n, die Datenbank und der Reverse Proxy jeweils in einem eigenen Container.</p>
+</section>
+<section id="image-und-tag" class="level3">
+<h3 class="anchored" data-anchor-id="image-und-tag">Image und Tag</h3>
 <p>Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa <code>2.20.6</code>) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.</p>
 </section>
-<section id="reverse-proxy" class="level2">
-<h2 class="anchored" data-anchor-id="reverse-proxy">Reverse Proxy</h2>
-<p>Ein Reverse Proxy nimmt Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.</p>
+<section id="stack" class="level3">
+<h3 class="anchored" data-anchor-id="stack">Stack</h3>
+<p>Als Stack (englisch für „Stapel”) bezeichnet man die Gruppe von Programmen, die zusammen einen Dienst bilden und gemeinsam betrieben werden. Beim Hetzner-Weg umfasst der Stack n8n, die Datenbank Postgres und den Reverse Proxy Caddy, die als drei zusammenarbeitende Container laufen.</p>
 </section>
-<section id="tls-und-lets-encrypt" class="level2">
-<h2 class="anchored" data-anchor-id="tls-und-lets-encrypt">TLS und Let’s Encrypt</h2>
-<p>TLS ist die Verschlüsselung hinter dem <code>https</code> in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Let’s Encrypt ist eine kostenlose Zertifizierungsstelle, von der Caddy die nötigen Zertifikate automatisch bezieht.</p>
+<section id="ssh" class="level3">
+<h3 class="anchored" data-anchor-id="ssh">SSH</h3>
+<p>SSH (kurz für „Secure Shell”) ist ein verschlüsseltes Verfahren, um sich vom eigenen Terminal aus auf einem entfernten Server anzumelden und dort Befehle auszuführen. Statt eines Passworts dient meist ein Schlüsselpaar: ein privater Teil, der auf dem eigenen Rechner bleibt, und ein öffentlicher Teil, der auf dem Server hinterlegt wird. Der Befehl <code>ssh root@&lt;server-ip&gt;</code> öffnet eine solche Sitzung; alles, was wir danach tippen, läuft auf dem Server, bis wir die Sitzung mit <code>exit</code> wieder beenden.</p>
 </section>
-<section id="domain-und-sslip.io" class="level2">
-<h2 class="anchored" data-anchor-id="domain-und-sslip.io">Domain und sslip.io</h2>
+<section id="reverse-proxy" class="level3">
+<h3 class="anchored" data-anchor-id="reverse-proxy">Reverse Proxy</h3>
+<p>Ein Reverse Proxy ist so etwas wie der Empfang eines Gebäudes: Er nimmt alle Anfragen aus dem Internet entgegen und leitet sie intern an die richtige Anwendung weiter, die selbst nicht direkt erreichbar ist. Im Hetzner-Setup übernimmt der Reverse Proxy Caddy diese Rolle und kümmert sich zugleich um die Verschlüsselung.</p>
+</section>
+<section id="tls-und-lets-encrypt" class="level3">
+<h3 class="anchored" data-anchor-id="tls-und-lets-encrypt">TLS und Let’s Encrypt</h3>
+<p>TLS ist die Verschlüsselung hinter dem <code>https</code> und dem Schloss-Symbol in der Adresszeile; sie sorgt dafür, dass niemand den Datenverkehr zwischen Browser und Server mitlesen kann. Damit ein Browser dieser Verschlüsselung vertraut, braucht der Server einen Nachweis, ein sogenanntes Zertifikat. Let’s Encrypt ist eine kostenlose Stelle, die solche Zertifikate ausstellt; Caddy bezieht sie automatisch.</p>
+</section>
+<section id="domain-und-sslip.io" class="level3">
+<h3 class="anchored" data-anchor-id="domain-und-sslip.io">Domain und sslip.io</h3>
 <p>Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa <code>n8n.example.com</code>). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form <code>1-2-3-4.sslip.io</code> automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup.</p>
 </section>
-<section id="credentials-und-encryption-key" class="level2">
-<h2 class="anchored" data-anchor-id="credentials-und-encryption-key">Credentials und Encryption-Key</h2>
-<p>Credentials sind Zugangsdaten zu externen Diensten (API-Schlüssel, Passwörter, OAuth-Token), die n8n getrennt von den Workflows speichert. Sie werden mit dem Encryption-Key verschlüsselt abgelegt; geht dieser Schlüssel verloren, sind alle gespeicherten Credentials unbrauchbar.</p>
+<section id="credentials-und-encryption-key" class="level3">
+<h3 class="anchored" data-anchor-id="credentials-und-encryption-key">Credentials und Encryption-Key</h3>
+<p>Credentials sind Zugangsdaten zu externen Diensten, mit denen ein Workflow sich dort anmeldet, etwa ein API-Schlüssel (eine Art technisches Passwort für eine Programmschnittstelle) oder ein OAuth-Token (eine zeitlich begrenzte Zugriffserlaubnis, die ein Dienst nach erfolgter Anmeldung ausstellt). n8n speichert sie getrennt von den Workflows. Sie werden mit dem Encryption-Key verschlüsselt abgelegt; geht dieser Schlüssel verloren, sind alle gespeicherten Credentials unbrauchbar.</p>
 </section>
-<section id="provisioning-und-cloud-init" class="level2">
-<h2 class="anchored" data-anchor-id="provisioning-und-cloud-init">Provisioning und Cloud-Init</h2>
-<p>Provisioning bezeichnet das automatische Einrichten eines frischen Servers, vom Installieren der Pakete bis zum laufenden Dienst. Cloud-Init ist der Standard, mit dem ein Server beim ersten Start ein hinterlegtes Skript ausführt; im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.</p>
+<section id="provisioning-und-cloud-init" class="level3">
+<h3 class="anchored" data-anchor-id="provisioning-und-cloud-init">Provisioning und Cloud-Init</h3>
+<p>Provisioning bedeutet, einen frischen Server automatisch einzurichten, statt jeden Schritt von Hand zu tippen: Programme installieren, einstellen, starten. Cloud-Init ist das verbreitete Verfahren dafür: Der Server arbeitet beim allerersten Start eine hinterlegte Anleitung (ein Skript) selbsttätig ab. Im Hetzner-Modul übernimmt Cloud-Init die komplette Einrichtung.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

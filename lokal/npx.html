@@ -293,7 +293,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#zielbild" id="toc-zielbild" class="nav-link active" data-scroll-target="#zielbild"><span class="header-section-number">1.1</span> Zielbild</a></li>
-  <li><a href="#voraussetzung-node.js" id="toc-voraussetzung-node.js" class="nav-link" data-scroll-target="#voraussetzung-node.js"><span class="header-section-number">1.2</span> Voraussetzung: Node.js</a></li>
+  <li><a href="#voraussetzung-terminal-und-node.js" id="toc-voraussetzung-terminal-und-node.js" class="nav-link" data-scroll-target="#voraussetzung-terminal-und-node.js"><span class="header-section-number">1.2</span> Voraussetzung: Terminal und Node.js</a>
+  <ul class="collapse">
+  <li><a href="#prüfen-ob-node.js-vorhanden-ist" id="toc-prüfen-ob-node.js-vorhanden-ist" class="nav-link" data-scroll-target="#prüfen-ob-node.js-vorhanden-ist"><span class="header-section-number">1.2.1</span> Prüfen, ob Node.js vorhanden ist</a></li>
+  </ul></li>
   <li><a href="#schritt-für-schritt-selbst-bauen" id="toc-schritt-für-schritt-selbst-bauen" class="nav-link" data-scroll-target="#schritt-für-schritt-selbst-bauen"><span class="header-section-number">1.3</span> Schritt für Schritt selbst bauen</a>
   <ul class="collapse">
   <li><a href="#schritt-1-n8n-starten" id="toc-schritt-1-n8n-starten" class="nav-link" data-scroll-target="#schritt-1-n8n-starten"><span class="header-section-number">1.3.1</span> Schritt 1: n8n starten</a></li>
@@ -338,46 +341,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>der Browser zeigt den Editor</li>
 </ul>
 </section>
-<section id="voraussetzung-node.js" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="voraussetzung-node.js"><span class="header-section-number">1.2</span> Voraussetzung: Node.js</h2>
-<p><code>npx</code> gehört zu Node.js. Wer im Terminal <code>node --version</code> ausführt und eine Versionsnummer ab 18 sieht, ist startklar.</p>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-body-container">
-<p>Fehlt Node.js, lässt es sich über die LTS-Version von <a href="https://nodejs.org">nodejs.org</a> installieren. LTS steht für „Long Term Support” und bezeichnet die Fassung mit der längsten Pflegezusage, also die richtige Wahl für einen stabilen Start.</p>
-</div>
-</div>
-</div>
-</section>
-<section id="schritt-für-schritt-selbst-bauen" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="schritt-für-schritt-selbst-bauen"><span class="header-section-number">1.3</span> Schritt für Schritt selbst bauen</h2>
-<section id="schritt-1-n8n-starten" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="schritt-1-n8n-starten"><span class="header-section-number">1.3.1</span> Schritt 1: n8n starten</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npx</span> n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-simple callout-tip callout-titled" title="Was npx hier macht">
+<section id="voraussetzung-terminal-und-node.js" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="voraussetzung-terminal-und-node.js"><span class="header-section-number">1.2</span> Voraussetzung: Terminal und Node.js</h2>
+<p>Alle Schritte in diesem Kapitel laufen über das Terminal, also das Programm, in dem wir dem Rechner Befehle als Text geben. Wie es sich auf den verschiedenen Betriebssystemen öffnet, steht in der <a href="../introduction.html">Einführung</a>.</p>
+<p>Der Befehl, mit dem wir n8n gleich starten, heißt <code>npx</code> und gehört zu Node.js. Beides ist oft schon vorhanden, falls auf dem Rechner früher mit JavaScript gearbeitet wurde; andernfalls installieren wir es in einem Schritt.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Was sind Node.js und npx?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tipp</span>Was npx hier macht
+<span class="screen-reader-only">Hinweis</span>Was sind Node.js und npx?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>npx</code> lädt n8n einmalig herunter und führt es aus, ohne es dauerhaft zu installieren. Der erste Start dauert ein bis zwei Minuten, weil die Pakete geladen werden. Danach erscheint in der Terminal-Ausgabe die Zeile, dass der Editor erreichbar ist.</p>
+<p>Node.js ist eine Laufzeitumgebung, also die Software, in der in JavaScript geschriebene Programme laufen. n8n ist ein solches Programm. <code>npx</code> wird zusammen mit Node.js installiert und hat eine praktische Eigenschaft: Es lädt ein Programm bei Bedarf herunter und führt es sofort aus, ohne es dauerhaft auf dem Rechner einzurichten. Genau das nutzen wir für den Schnelltest.</p>
+</div>
+</div>
+<section id="prüfen-ob-node.js-vorhanden-ist" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="prüfen-ob-node.js-vorhanden-ist"><span class="header-section-number">1.2.1</span> Prüfen, ob Node.js vorhanden ist</h3>
+<p>Wir tippen den folgenden Befehl ins Terminal und bestätigen mit der Eingabetaste:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">node</span> <span class="at">--version</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Erscheint eine Versionsnummer ab 18 (etwa <code>v20.11.0</code>), ist alles bereit. Erscheint stattdessen eine Meldung wie <code>command not found</code>, fehlt Node.js noch.</p>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Node.js installieren">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Node.js installieren
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fehlt Node.js, laden wir die LTS-Version von <a href="https://nodejs.org">nodejs.org</a> und folgen dem Installationsprogramm. LTS steht für „Long Term Support” und bezeichnet die Fassung mit der längsten Pflegezusage, also die stabile Wahl für einen verlässlichen Start. Nach der Installation schließen wir das Terminal einmal und öffnen es neu, damit der <code>node</code>-Befehl erkannt wird.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="schritt-für-schritt-selbst-bauen" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="schritt-für-schritt-selbst-bauen"><span class="header-section-number">1.3</span> Schritt für Schritt selbst bauen</h2>
+<section id="schritt-1-n8n-starten" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="schritt-1-n8n-starten"><span class="header-section-number">1.3.1</span> Schritt 1: n8n starten</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npx</span> n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-simple callout-tip callout-titled" title="Was beim ersten Start passiert">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tipp</span>Was beim ersten Start passiert
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>npx</code> lädt n8n einmalig herunter und führt es aus. Der erste Start dauert ein bis zwei Minuten, weil die Pakete geladen werden. Eventuell fragt npx, ob das Paket installiert werden darf; das bestätigen wir mit <code>y</code> und der Eingabetaste. Danach läuft im Terminal viel Text durch, was normal ist. Wichtig ist die Zeile am Ende, die meldet, dass der Editor erreichbar ist.</p>
 </div>
 </div>
 </section>
 <section id="schritt-2-editor-öffnen" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="schritt-2-editor-öffnen"><span class="header-section-number">1.3.2</span> Schritt 2: Editor öffnen</h3>
-<p>Sobald das Terminal <code>Editor is now accessible via …</code> meldet, rufen wir im Browser <code>http://localhost:5678</code> auf. Beim ersten Aufruf legt n8n ein Owner-Konto an, also E-Mail-Adresse und Passwort. Diese Anmeldedaten gelten nur für diese lokale Instanz.</p>
+<p>Sobald das Terminal <code>Editor is now accessible via …</code> meldet, rufen wir im Browser <code>http://localhost:5678</code> auf. <code>localhost</code> ist dabei der eigene Rechner und <code>5678</code> der Port, über den n8n antwortet (beides erklärt die <a href="../introduction.html">Einführung</a>). Beim ersten Aufruf legt n8n ein Owner-Konto an, also E-Mail-Adresse und Passwort. Diese Anmeldedaten gelten nur für diese lokale Instanz und werden nirgends nach außen gesendet.</p>
 </section>
 <section id="schritt-3-n8n-wieder-beenden" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="schritt-3-n8n-wieder-beenden"><span class="header-section-number">1.3.3</span> Schritt 3: n8n wieder beenden</h3>
-<p>Im Terminal beenden wir n8n mit <code>Strg + C</code> (auf macOS <code>Ctrl + C</code>). Der Prozess hält an, und der Rechner ist wieder frei.</p>
+<p>Im Terminal beenden wir n8n mit der Tastenkombination <code>Strg + C</code> (auf macOS <code>Ctrl + C</code>). Das Programm hält an, die Eingabezeile kehrt zurück, und der Rechner ist wieder frei.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Was Strg + C bedeutet">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Was Strg + C bedeutet
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>Strg + C</code> ist im Terminal das allgemeine Signal „laufendes Programm abbrechen”. Es schließt nicht das Fenster, sondern beendet nur den Befehl, der gerade läuft. Diese Kombination wirkt bei fast allen Terminal-Programmen gleich und ist der übliche Weg, einen Vordergrund-Prozess zu stoppen.</p>
+</div>
+</div>
 </section>
 </section>
 <section id="wo-die-daten-liegen" class="level2" data-number="1.4">
@@ -388,7 +427,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>n8n legt seine Daten im Ordner <code>~/.n8n</code> im Heimatverzeichnis ab, standardmäßig in einer SQLite-Datei. Diese Daten bleiben zwischen den Starts erhalten, solange der Ordner besteht. Für einen dauerhaften Betrieb eignet sich der Weg über Docker, der die Daten in einem klar benannten Volume hält.</p>
+<p>n8n legt seine Daten im Ordner <code>~/.n8n</code> ab. Die Tilde <code>~</code> steht für das persönliche Heimatverzeichnis des angemeldeten Nutzers, also etwa <code>/Users/anna</code> auf macOS oder <code>C:\Users\anna</code> unter Windows. Der Punkt vor dem Namen macht ihn zu einem versteckten Ordner. Darin liegt standardmäßig eine SQLite-Datei, eine schlanke Datenbank in Form einer einzigen Datei. Diese Daten bleiben zwischen den Starts erhalten, solange der Ordner besteht. Für einen dauerhaften Betrieb eignet sich der Weg über Docker, der die Daten in einem klar benannten Volume hält.</p>
 </div>
 </div>
 </div>
@@ -412,12 +451,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="odd">
 <td><code>command not found: npx</code></td>
 <td>Node.js fehlt</td>
-<td>Node.js LTS von nodejs.org installieren</td>
+<td>Node.js LTS von nodejs.org installieren, Terminal neu öffnen</td>
 </tr>
 <tr class="even">
 <td><code>Port 5678 is already in use</code></td>
 <td>ein anderer Dienst belegt den Port</td>
-<td>mit anderem Port starten: <code>N8N_PORT=5679 npx n8n</code></td>
+<td>mit anderem Port starten: <code>N8N_PORT=5679 npx n8n</code>, dann <code>localhost:5679</code> aufrufen</td>
 </tr>
 <tr class="odd">
 <td>Browser zeigt nichts an</td>

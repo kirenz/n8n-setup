@@ -329,6 +329,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Jetzt entsteht der Server. Hetzner stellt eine virtuelle Maschine bereit; ein hinterlegtes Cloud-Init-Skript richtet darauf den kompletten Stack ein. Nach dem Start müssen wir uns nicht einmal einloggen, um n8n zum Laufen zu bringen.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Was ist eine virtuelle Maschine?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Was ist eine virtuelle Maschine?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Eine virtuelle Maschine ist ein vollständiger Rechner, der nicht als eigenes Gerät auf dem Schreibtisch steht, sondern als Software in einem Rechenzentrum läuft. Für uns verhält sie sich wie ein eigener Server: Sie hat eine eigene IP-Adresse, ein Betriebssystem und Speicher, lässt sich aber per Mausklick anlegen und wieder löschen. Hetzner stellt sie bereit, wir greifen über das Internet darauf zu.</p>
+</div>
+</div>
 <section id="zielbild" class="level2" data-number="6.1">
 <h2 data-number="6.1" class="anchored" data-anchor-id="zielbild"><span class="header-section-number">6.1</span> Zielbild</h2>
 <p>Ein laufender Server bei Hetzner, der sich selbst eingerichtet hat und unter einer Adresse der Form <code>https://1-2-3-4.sslip.io</code> erreichbar ist. Die Stationen:</p>
@@ -346,17 +359,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>ein SSH-Schlüssel, in der Hetzner-Console hinterlegt</li>
 <li>Budget von etwa 4 bis 7 € im Monat; der Server lässt sich jederzeit wieder löschen</li>
 </ul>
-<div class="callout callout-style-simple callout-note callout-titled" title="SSH-Schlüssel anlegen">
+<p>Den SSH-Schlüssel brauchen wir, um uns später sicher auf dem Server anzumelden. Was SSH ist, erklärt die <a href="../introduction.html">Einführung</a>; hier erzeugen wir das Schlüsselpaar und hinterlegen es bei Hetzner.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="SSH-Schlüssel erzeugen und hinterlegen">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Hinweis</span>SSH-Schlüssel anlegen
+<span class="screen-reader-only">Hinweis</span>SSH-Schlüssel erzeugen und hinterlegen
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Ein SSH-Schlüssel besteht aus einem privaten und einem öffentlichen Teil. Wer noch keinen hat, erzeugt ihn lokal mit <code>ssh-keygen -t ed25519</code>. Der öffentliche Teil (Datei <code>~/.ssh/id_ed25519.pub</code>) wird in der Hetzner-Console unter „SSH-Keys” hinterlegt, der private Teil bleibt auf dem eigenen Rechner.</p>
+<p>Ein SSH-Schlüssel besteht aus zwei zusammengehörigen Teilen: einem privaten, der geheim auf dem eigenen Rechner bleibt, und einem öffentlichen, den wir beim Server hinterlegen. Wer noch keinen hat, erzeugt ihn im Terminal mit:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Das Programm fragt nach einem Speicherort (wir bestätigen den Vorschlag mit der Eingabetaste) und optional nach einer Passphrase, also einem zusätzlichen Passwort für den Schlüssel, das leer bleiben darf. Danach liegen zwei Dateien im versteckten Ordner <code>~/.ssh</code>: der private Schlüssel <code>id_ed25519</code> und der öffentliche <code>id_ed25519.pub</code>. Den <strong>öffentlichen</strong> Teil (Endung <code>.pub</code>) kopieren wir und fügen ihn in der Hetzner-Console unter „SSH-Keys” ein. Den privaten Teil geben wir niemals weiter.</p>
 </div>
 </div>
 </section>
@@ -364,7 +380,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="6.3" class="anchored" data-anchor-id="schritt-für-schritt-selbst-bauen"><span class="header-section-number">6.3</span> Schritt für Schritt selbst bauen</h2>
 <section id="schritt-1-firewall-anlegen" class="level3" data-number="6.3.1">
 <h3 data-number="6.3.1" class="anchored" data-anchor-id="schritt-1-firewall-anlegen"><span class="header-section-number">6.3.1</span> Schritt 1: Firewall anlegen</h3>
-<p>In der Hetzner-Console unter <strong>Firewalls → Firewall erstellen</strong>:</p>
+<p>Eine Firewall ist ein Filter, der festlegt, welcher Netzwerkverkehr den Server überhaupt erreichen darf. In der Hetzner-Console unter <strong>Firewalls → Firewall erstellen</strong>:</p>
 <ul>
 <li>Name: <code>n8n-firewall</code></li>
 <li>eingehende Regeln: nur SSH (22), HTTP (80) und HTTPS (443), jeweils von überall</li>
@@ -376,7 +392,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon"></i>
 </div>
 <div class="callout-body-container">
-<p>Diese Firewall arbeitet auf Provider-Ebene und blockiert Verkehr, bevor er den Server erreicht. Die zweite Schicht (UFW) richtet das Cloud-Init-Skript später automatisch auf dem Server selbst ein.</p>
+<p>Die Zahlen 22, 80 und 443 sind Ports, also die nummerierten Türen aus der <a href="../introduction.html">Einführung</a>: 22 für die SSH-Anmeldung, 80 und 443 für den Web-Zugriff (unverschlüsselt und verschlüsselt). Alle anderen Türen bleiben geschlossen. Diese Firewall arbeitet auf Provider-Ebene und blockiert Verkehr, bevor er den Server erreicht. Die zweite Schicht (UFW) richtet das Cloud-Init-Skript später automatisch auf dem Server selbst ein.</p>
 </div>
 </div>
 </div>
@@ -426,6 +442,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 </tbody>
 </table>
+<div class="callout callout-style-simple callout-note callout-titled" title="Ubuntu, vCPU und RAM">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Ubuntu, vCPU und RAM
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ubuntu ist ein verbreitetes Linux-Betriebssystem, das auf Servern üblich ist. „vCPU” steht für virtuelle Prozessorkerne, „RAM” für den Arbeitsspeicher; beide bestimmen zusammen, wie viel der Server gleichzeitig leisten kann. Die Bezeichnungen CPX11 und CPX21 sind Hetzners Namen für unterschiedlich große Server.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-important callout-titled" title="Cloud-Config nicht vergessen">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -457,7 +486,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="6.3.3" class="anchored" data-anchor-id="schritt-3-provisioning-abwarten"><span class="header-section-number">6.3.3</span> Schritt 3: Provisioning abwarten</h3>
 <p>Nach dem Start richtet sich der Server in etwa 5 bis 8 Minuten selbst ein. In dieser Zeit installiert er Docker, klont das Repo, erzeugt die Geheimnisse und startet die Container.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Was im Hintergrund läuft">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -466,7 +495,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Das Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UFW-Firewall einrichten, das Repo nach <code>/opt/n8n</code> klonen, die Server-IP ermitteln und daraus die sslip.io-Domain bilden. Anschließend erzeugt es mit <code>openssl rand</code> ein Datenbank-Passwort und den Encryption-Key, schreibt sie in die <code>.env</code>-Datei und startet den Stack mit <code>docker compose up</code>. Die Schritte sind so geschrieben, dass ein erneuter Lauf bestehende Geheimnisse nicht überschreibt.</p>
 </div>
@@ -475,13 +504,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="schritt-4-url-ermitteln" class="level3" data-number="6.3.4">
 <h3 data-number="6.3.4" class="anchored" data-anchor-id="schritt-4-url-ermitteln"><span class="header-section-number">6.3.4</span> Schritt 4: URL ermitteln</h3>
-<p>Sobald der Server läuft, loggen wir uns einmal per SSH ein. Die Begrüßungsnachricht zeigt die fertige URL:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Die Ausgabe nennt die Adresse, etwa:</p>
+<p>Sobald der Server läuft, melden wir uns einmal per SSH an. Dafür brauchen wir die IP-Adresse des Servers, die in der Hetzner-Console neben dem Server steht. Im Terminal tippen wir:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>&lt;server-ip&gt;</code> ist ein Platzhalter: Wir ersetzen ihn samt der spitzen Klammern durch die tatsächliche Adresse, aus <code>ssh root@&lt;server-ip&gt;</code> wird so zum Beispiel <code>ssh root@203.0.113.10</code>. <code>root</code> ist der Name des Administrator-Kontos auf dem Server. Beim allerersten Verbinden fragt SSH, ob der Server vertrauenswürdig ist; das bestätigen wir einmalig mit <code>yes</code>.</p>
+<p>Die Begrüßungsnachricht nach der Anmeldung zeigt die fertige URL:</p>
 <pre><code>n8n läuft. Aufrufen unter:
   https://1-2-3-4.sslip.io</code></pre>
 <p>Erscheint die Begrüßung noch nicht, läuft das Provisioning noch. Der Stand lässt sich prüfen mit:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 30 /var/log/n8n-setup.log</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 30 /var/log/n8n-setup.log</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-simple callout-note callout-titled" title="Die Befehle in diesem Schritt">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Die Befehle in diesem Schritt
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>tail</code> zeigt das Ende einer Textdatei; <code>-n 30</code> bedeutet „die letzten 30 Zeilen”. So sehen wir den aktuellen Stand des Einrichtungs-Protokolls, ohne die ganze Datei zu öffnen. Der Begriff <code>sudo</code>, der in der Fehlertabelle auftaucht, wird manchen Befehlen vorangestellt, um sie mit Administrator-Rechten auszuführen; als <code>root</code> angemeldet brauchen wir ihn nicht, andere Anleitungen setzen ihn aber oft voraus.</p>
+</div>
+</div>
 </section>
 </section>
 <section id="fehler-diagnostizieren" class="level2" data-number="6.4">

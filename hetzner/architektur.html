@@ -257,16 +257,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Inhaltsverzeichnis</h2>
    
   <ul>
-  <li><a href="#zielbild-drei-container-zwei-firewalls" id="toc-zielbild-drei-container-zwei-firewalls" class="nav-link active" data-scroll-target="#zielbild-drei-container-zwei-firewalls"><span class="header-section-number">5.1</span> Zielbild: drei Container, zwei Firewalls</a></li>
-  <li><a href="#die-drei-container" id="toc-die-drei-container" class="nav-link" data-scroll-target="#die-drei-container"><span class="header-section-number">5.2</span> Die drei Container</a>
+  <li><a href="#das-gesamtbild" id="toc-das-gesamtbild" class="nav-link active" data-scroll-target="#das-gesamtbild"><span class="header-section-number">5.1</span> Das Gesamtbild</a></li>
+  <li><a href="#die-drei-bausteine" id="toc-die-drei-bausteine" class="nav-link" data-scroll-target="#die-drei-bausteine"><span class="header-section-number">5.2</span> Die drei Bausteine</a>
   <ul class="collapse">
-  <li><a href="#caddy-reverse-proxy-und-verschlüsselung" id="toc-caddy-reverse-proxy-und-verschlüsselung" class="nav-link" data-scroll-target="#caddy-reverse-proxy-und-verschlüsselung"><span class="header-section-number">5.2.1</span> Caddy: Reverse Proxy und Verschlüsselung</a></li>
-  <li><a href="#n8n-die-workflow-engine" id="toc-n8n-die-workflow-engine" class="nav-link" data-scroll-target="#n8n-die-workflow-engine"><span class="header-section-number">5.2.2</span> n8n: die Workflow-Engine</a></li>
-  <li><a href="#postgres-die-datenbank" id="toc-postgres-die-datenbank" class="nav-link" data-scroll-target="#postgres-die-datenbank"><span class="header-section-number">5.2.3</span> Postgres: die Datenbank</a></li>
+  <li><a href="#caddy-der-empfang" id="toc-caddy-der-empfang" class="nav-link" data-scroll-target="#caddy-der-empfang"><span class="header-section-number">5.2.1</span> Caddy: der Empfang</a></li>
+  <li><a href="#n8n-die-sachbearbeitung" id="toc-n8n-die-sachbearbeitung" class="nav-link" data-scroll-target="#n8n-die-sachbearbeitung"><span class="header-section-number">5.2.2</span> n8n: die Sachbearbeitung</a></li>
+  <li><a href="#postgres-das-archiv" id="toc-postgres-das-archiv" class="nav-link" data-scroll-target="#postgres-das-archiv"><span class="header-section-number">5.2.3</span> Postgres: das Archiv</a></li>
   </ul></li>
-  <li><a href="#zwei-firewall-schichten" id="toc-zwei-firewall-schichten" class="nav-link" data-scroll-target="#zwei-firewall-schichten"><span class="header-section-number">5.3</span> Zwei Firewall-Schichten</a></li>
-  <li><a href="#warum-diese-bausteine" id="toc-warum-diese-bausteine" class="nav-link" data-scroll-target="#warum-diese-bausteine"><span class="header-section-number">5.4</span> Warum diese Bausteine</a></li>
-  <li><a href="#reproduzierbarkeit-durch-versionspinning" id="toc-reproduzierbarkeit-durch-versionspinning" class="nav-link" data-scroll-target="#reproduzierbarkeit-durch-versionspinning"><span class="header-section-number">5.5</span> Reproduzierbarkeit durch Versionspinning</a></li>
+  <li><a href="#zwei-kontrollen-am-eingang" id="toc-zwei-kontrollen-am-eingang" class="nav-link" data-scroll-target="#zwei-kontrollen-am-eingang"><span class="header-section-number">5.3</span> Zwei Kontrollen am Eingang</a></li>
+  <li><a href="#warum-genau-diese-bausteine" id="toc-warum-genau-diese-bausteine" class="nav-link" data-scroll-target="#warum-genau-diese-bausteine"><span class="header-section-number">5.4</span> Warum genau diese Bausteine</a></li>
+  <li><a href="#feste-versionen-statt-automatischer-updates" id="toc-feste-versionen-statt-automatischer-updates" class="nav-link" data-scroll-target="#feste-versionen-statt-automatischer-updates"><span class="header-section-number">5.5</span> Feste Versionen statt automatischer Updates</a></li>
   <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">5.6</span> Kontrollpunkt</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/kirenz/n8n-setup/blob/main/hetzner/architektur.qmd" class="toc-action"><i class="bi bi-github"></i>Quellcode anzeigen</a></li><li><a href="https://github.com/kirenz/n8n-setup/issues/new" class="toc-action"><i class="bi empty"></i>Problem melden</a></li></ul></div></nav>
@@ -293,9 +293,17 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Bevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start entsteht. Das Setup besteht aus drei Bausteinen, die zusammenarbeiten, und zwei Schutzschichten davor. Wer dieses Bild im Kopf hat, versteht später jeden Schritt und kann Fehler gezielt eingrenzen.</p>
-<section id="zielbild-drei-container-zwei-firewalls" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="zielbild-drei-container-zwei-firewalls"><span class="header-section-number">5.1</span> Zielbild: drei Container, zwei Firewalls</h2>
+<p>Bevor wir den Server anlegen, lohnt sich ein Bild davon, was beim ersten Start entsteht. Wer dieses Bild im Kopf hat, versteht später jeden Schritt und kann Fehler gezielt eingrenzen. Wir verwenden dafür den Vergleich mit einem kleinen Bürogebäude.</p>
+<section id="das-gesamtbild" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="das-gesamtbild"><span class="header-section-number">5.1</span> Das Gesamtbild</h2>
+<p>Stellen wir uns die fertige Instanz als kleines Bürogebäude mit drei Räumen vor:</p>
+<ul>
+<li>Am <strong>Empfang</strong> im Erdgeschoss kommt jeder Besucher an. Nur der Empfang hat eine Tür zur Straße.</li>
+<li>In der <strong>Sachbearbeitung</strong> wird die eigentliche Arbeit erledigt. Dorthin gelangt man nur über den Empfang.</li>
+<li>Im <strong>Archiv</strong> im Keller liegen alle Unterlagen geordnet. Von außen kommt niemand hinein, nur die Sachbearbeitung greift darauf zu.</li>
+</ul>
+<p>Genau so ist das n8n-Setup aufgebaut. Jeder Raum entspricht einem Programm, und jedes Programm läuft in einem eigenen Container (was ein Container ist, erklärt die <a href="../introduction.html">Einführung</a>). Die drei Programme heißen Caddy (der Empfang), n8n (die Sachbearbeitung) und Postgres (das Archiv). Davor liegen zwei Sicherheitskontrollen, zu denen wir gleich kommen.</p>
+<p>Als technische Karte sieht derselbe Aufbau so aus:</p>
 <pre><code>                             Internet
                                 │
                                 ▼
@@ -323,56 +331,80 @@ ul.task-list li input[type="checkbox"] {
                     │   Postgres  (5432)     │   Workflows, Credentials
                     └───────────────────────┘
                             (nur intern)</code></pre>
-<p>Eine Anfrage aus dem Internet passiert zuerst zwei Firewalls, erreicht dann Caddy, der die Verschlüsselung übernimmt und intern an n8n weiterreicht. n8n speichert alles Dauerhafte in Postgres. Nur Caddy ist von außen erreichbar.</p>
+<p>Eine Anfrage aus dem Internet durchläuft das Gebäude von oben nach unten: zuerst die beiden Sicherheitskontrollen, dann den Empfang (Caddy), der sie an die Sachbearbeitung (n8n) weiterreicht; diese greift bei Bedarf auf das Archiv (Postgres) zu. Die Zahlen am Rand sind Ports, also die nummerierten Türen aus der <a href="../introduction.html">Einführung</a>; für das Verständnis des Aufbaus müssen wir sie nicht auswendig kennen.</p>
 </section>
-<section id="die-drei-container" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="die-drei-container"><span class="header-section-number">5.2</span> Die drei Container</h2>
-<section id="caddy-reverse-proxy-und-verschlüsselung" class="level3" data-number="5.2.1">
-<h3 data-number="5.2.1" class="anchored" data-anchor-id="caddy-reverse-proxy-und-verschlüsselung"><span class="header-section-number">5.2.1</span> Caddy: Reverse Proxy und Verschlüsselung</h3>
-<p>Caddy ist der einzige Baustein, der von außen erreichbar ist. Er nimmt Anfragen auf den Ports 80 und 443 entgegen, holt automatisch ein TLS-Zertifikat von Let’s Encrypt und reicht den Verkehr intern an n8n weiter. Dabei setzt er die Header, die n8n braucht, um eingehende Webhooks der richtigen URL zuzuordnen.</p>
+<section id="die-drei-bausteine" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="die-drei-bausteine"><span class="header-section-number">5.2</span> Die drei Bausteine</h2>
+<section id="caddy-der-empfang" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="caddy-der-empfang"><span class="header-section-number">5.2.1</span> Caddy: der Empfang</h3>
+<p>Caddy ist der Empfang im Erdgeschoss und die einzige Stelle, die von draußen, also aus dem Internet, erreichbar ist. Wer die Adresse der Instanz im Browser eingibt, landet zuerst bei Caddy.</p>
+<p>Der Empfang erledigt drei Dinge:</p>
+<ul>
+<li><strong>Er nimmt alle Besucher an.</strong> Jede Anfrage aus dem Internet kommt zuerst bei Caddy an, nicht direkt bei n8n.</li>
+<li><strong>Er sorgt für eine sichere Verbindung.</strong> Caddy stellt sicher, dass die Verbindung verschlüsselt ist, erkennbar am <code>https</code> und am Schloss-Symbol in der Adresszeile des Browsers. Den dafür nötigen Nachweis, ein sogenanntes Zertifikat, besorgt Caddy automatisch und kostenlos bei einer zuständigen Stelle namens Let’s Encrypt. Darum müssen wir uns nicht kümmern.</li>
+<li><strong>Er leitet nach innen weiter.</strong> Eine angenommene Anfrage reicht Caddy intern an n8n weiter.</li>
+</ul>
+<p>Ein Programm, das Anfragen von außen annimmt und an das richtige Programm im Inneren weiterleitet, nennt man Reverse Proxy. Caddy ist also der Reverse Proxy unseres Setups.</p>
 </section>
-<section id="n8n-die-workflow-engine" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="n8n-die-workflow-engine"><span class="header-section-number">5.2.2</span> n8n: die Workflow-Engine</h3>
-<p>n8n hört intern auf Port 5678 und ist nicht direkt aus dem Internet erreichbar. Es führt die Workflows aus und speichert Workflows, Credentials und Ausführungsprotokolle in der Datenbank.</p>
+<section id="n8n-die-sachbearbeitung" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="n8n-die-sachbearbeitung"><span class="header-section-number">5.2.2</span> n8n: die Sachbearbeitung</h3>
+<p>n8n ist der Raum, in dem die eigentliche Arbeit geschieht: Hier laufen die Workflows. n8n nimmt keine Besucher direkt von der Straße an, sondern bekommt seine Aufträge immer über den Empfang hereingereicht. Alles, was dauerhaft erhalten bleiben soll, also die Workflows selbst, die gespeicherten Zugangsdaten und das Protokoll jeder Ausführung, behält n8n nicht bei sich, sondern gibt es ins Archiv.</p>
 </section>
-<section id="postgres-die-datenbank" class="level3" data-number="5.2.3">
-<h3 data-number="5.2.3" class="anchored" data-anchor-id="postgres-die-datenbank"><span class="header-section-number">5.2.3</span> Postgres: die Datenbank</h3>
-<p>Postgres hält alle Daten dauerhaft und hat bewusst keinen Port nach außen. Ein Healthcheck prüft, ob die Datenbank Anfragen beantwortet; n8n startet erst, wenn Postgres bereit ist.</p>
-<div class="callout callout-style-simple callout-tip callout-titled" title="Analogie: Empfang, Sachbearbeitung, Archiv">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<section id="postgres-das-archiv" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="postgres-das-archiv"><span class="header-section-number">5.2.3</span> Postgres: das Archiv</h3>
+<p>Postgres ist das Archiv im Keller. Hier liegen alle Daten dauerhaft und geordnet. Wie ein Archiv ohne Publikumsverkehr hat Postgres bewusst keine eigene Tür nach außen; nur n8n greift darauf zu. Ein Programm, das Daten strukturiert und dauerhaft speichert, nennt man Datenbank.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Warum n8n erst nach dem Archiv startet">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tipp</span>Analogie: Empfang, Sachbearbeitung, Archiv
+<span class="screen-reader-only">Hinweis</span>Warum n8n erst nach dem Archiv startet
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Caddy ist der Empfang im Erdgeschoss: Er nimmt Besucher entgegen, prüft die Verschlüsselung wie einen Ausweis und leitet weiter. n8n ist die Sachbearbeitung, die die eigentliche Arbeit erledigt. Postgres ist das Archiv im Keller, ohne Publikumsverkehr, in dem alle Vorgänge dauerhaft abgelegt werden. Nur der Empfang hat eine Tür nach draußen.</p>
+<p>Beim Hochfahren prüft das Setup automatisch und wiederholt, ob das Archiv schon ansprechbar ist; eine solche Funktionsprüfung heißt Healthcheck. n8n startet erst, wenn Postgres bereit ist, damit keine Anfrage ins Leere läuft.</p>
 </div>
 </div>
-</div>
-</section>
-</section>
-<section id="zwei-firewall-schichten" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="zwei-firewall-schichten"><span class="header-section-number">5.3</span> Zwei Firewall-Schichten</h2>
-<p>Der Server ist durch zwei voneinander unabhängige Firewalls geschützt. Die Hetzner Cloud Firewall arbeitet auf Provider-Ebene und filtert Pakete, bevor sie den Server überhaupt erreichen. Die UFW (Uncomplicated Firewall) läuft zusätzlich auf dem Server selbst und wird beim Provisioning mit denselben Regeln eingerichtet. Beide erlauben eingehend nur drei Ports: 22 für SSH, 80 und 443 für den Web-Zugriff.</p>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
+<div class="callout callout-style-simple callout-note callout-titled" title="Für Technisch-Interessierte: die Webhook-Adresse">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-body-container">
-<p>Dieses Prinzip heißt Defense-in-Depth: Sollte eine Schicht versehentlich falsch konfiguriert sein, schützt die zweite weiterhin. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Für Technisch-Interessierte: die Webhook-Adresse
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Beim Weiterreichen ergänzt Caddy die Anfrage um einige Zusatzangaben (sogenannte Header), aus denen n8n die ursprünglich aufgerufene Adresse rekonstruiert. Das ist nötig, damit von außen aufgerufene Workflow-Adressen (Webhooks) korrekt zugeordnet werden.</p>
 </div>
 </div>
 </div>
 </section>
-<section id="warum-diese-bausteine" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="warum-diese-bausteine"><span class="header-section-number">5.4</span> Warum diese Bausteine</h2>
-<p>Die Auswahl folgt dem Ziel, eine produktionsähnliche und zugleich nachvollziehbare Umgebung zu schaffen:</p>
+</section>
+<section id="zwei-kontrollen-am-eingang" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="zwei-kontrollen-am-eingang"><span class="header-section-number">5.3</span> Zwei Kontrollen am Eingang</h2>
+<p>Bevor eine Anfrage überhaupt beim Empfang ankommt, passiert sie zwei voneinander unabhängige Sicherheitskontrollen. Beide lassen nur drei Arten von Verkehr durch und weisen alles andere ab: die Anmeldung per SSH sowie den Web-Zugriff mit und ohne Verschlüsselung. Eine solche Kontrolle, die festlegt, welcher Verkehr durchgelassen wird, heißt Firewall.</p>
+<p>Die erste Kontrolle steht schon vor dem Gebäude: Die Hetzner Cloud Firewall filtert den Verkehr beim Anbieter, bevor er den Server überhaupt erreicht. Die zweite Kontrolle steht im Eingang des Servers selbst: die UFW (kurz für „Uncomplicated Firewall”), die beim Einrichten automatisch mit denselben Regeln aufgesetzt wird.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="Warum gleich zwei?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Warum gleich zwei?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Zwei hintereinandergeschaltete Kontrollen mit denselben Regeln nennt man Defense-in-Depth, also „Schutz in der Tiefe”. Der Gedanke dahinter: Sollte eine Kontrolle versehentlich falsch eingestellt sein, fängt die zweite den Fehler auf. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.</p>
+</div>
+</div>
+</section>
+<section id="warum-genau-diese-bausteine" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="warum-genau-diese-bausteine"><span class="header-section-number">5.4</span> Warum genau diese Bausteine</h2>
+<p>Die Auswahl folgt dem Ziel, eine Umgebung zu schaffen, die echten Projekten standhält und zugleich nachvollziehbar bleibt:</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -386,37 +418,38 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td>Postgres statt SQLite</td>
-<td>produktionsnah, trägt auch reale Projekte</td>
+<td>Postgres statt der einfacheren SQLite-Datei</td>
+<td>belastbar genug, trägt auch reale Projekte</td>
 </tr>
 <tr class="even">
-<td>Caddy als Reverse Proxy</td>
-<td>automatisches TLS, deutlich weniger Konfiguration als Alternativen</td>
+<td>Caddy als Empfang (Reverse Proxy)</td>
+<td>kümmert sich selbst um die Verschlüsselung, wenig einzustellen</td>
 </tr>
 <tr class="odd">
 <td>sslip.io statt eigener Domain</td>
-<td>sofort startklar, ohne eigenes DNS-Setup</td>
+<td>sofort startklar, ohne einen eigenen Domain-Namen einzurichten</td>
 </tr>
 <tr class="even">
-<td>feste Versions-Tags</td>
+<td>feste Versionen</td>
 <td>reproduzierbar, keine Überraschungen durch automatische Updates</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="reproduzierbarkeit-durch-versionspinning" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="reproduzierbarkeit-durch-versionspinning"><span class="header-section-number">5.5</span> Reproduzierbarkeit durch Versionspinning</h2>
-<div class="callout callout-style-simple callout-important callout-titled" title="Feste Versionen statt latest">
+<section id="feste-versionen-statt-automatischer-updates" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="feste-versionen-statt-automatischer-updates"><span class="header-section-number">5.5</span> Feste Versionen statt automatischer Updates</h2>
+<p>Jedes der drei Programme ist auf eine ganz bestimmte Version festgelegt, statt einfach „immer die neueste” zu nehmen. So startet jede Installation dieselbe, erprobte Fassung.</p>
+<div class="callout callout-style-simple callout-important callout-titled" title="Warum nicht automatisch die neueste Version?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Wichtig</span>Feste Versionen statt latest
+<span class="screen-reader-only">Wichtig</span>Warum nicht automatisch die neueste Version?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Alle Container-Images sind auf konkrete Versionen festgelegt (n8n auf <code>2.20.6</code>, Postgres auf <code>16.13-alpine3.23</code>, Caddy auf <code>2.11.2-alpine</code>), kein <code>latest</code>-Tag. So startet jede Installation dieselbe Fassung, und ein Update ist ein bewusster, geplanter Schritt statt einer stillen Veränderung im Hintergrund.</p>
+<p>Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte: n8n auf <code>2.20.6</code>, Postgres auf <code>16.13-alpine3.23</code>, Caddy auf <code>2.11.2-alpine</code>). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.</p>
 </div>
 </div>
 </section>
@@ -424,9 +457,9 @@ ul.task-list li input[type="checkbox"] {
 <h2 data-number="5.6" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">5.6</span> Kontrollpunkt</h2>
 <p>Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:</p>
 <ul>
-<li>die drei Container und ihre jeweilige Aufgabe benennen</li>
-<li>erklären, warum nur Caddy von außen erreichbar ist</li>
-<li>die zwei Firewall-Schichten und den Zweck fester Versions-Tags beschreiben</li>
+<li>die drei Bausteine Empfang, Sachbearbeitung und Archiv und ihre Aufgabe benennen</li>
+<li>erklären, warum nur der Empfang (Caddy) von außen erreichbar ist</li>
+<li>die zwei Sicherheitskontrollen und den Zweck fester Versionen beschreiben</li>
 </ul>
 
 

@@ -355,6 +355,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span>:/opt/n8n/backups ./n8n-backup-<span class="va">$(</span><span class="fu">date</span> +%F<span class="va">)</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="callout callout-style-simple callout-note callout-titled" title="Server-Sitzung und lokaler Befehl">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Server-Sitzung und lokaler Befehl
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Die ersten Befehle laufen auf dem Server: <code>ssh</code> öffnet die Sitzung, <code>backup.sh</code> erzeugt das Backup, <code>exit</code> beendet die Sitzung wieder und bringt uns zurück auf den eigenen Rechner. Erst der letzte Befehl, <code>scp</code>, läuft wieder lokal und holt den Backup-Ordner herüber. Die Reihenfolge ist wichtig: erst auf dem Server sichern und die Sitzung verlassen, dann von zu Hause kopieren.</p>
+</div>
+</div>
 <div class="callout callout-style-simple callout-important callout-titled" title="Ohne Encryption-Key sind die Credentials wertlos">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -384,7 +397,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="restore-in-eine-neue-instanz" class="level2" data-number="10.4">
 <h2 data-number="10.4" class="anchored" data-anchor-id="restore-in-eine-neue-instanz"><span class="header-section-number">10.4</span> Restore in eine neue Instanz</h2>
 <div class="callout callout-style-simple callout-note callout-titled" title="Kurzfassung für den Wiederherstellungs-Fall">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -393,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Auf einem frischen, mit dieser Anleitung aufgesetzten Server lässt sich der Stand zurückspielen: den Stack mit <code>docker compose down</code> stoppen, die gesicherte <code>env-…backup</code> als <code>.env</code> einspielen und die <code>DOMAIN</code> auf die neue IP anpassen, Postgres starten, den Dump mit <code>zcat … | docker compose exec -T postgres psql -U n8n n8n</code> einspielen, danach das n8n-Daten-Volume aus dem Tarball zurückspielen und die Container starten. Externe OAuth-Verbindungen müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-URL ändert.</p>
 </div>
