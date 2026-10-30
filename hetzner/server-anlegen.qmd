@@ -104,7 +104,7 @@ Hetzner ändert Typen, Preise und Verfügbarkeit von Zeit zu Zeit. Zeigt die Con
 
 ### Schritt 3: Provisioning abwarten
 
-Nach dem Start richtet sich der Server in etwa 5 bis 8 Minuten selbst ein. In dieser Zeit installiert er Docker, klont das Repo, erzeugt die Geheimnisse und startet die Container.
+Nach dem Start richtet sich der Server in etwa 3 bis 5 Minuten selbst ein. In dieser Zeit installiert er Docker, klont das Repo, erzeugt die Geheimnisse und startet die Container.
 
 ::: {.callout-tip title="Was im Hintergrund läuft" collapse="true"}
 Das Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UFW-Firewall einrichten, das Repo nach `/opt/n8n` klonen, die Server-IP ermitteln und daraus die sslip.io-Domain bilden. Anschließend erzeugt es mit `openssl rand` ein Datenbank-Passwort und den Encryption-Key, schreibt sie in die `.env`-Datei und startet den Stack mit `docker compose up`. Zum Schluss wartet es, bis n8n über `https` antwortet; erst dann meldet es Erfolg. Die Schritte sind so geschrieben, dass ein erneuter Lauf bestehende Geheimnisse nicht überschreibt.

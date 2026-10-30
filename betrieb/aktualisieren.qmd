@@ -62,13 +62,13 @@ Alles, was zwischen Update und Restore in n8n entstanden ist, etwa neue Workflow
 Die Datenbank und der Reverse Proxy haben eigene Versionen. Sie ändern sich seltener und werden mit demselben Skript angehoben; vor den Tag schreiben wir dann, welcher Baustein gemeint ist. Die verfügbaren Tags zeigen die Seiten von [Postgres](https://hub.docker.com/_/postgres/tags) und [Caddy](https://hub.docker.com/_/caddy/tags) auf Docker Hub; wir wählen Tags derselben Bauart wie bisher, also mit `-alpine` im Namen.
 
 1. Auf dem Server anmelden: `ssh root@<server-ip>`.
-2. Das Skript mit Baustein und Tag ausführen, etwa `/opt/n8n/scripts/update.sh caddy 2.11.8-alpine` oder `/opt/n8n/scripts/update.sh postgres 16.16-alpine3.24`.
+2. Das Skript mit Baustein und Tag ausführen, etwa `/opt/n8n/scripts/update.sh caddy 2.11.8-alpine` oder `/opt/n8n/scripts/update.sh postgres 18.5-alpine3.24`.
 3. Prüfen: Das Skript endet mit `Fertig, n8n antwortet.`
 
 Auch hier sichert das Skript zuerst den bisherigen Stand und setzt erst danach den neuen Tag.
 
 ::: {.callout-warning title="Postgres nur innerhalb der Hauptversion anheben"}
-Ein Wechsel innerhalb der Hauptversion, etwa von `16.15` auf `16.16`, ist unproblematisch. Ein Sprung auf eine neue Hauptversion, etwa von `16` auf `17`, kann die vorhandenen Daten nicht direkt übernehmen und braucht einen eigenen Umzug per Dump und Restore. Das Update-Skript lehnt einen solchen Sprung deshalb ab.
+Ein Wechsel innerhalb der Hauptversion, etwa von `18.4` auf `18.5`, ist unproblematisch. Ein Sprung auf eine neue Hauptversion, etwa von `18` auf `19`, kann die vorhandenen Daten nicht direkt übernehmen und braucht einen eigenen Umzug per Dump und Restore. Das Update-Skript lehnt einen solchen Sprung deshalb ab.
 :::
 
 ## Fehler diagnostizieren

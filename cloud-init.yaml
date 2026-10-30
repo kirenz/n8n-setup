@@ -9,7 +9,7 @@
 # Re-Run im Notfall safe.
 #
 # Verwendung: kompletten Inhalt dieser Datei ins Hetzner-Cloud-Feld
-# "Cloud config" einfügen, dann Server starten. Nach 5 bis 8 Minuten ist die
+# "Cloud config" einfügen, dann Server starten. Nach etwa 3 bis 5 Minuten ist die
 # n8n-Instanz unter https://<ip-mit-bindestrichen>.sslip.io erreichbar.
 # Voraussetzung: Der Server hat eine öffentliche IPv4-Adresse.
 

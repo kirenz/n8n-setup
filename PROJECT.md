@@ -47,7 +47,9 @@ Architektur verstehen.
   mindestens monatlich auf die aktuelle Stable-Version prüfen, weil
   n8n-Updates regelmäßig Sicherheitslücken schließen. Keine
   automatischen Updates; jedes Update über `scripts/update.sh <tag>`.
-- Postgres: **`postgres:16.15-alpine3.24`**
+- Postgres: **`postgres:18.4-alpine3.24`** (n8n unterstützt nur die zwei
+  jüngsten Hauptversionen; mit 16 meldet n8n 2.45 „compatibility support
+  only“). Volume auf `/var/lib/postgresql`, nicht `.../data`.
 - Caddy: **`caddy:2.11.7-alpine`**
 - DNS: **sslip.io** (kein eigenes DNS-Setup für den Kurs)
 

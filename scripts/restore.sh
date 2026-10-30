@@ -75,7 +75,7 @@ PROJECT="$(docker compose config | sed -n 's/^name: //p')"
 docker volume rm -f "${PROJECT}_postgres_data" "${PROJECT}_n8n_data" >/dev/null
 
 # ---- 4. Alte .env übernehmen, Domain anpassen ----
-cp .env ".env.vor-restore-$(date +%Y-%m-%d-%H%M)"
+cp .env ".env.vor-restore-$(date +%Y-%m-%d-%H%M%S)"
 cp "${ENV_BACKUP}" .env
 if [ -n "${NEW_DOMAIN}" ] && [ "${OLD_DOMAIN}" != "${NEW_DOMAIN}" ]; then
   echo "[restore] Domain auf ${NEW_DOMAIN} umstellen (DOMAIN, N8N_HOST, WEBHOOK_URL)"

@@ -102,7 +102,7 @@ Die Auswahl folgt dem Ziel, eine Umgebung zu schaffen, die echten Projekten stan
 Jedes der drei Programme ist auf eine ganz bestimmte Version festgelegt, statt einfach „immer die neueste" zu nehmen. So startet jede Installation dieselbe, erprobte Fassung.
 
 ::: {.callout-important title="Warum nicht automatisch die neueste Version?"}
-Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte, Stand Oktober 2026: n8n auf `2.45.7`, Postgres auf `16.15-alpine3.24`, Caddy auf `2.11.7-alpine`). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.
+Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte, Stand Oktober 2026: n8n auf `2.45.7`, Postgres auf `18.4-alpine3.24`, Caddy auf `2.11.7-alpine`). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.
 :::
 
 ## Kontrollpunkt

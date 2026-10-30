@@ -27,7 +27,9 @@ umask 077
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BACKUP_DIR="${REPO_DIR}/backups"
-TIMESTAMP="$(date +%Y-%m-%d-%H%M)"
+# Sekundengenau, damit zwei Läufe in derselben Minute (etwa Backup und
+# direkt folgendes Update) sich nicht überschreiben.
+TIMESTAMP="$(date +%Y-%m-%d-%H%M%S)"
 RETAIN=7
 
 mkdir -p "${BACKUP_DIR}"

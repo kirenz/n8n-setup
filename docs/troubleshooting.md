@@ -36,8 +36,7 @@ Häufige Ursachen:
 - **Cloud-Init noch nicht fertig** → eine Minute warten, dann neu probieren
 - **DNS-Glitch bei sslip.io** → `http://<ip-mit-bindestrichen>.sslip.io`
   (HTTP, kein HTTPS) aufrufen: ergibt einen Redirect auf HTTPS, wenn der
-  Server erreichbar ist. Die nackte IP liefert keinen Redirect, weil Caddy
-  nur den konfigurierten Hostnamen bedient.
+  Server erreichbar ist (im Test 2026-10-30: 308 auf HTTPS).
 - **Let's Encrypt Rate Limit** → siehe nächster Abschnitt
 
 ## Let's Encrypt Rate Limit (sslip.io-Spezifikum)

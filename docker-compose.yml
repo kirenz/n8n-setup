@@ -11,14 +11,17 @@ services:
   postgres:
     # Datenbank für n8n-Workflows, -Credentials, -Executions.
     # Gepinnt auf konkretes Patch-Tag, kein "latest".
-    image: postgres:${POSTGRES_IMAGE_TAG:-16.15-alpine3.24}
+    image: postgres:${POSTGRES_IMAGE_TAG:-18.4-alpine3.24}
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Ab Postgres 18 liegt PGDATA versionsabhängig unter
+      # /var/lib/postgresql/18/docker; das Volume hängt deshalb eine Ebene
+      # höher. Ein Mount auf .../data lehnt das 18er-Image ab.
+      - postgres_data:/var/lib/postgresql
     healthcheck:
       # n8n startet erst, wenn Postgres wirklich Anfragen beantworten kann.
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]

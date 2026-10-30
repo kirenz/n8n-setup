@@ -7,7 +7,7 @@
 #   scripts/update.sh n8n <tag>             dasselbe, ausdrücklich
 #   scripts/update.sh caddy <tag>           etwa: scripts/update.sh caddy 2.11.8-alpine
 #   scripts/update.sh postgres <tag>        nur innerhalb der Hauptversion,
-#                                           etwa: 16.15-alpine3.24 -> 16.16-alpine3.24
+#                                           etwa: 18.4-alpine3.24 -> 18.5-alpine3.24
 #   scripts/update.sh                       zieht die Tags, die bereits in .env stehen
 #
 # Ablauf:
@@ -45,7 +45,7 @@ if [ -n "${COMPONENT}" ]; then
   case "${COMPONENT}" in
     n8n)      VAR="N8N_IMAGE_TAG";      PATTERN='^[0-9]+\.[0-9]+\.[0-9]+$';            EXAMPLE="2.46.1" ;;
     caddy)    VAR="CADDY_IMAGE_TAG";    PATTERN='^[0-9]+\.[0-9]+\.[0-9]+-alpine$';     EXAMPLE="2.11.8-alpine" ;;
-    postgres) VAR="POSTGRES_IMAGE_TAG"; PATTERN='^[0-9]+\.[0-9]+-alpine[0-9.]+$';      EXAMPLE="16.16-alpine3.24" ;;
+    postgres) VAR="POSTGRES_IMAGE_TAG"; PATTERN='^[0-9]+\.[0-9]+-alpine[0-9.]+$';      EXAMPLE="18.5-alpine3.24" ;;
     *) echo "[update] FEHLER: unbekannte Komponente '${COMPONENT}' (n8n, caddy, postgres)" >&2; exit 1 ;;
   esac
   if ! [[ "${NEW_TAG}" =~ ${PATTERN} ]]; then
