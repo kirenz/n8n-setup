@@ -422,7 +422,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Die Datenbank und der Reverse Proxy haben eigene Versionen. Sie ändern sich seltener und werden mit demselben Skript angehoben; vor den Tag schreiben wir dann, welcher Baustein gemeint ist. Die verfügbaren Tags zeigen die Seiten von <a href="https://hub.docker.com/_/postgres/tags">Postgres</a> und <a href="https://hub.docker.com/_/caddy/tags">Caddy</a> auf Docker Hub; wir wählen Tags derselben Bauart wie bisher, also mit <code>-alpine</code> im Namen.</p>
 <ol type="1">
 <li>Auf dem Server anmelden: <code>ssh root@&lt;server-ip&gt;</code>.</li>
-<li>Das Skript mit Baustein und Tag ausführen, etwa <code>/opt/n8n/scripts/update.sh caddy 2.11.8-alpine</code> oder <code>/opt/n8n/scripts/update.sh postgres 16.16-alpine3.24</code>.</li>
+<li>Das Skript mit Baustein und Tag ausführen, etwa <code>/opt/n8n/scripts/update.sh caddy 2.11.8-alpine</code> oder <code>/opt/n8n/scripts/update.sh postgres 18.5-alpine3.24</code>.</li>
 <li>Prüfen: Das Skript endet mit <code>Fertig, n8n antwortet.</code></li>
 </ol>
 <p>Auch hier sichert das Skript zuerst den bisherigen Stand und setzt erst danach den neuen Tag.</p>
@@ -436,7 +436,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Ein Wechsel innerhalb der Hauptversion, etwa von <code>16.15</code> auf <code>16.16</code>, ist unproblematisch. Ein Sprung auf eine neue Hauptversion, etwa von <code>16</code> auf <code>17</code>, kann die vorhandenen Daten nicht direkt übernehmen und braucht einen eigenen Umzug per Dump und Restore. Das Update-Skript lehnt einen solchen Sprung deshalb ab.</p>
+<p>Ein Wechsel innerhalb der Hauptversion, etwa von <code>18.4</code> auf <code>18.5</code>, ist unproblematisch. Ein Sprung auf eine neue Hauptversion, etwa von <code>18</code> auf <code>19</code>, kann die vorhandenen Daten nicht direkt übernehmen und braucht einen eigenen Umzug per Dump und Restore. Das Update-Skript lehnt einen solchen Sprung deshalb ab.</p>
 </div>
 </div>
 </section>
