@@ -4,14 +4,14 @@ Wo Daten verarbeitet werden, ist nicht nur eine technische Frage. Laut dem Bitko
 
 ## Auftragsverarbeitung mit dem Hoster
 
-Wer personenbezogene Daten in n8n speichert, lässt diese durch den Hoster verarbeiten. Damit liegt eine Auftragsverarbeitung nach Art. 28 DSGVO vor, und es braucht einen Auftragsverarbeitungsvertrag (AVV). Hetzner stellt einen Standard-AVV bereit, der sich direkt in der Console abschließen lässt.
+Wer personenbezogene Daten in n8n speichert, lässt diese durch den Hoster verarbeiten. Damit liegt eine Auftragsverarbeitung nach Art. 28 DSGVO vor, und es braucht einen Auftragsverarbeitungsvertrag (AVV). Hetzner stellt einen Standard-AVV bereit. Er wird nicht automatisch geschlossen, sondern im Kundenkonto unter [accounts.hetzner.com](https://accounts.hetzner.com) abgeschlossen, nicht in der Cloud Console.
 
 ::: {.callout-note title="Auftragsverarbeitung und AVV"}
 „Personenbezogene Daten" sind alle Angaben, die sich auf eine identifizierbare Person beziehen, etwa Name, E-Mail-Adresse oder Telefonnummer. „Auftragsverarbeitung" bedeutet, dass ein Dienstleister diese Daten in unserem Auftrag verarbeitet, ohne selbst über sie zu bestimmen, ähnlich einem externen Lohnbüro, das die Gehaltsabrechnung erledigt, die Mitarbeiterdaten aber nur im Auftrag der Firma nutzen darf. Hier ist dieser Dienstleister der Hoster. Die DSGVO verlangt für solche Fälle einen Auftragsverarbeitungsvertrag (AVV), also einen Vertrag, der schriftlich festhält, was der Dienstleister mit den Daten tun darf und wie er sie schützt.
 :::
 
 ::: {.callout-note}
-Ein praktischer Schritt vor dem ersten Echt-Workflow: den AVV in der Console abschließen und die Bestätigung lokal sichern. Die Hetzner-Standorte Nürnberg, Falkenstein und Helsinki liegen alle innerhalb der EU.
+Ein praktischer Schritt vor dem ersten Echt-Workflow: den AVV im Hetzner-Kundenkonto abschließen und die Bestätigung lokal sichern. Die Hetzner-Standorte Nürnberg, Falkenstein und Helsinki liegen alle innerhalb der EU.
 :::
 
 ## Drittlandtransfer durch KI-Knoten

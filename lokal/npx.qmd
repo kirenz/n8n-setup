@@ -28,10 +28,10 @@ Wir tippen den folgenden Befehl ins Terminal und bestätigen mit der Eingabetast
 node --version
 ```
 
-Erscheint eine Versionsnummer ab 18 (etwa `v20.11.0`), ist alles bereit. Erscheint stattdessen eine Meldung wie `command not found`, fehlt Node.js noch.
+n8n braucht eine Version zwischen 20.19 und 24. Erscheint eine passende Versionsnummer (etwa `v24.11.0`), ist alles bereit. Erscheint stattdessen eine Meldung wie `command not found`, fehlt Node.js noch. Ist die Version älter als 20.19 oder neuer als 24, installieren wir Version 24 wie unten beschrieben.
 
 ::: {.callout-tip title="Node.js installieren"}
-Fehlt Node.js, laden wir die LTS-Version von [nodejs.org](https://nodejs.org) und folgen dem Installationsprogramm. LTS steht für „Long Term Support" und bezeichnet die Fassung mit der längsten Pflegezusage, also die stabile Wahl für einen verlässlichen Start. Nach der Installation schließen wir das Terminal einmal und öffnen es neu, damit der `node`-Befehl erkannt wird.
+Fehlt Node.js oder passt die Version nicht, laden wir von [nodejs.org/download](https://nodejs.org/en/download) die Version 24 (LTS) und folgen dem Installationsprogramm. LTS steht für „Long Term Support" und bezeichnet eine Fassung mit langer Pflegezusage, also die stabile Wahl für einen verlässlichen Start. Bietet die Seite bereits eine neuere LTS-Version an, wählen wir trotzdem ausdrücklich Version 24, solange n8n neuere Versionen noch nicht unterstützt. Nach der Installation schließen wir das Terminal einmal und öffnen es neu, damit der `node`-Befehl erkannt wird.
 :::
 
 ## Schritt für Schritt selbst bauen
@@ -69,8 +69,25 @@ n8n legt seine Daten im Ordner `~/.n8n` ab. Die Tilde `~` steht für das persön
 | Symptom | Wahrscheinliche Ursache | Nächster Schritt |
 |---|---|---|
 | `command not found: npx` | Node.js fehlt | Node.js LTS von nodejs.org installieren, Terminal neu öffnen |
-| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit anderem Port starten: `N8N_PORT=5679 npx n8n`, dann `localhost:5679` aufrufen |
+| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit anderem Port starten (Befehl unter der Tabelle), dann `localhost:5679` aufrufen |
+| Fehlermeldung zur Node.js-Version | Node.js zu alt oder zu neu | Version 24 von nodejs.org installieren, Terminal neu öffnen |
 | Browser zeigt nichts an | n8n startet noch | warten, bis das Terminal „Editor is now accessible" meldet |
+
+n8n auf einem anderen Port starten:
+
+::: {.panel-tabset group="os"}
+#### macOS und Linux
+
+```bash
+N8N_PORT=5679 npx n8n
+```
+
+#### Windows (PowerShell)
+
+```powershell
+$env:N8N_PORT=5679; npx n8n
+```
+:::
 
 ## Kontrollpunkt
 

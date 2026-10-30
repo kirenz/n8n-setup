@@ -9,8 +9,9 @@
 # Re-Run im Notfall safe.
 #
 # Verwendung: kompletten Inhalt dieser Datei ins Hetzner-Cloud-Feld
-# "User Data" einfügen, dann Server starten. Nach 5–8 Minuten ist die
-# n8n-Instanz unter https://${IP}.sslip.io erreichbar.
+# "Cloud config" einfügen, dann Server starten. Nach 5 bis 8 Minuten ist die
+# n8n-Instanz unter https://<ip-mit-bindestrichen>.sslip.io erreichbar.
+# Voraussetzung: Der Server hat eine öffentliche IPv4-Adresse.
 
 package_update: true
 package_upgrade: true
@@ -40,6 +41,7 @@ write_files:
       #  2. Server-IP ermitteln, Domain bauen
       #  3. Secrets generieren (falls .env noch nicht existiert)
       #  4. Docker Compose starten
+      #  5. Warten, bis n8n über HTTPS antwortet
       #
       # Logging: alle Ausgaben landen via runcmd in /var/log/n8n-setup.log
       # ============================================================
@@ -58,7 +60,9 @@ write_files:
       systemctl enable --now docker
 
       # 2. Firewall: Default-Deny eingehend, nur SSH/HTTP/HTTPS erlauben.
-      #    UFW ist die zweite Schicht zusätzlich zur Hetzner Cloud Firewall.
+      #    UFW schützt Dienste auf dem Host selbst. Von Docker veröffentlichte
+      #    Ports umgehen UFW; deshalb veröffentlicht docker-compose.yml nur
+      #    80/443, und die Hetzner Cloud Firewall filtert davor.
       ufw --force reset
       ufw default deny incoming
       ufw default allow outgoing
@@ -113,6 +117,10 @@ write_files:
         chmod 600 "${ENV_FILE}"
       else
         echo "[n8n-setup] .env existiert bereits, behalte vorhandene Secrets"
+        # Nach einem Domainwechsel gilt die Domain aus der .env, nicht die
+        # aus der IP berechnete.
+        DOMAIN="$(grep -E '^DOMAIN=' "${ENV_FILE}" | cut -d= -f2-)"
+        echo "[n8n-setup] Domain laut .env: ${DOMAIN}"
       fi
 
       # 6. Stack starten.
@@ -120,13 +128,25 @@ write_files:
       docker compose pull
       docker compose up -d
 
-      # 7. Status loggen, damit Troubleshooting via cloud-init.log möglich ist.
-      sleep 5
+      # 7. Bereitschaft prüfen: erst wenn n8n über HTTPS als bereit meldet,
+      #    gilt das Setup als erfolgreich. /healthz/readiness testet Caddy,
+      #    Zertifikat, n8n und die Datenbankverbindung in einem Aufruf.
+      #    Zeitlimit: 10 Minuten.
+      echo "[n8n-setup] Warte auf https://${DOMAIN}/healthz/readiness"
+      READY=0
+      for _ in $(seq 1 60); do
+        if curl -fsS --max-time 5 "https://${DOMAIN}/healthz/readiness" >/dev/null 2>&1; then
+          READY=1
+          break
+        fi
+        sleep 10
+      done
       docker compose ps
 
-      # 8. Domain ins motd schreiben, damit SSH-User direkt sehen, wie sie
-      #    n8n erreichen.
-      cat > /etc/motd <<MOTD
+      # 8. Ergebnis ins motd schreiben, damit SSH-User direkt sehen, wie sie
+      #    n8n erreichen oder wo sie mit der Fehlersuche beginnen.
+      if [ "${READY}" -eq 1 ]; then
+        cat > /etc/motd <<MOTD
 
         n8n läuft. Aufrufen unter:
           https://${DOMAIN}
@@ -135,6 +155,19 @@ write_files:
         Logs:   docker compose -f ${REPO_DIR}/docker-compose.yml logs -f
 
       MOTD
+      else
+        cat > /etc/motd <<MOTD
+
+        n8n antwortet noch nicht unter https://${DOMAIN}
+
+        Status: docker compose -f ${REPO_DIR}/docker-compose.yml ps
+        Caddy:  docker compose -f ${REPO_DIR}/docker-compose.yml logs caddy --tail 50
+        Setup:  tail -n 50 /var/log/n8n-setup.log
+
+      MOTD
+        echo "[n8n-setup] FEHLER: n8n nach 10 Minuten nicht über HTTPS erreichbar" >&2
+        exit 1
+      fi
 
       echo "[n8n-setup] $(date -Is) – Fertig"
 

@@ -24,7 +24,7 @@ Als technische Karte sieht derselbe Aufbau so aus:
                                 │  nur 22 / 80 / 443
                                 ▼
                     ┌───────────────────────┐
-                    │   UFW (Server-Ebene)   │   zweite Schicht
+                    │   UFW (Server-Ebene)   │   schützt Host-Dienste wie SSH
                     └───────────┬───────────┘
                                 │
                                 ▼
@@ -78,12 +78,12 @@ Beim Weiterreichen ergänzt Caddy die Anfrage um einige Zusatzangaben (sogenannt
 
 ## Zwei Kontrollen am Eingang
 
-Bevor eine Anfrage überhaupt beim Empfang ankommt, passiert sie zwei voneinander unabhängige Sicherheitskontrollen. Beide lassen nur drei Arten von Verkehr durch und weisen alles andere ab: die Anmeldung per SSH sowie den Web-Zugriff mit und ohne Verschlüsselung. Eine solche Kontrolle, die festlegt, welcher Verkehr durchgelassen wird, heißt Firewall.
+Bevor eine Anfrage überhaupt beim Empfang ankommt, passiert sie Sicherheitskontrollen. Sie lassen nur drei Arten von Verkehr durch und weisen alles andere ab: die Anmeldung per SSH sowie den Web-Zugriff mit und ohne Verschlüsselung. Eine solche Kontrolle, die festlegt, welcher Verkehr durchgelassen wird, heißt Firewall.
 
-Die erste Kontrolle steht schon vor dem Gebäude: Die Hetzner Cloud Firewall filtert den Verkehr beim Anbieter, bevor er den Server überhaupt erreicht. Die zweite Kontrolle steht im Eingang des Servers selbst: die UFW (kurz für „Uncomplicated Firewall"), die beim Einrichten automatisch mit denselben Regeln aufgesetzt wird.
+Die wichtigste Kontrolle steht schon vor dem Gebäude: Die Hetzner Cloud Firewall filtert den Verkehr beim Anbieter, bevor er den Server überhaupt erreicht. Eine zweite Kontrolle steht im Eingang des Servers selbst: die UFW (kurz für „Uncomplicated Firewall"), die beim Einrichten automatisch mit denselben Regeln aufgesetzt wird.
 
 ::: {.callout-note title="Warum gleich zwei?"}
-Zwei hintereinandergeschaltete Kontrollen mit denselben Regeln nennt man Defense-in-Depth, also „Schutz in der Tiefe". Der Gedanke dahinter: Sollte eine Kontrolle versehentlich falsch eingestellt sein, fängt die zweite den Fehler auf. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.
+Mehrere hintereinandergeschaltete Kontrollen nennt man Defense-in-Depth, also „Schutz in der Tiefe". Der Gedanke dahinter: Ein einzelner Konfigurationsfehler soll nicht gleich den ganzen Server öffnen. Die zweite Kontrolle hat allerdings eine Lücke, die man kennen sollte: Sie schützt die Programme, die direkt auf dem Server laufen, etwa den SSH-Zugang. Türen, die Docker für einen Container öffnet, laufen an der UFW vorbei. Deshalb öffnet unser Setup nur die beiden Türen des Empfangs, und deshalb ist die Hetzner Cloud Firewall die entscheidende Kontrolle, die auf keinen Fall fehlen darf.
 :::
 
 ## Warum genau diese Bausteine
@@ -102,7 +102,7 @@ Die Auswahl folgt dem Ziel, eine Umgebung zu schaffen, die echten Projekten stan
 Jedes der drei Programme ist auf eine ganz bestimmte Version festgelegt, statt einfach „immer die neueste" zu nehmen. So startet jede Installation dieselbe, erprobte Fassung.
 
 ::: {.callout-important title="Warum nicht automatisch die neueste Version?"}
-Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte: n8n auf `2.20.6`, Postgres auf `16.13-alpine3.23`, Caddy auf `2.11.2-alpine`). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.
+Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte, Stand Oktober 2026: n8n auf `2.45.7`, Postgres auf `16.15-alpine3.24`, Caddy auf `2.11.7-alpine`). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.
 :::
 
 ## Kontrollpunkt
@@ -111,4 +111,4 @@ Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 
 - die drei Bausteine Empfang, Sachbearbeitung und Archiv und ihre Aufgabe benennen
 - erklären, warum nur der Empfang (Caddy) von außen erreichbar ist
-- die zwei Sicherheitskontrollen und den Zweck fester Versionen beschreiben
+- die Sicherheitskontrollen am Eingang und den Zweck fester Versionen beschreiben

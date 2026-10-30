@@ -34,9 +34,9 @@ Das Repo vereint zwei Welten:
 │  # — Kursbegleitende Infrastruktur (kein Buch-Inhalt) —
 ├── cloud-init.yaml           # Hetzner-Provisioning
 ├── docker-compose.yml        # n8n + Postgres + Caddy
-├── Caddyfile                 # Reverse Proxy, on_demand TLS
+├── Caddyfile                 # Reverse Proxy, automatisches TLS
 ├── .env.example              # Konfig-Template, kommentiert
-├── scripts/                  # backup.sh, update.sh
+├── scripts/                  # backup.sh, update.sh, restore.sh
 └── docs/                     # Quell-Notizen (architektur, dsgvo, eu-ai-act, …)
 ```
 

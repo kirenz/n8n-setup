@@ -1,40 +1,37 @@
 # Aktualisieren
 
-Updates sind ein bewusster Schritt. Die Versionen sind festgelegt, damit jede Installation dieselbe Fassung nutzt; ein Update ändert den gewünschten Tag und zieht die neue Version kontrolliert nach. Davor wird automatisch gesichert.
+Updates sind ein bewusster Schritt. Die Versionen sind festgelegt, damit jede Installation dieselbe Fassung nutzt; ein Update setzt den gewünschten Tag und zieht die neue Version kontrolliert nach. Davor wird automatisch gesichert.
 
 ## Zielbild
 
-Eine aktualisierte Instanz auf einer bewusst gewählten Version, mit einem frischen Backup als Sicherheitsnetz.
+Eine aktualisierte Instanz auf einer bewusst gewählten Version, mit einem frischen Backup als Weg zurück.
+
+## Wie oft aktualisieren?
+
+Neue n8n-Versionen schließen regelmäßig auch Sicherheitslücken. Deshalb prüfen wir mindestens einmal im Monat, ob eine neue stabile Version vorliegt, und aktualisieren zeitnah, statt eine Version über ein ganzes Semester laufen zu lassen.
 
 ## Schritt für Schritt selbst bauen
 
 ### Schritt 1: Zielversion wählen
 
-Vor dem Update prüfen wir, welche Version aktuell stabil ist. Die n8n-Release-Notes und die Tag-Übersicht auf Docker Hub zeigen die verfügbaren Fassungen.
+Die Release-Übersicht von n8n auf [GitHub](https://github.com/n8n-io/n8n/releases) listet alle Versionen. Wir wählen die Version mit der Markierung „Latest", etwa `2.46.1`. Versionen mit der Markierung „Pre-release" sind Vorabfassungen zum Testen und für den laufenden Betrieb nicht gedacht.
 
-### Schritt 2: Tag in der .env setzen
+### Schritt 2: Update-Skript mit der Zielversion ausführen
 
 ```bash
 ssh root@<server-ip>
-cd /opt/n8n
-nano .env
+/opt/n8n/scripts/update.sh <version>
 ```
 
-In der `.env` wird der gewünschte Tag eingetragen, etwa `N8N_IMAGE_TAG=2.21.0`. Die Datenbank- und Caddy-Tags lassen sich auf dieselbe Weise anheben.
-
-::: {.callout-tip title="Mit nano arbeiten"}
-`nano` ist ein einfacher Texteditor, der direkt im Terminal läuft. Mit den Pfeiltasten bewegen wir den Cursor zur richtigen Stelle und ändern den Wert. Gespeichert wird mit `Strg + O` (danach mit der Eingabetaste bestätigen), beendet mit `Strg + X`. Die wichtigsten Tastenkürzel zeigt nano am unteren Rand an; das Zeichen `^` steht dort für die Strg-Taste, `^X` bedeutet also `Strg + X`.
-:::
-
-### Schritt 3: Update-Skript ausführen
-
-```bash
-/opt/n8n/scripts/update.sh
-```
+`<version>` ersetzen wir durch die gewählte Versionsnummer, etwa `/opt/n8n/scripts/update.sh 2.46.1`.
 
 ::: {.callout-tip title="Was das Skript tut"}
-Das Skript zieht zuerst ein vollständiges Backup, zeigt dann die in der `.env` gesetzten Tags an und führt anschließend `docker compose pull` und `docker compose up -d` aus. Der gewünschte Stand bleibt in der `.env` dokumentiert, das Update ist damit reproduzierbar.
+Das Skript prüft zuerst, ob die Versionsnummer die richtige Form hat. Dann zieht es ein vollständiges Backup, solange die bisherige Version noch eingetragen ist. Erst danach trägt es die neue Version in die `.env` ein, lädt sie mit `docker compose pull` und startet die Container mit `docker compose up -d` neu. Zum Schluss wartet es, bis n8n wieder über `https` antwortet.
 :::
+
+### Schritt 3: Ergebnis prüfen
+
+Das Skript endet mit der Zeile `Fertig, n8n antwortet.` Danach öffnen wir die Instanz im Browser, melden uns an und starten einen bestehenden Workflow einmal von Hand. Läuft er wie zuvor, ist das Update abgeschlossen. Mit `exit` beenden wir die Server-Sitzung.
 
 ## Warum nicht latest und nicht automatisch
 
@@ -43,21 +40,50 @@ Kein Image trägt den Tag `latest`. Automatische Updates im laufenden Betrieb k�
 :::
 
 ::: {.callout-note title="Breaking Change und Migration"}
-Ein „Breaking Change" ist eine Änderung in einer neuen Version, die bisher Funktionierendes bewusst anders macht, sodass etwas nicht mehr wie zuvor läuft. Eine „Migration" ist ein automatischer Anpassungsschritt, mit dem n8n beim Update die Datenbank auf die neue Version umstellt; läuft sie noch oder schlägt sie fehl, startet der Container unter Umständen nicht sofort. Beides ist der Grund, warum vor jedem Update ein Backup steht.
+Ein „Breaking Change" ist eine Änderung in einer neuen Version, die bisher Funktionierendes bewusst anders macht, sodass etwas nicht mehr wie zuvor läuft. Eine „Migration" ist ein automatischer Anpassungsschritt, mit dem n8n beim Update die Datenbank auf die neue Version umstellt. Eine migrierte Datenbank passt danach nicht mehr ohne Weiteres zur alten Version. Deshalb steht vor jedem Update ein Backup.
+:::
+
+## Der Weg zurück
+
+Startet n8n nach einem Update nicht oder laufen Workflows nicht mehr, genügt es nicht, die alte Versionsnummer wieder einzutragen: Die Datenbank wurde unter Umständen schon migriert. Der sichere Weg zurück ist das Backup, das das Update-Skript in Schritt 2 angelegt hat. Es enthält die alte Version samt passender Datenbank.
+
+```bash
+/opt/n8n/scripts/restore.sh /opt/n8n/backups
+```
+
+Das Restore-Skript nimmt den jüngsten Backup-Satz aus dem Ordner, zeigt ihn an und fragt zur Sicherheit nach. Erst wenn wir `RESTORE` eintippen und mit der Eingabetaste bestätigen, ersetzt es Datenbank und n8n-Daten durch den Stand vor dem Update. Es endet mit der Zeile `Fertig: … antwortet.`
+
+::: {.callout-warning title="Änderungen seit dem Update gehen verloren"}
+Alles, was zwischen Update und Restore in n8n entstanden ist, etwa neue Workflows oder Ausführungen, ist nach dem Restore nicht mehr vorhanden.
+:::
+
+## Postgres und Caddy anheben
+
+Die Datenbank und der Reverse Proxy haben eigene Versionen. Sie ändern sich seltener und werden mit demselben Skript angehoben; vor den Tag schreiben wir dann, welcher Baustein gemeint ist. Die verfügbaren Tags zeigen die Seiten von [Postgres](https://hub.docker.com/_/postgres/tags) und [Caddy](https://hub.docker.com/_/caddy/tags) auf Docker Hub; wir wählen Tags derselben Bauart wie bisher, also mit `-alpine` im Namen.
+
+1. Auf dem Server anmelden: `ssh root@<server-ip>`.
+2. Das Skript mit Baustein und Tag ausführen, etwa `/opt/n8n/scripts/update.sh caddy 2.11.8-alpine` oder `/opt/n8n/scripts/update.sh postgres 16.16-alpine3.24`.
+3. Prüfen: Das Skript endet mit `Fertig, n8n antwortet.`
+
+Auch hier sichert das Skript zuerst den bisherigen Stand und setzt erst danach den neuen Tag.
+
+::: {.callout-warning title="Postgres nur innerhalb der Hauptversion anheben"}
+Ein Wechsel innerhalb der Hauptversion, etwa von `16.15` auf `16.16`, ist unproblematisch. Ein Sprung auf eine neue Hauptversion, etwa von `16` auf `17`, kann die vorhandenen Daten nicht direkt übernehmen und braucht einen eigenen Umzug per Dump und Restore. Das Update-Skript lehnt einen solchen Sprung deshalb ab.
 :::
 
 ## Fehler diagnostizieren
 
 | Symptom | Wahrscheinliche Ursache | Nächster Schritt |
 |---|---|---|
-| Container startet nach dem Update nicht | Breaking Change oder offene Migration | Logs prüfen, im Zweifel den vorherigen Tag in `.env` setzen und erneut `docker compose up -d` |
-| `pull` schlägt fehl | Tag existiert nicht | Schreibweise des Tags auf Docker Hub abgleichen |
-| Update bricht vor dem Pull ab | Pre-Backup gescheitert | Speicherplatz und Backup-Pfad prüfen |
+| Skript meldet „kein Tag der Form 2.46.1" | Tippfehler in der Versionsnummer | Versionsnummer ohne Leerzeichen und ohne `v` eingeben |
+| Skript meldet „Pull fehlgeschlagen" | Tag existiert nicht | Schreibweise mit der Release-Übersicht abgleichen und erneut ausführen; die bisherige Version ist automatisch wieder eingetragen |
+| Skript meldet „n8n antwortet nach 10 Minuten nicht" | Breaking Change oder fehlgeschlagene Migration | `cd /opt/n8n` und `docker compose logs n8n --tail 50` lesen; im Zweifel den Weg zurück nehmen |
+| Update bricht vor dem Pull ab | Backup gescheitert | freien Speicher mit `df -h` prüfen |
 
 ## Kontrollpunkt
 
 Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 
-- eine Zielversion bewusst auswählen
-- den Image-Tag in der `.env` setzen und das Update-Skript ausführen
-- begründen, warum Updates geplant statt automatisch erfolgen
+- eine stabile Zielversion bewusst auswählen
+- das Update-Skript mit der Zielversion ausführen und das Ergebnis prüfen
+- begründen, warum der Weg zurück über das Backup führt und nicht über die alte Versionsnummer

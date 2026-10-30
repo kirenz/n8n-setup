@@ -81,7 +81,7 @@ bringt das von Haus aus mit:
 - Jede Workflow-Ausführung wird im Execution-Log gespeichert
 - Inputs, Outputs, Fehler je Node sind nachvollziehbar
 - Aufbewahrungsdauer in n8n konfigurierbar
-  (`EXECUTIONS_DATA_PRUNE_MAX_AGE`)
+  (`EXECUTIONS_DATA_MAX_AGE` in Stunden, `EXECUTIONS_DATA_PRUNE_MAX_COUNT`)
 
 Praktisch: für Hochrisiko-Workflows die Aufbewahrung des Execution-Logs
 auf den nach AI Act geforderten Zeitraum hochsetzen (Art. 19: mindestens

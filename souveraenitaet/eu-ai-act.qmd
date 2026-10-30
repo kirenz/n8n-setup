@@ -1,6 +1,15 @@
 # Der EU AI Act für eigene Workflows
 
-Der EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft; die meisten Pflichten gelten gestaffelt zwischen 2025 und 2027 [@euaiact2024]. Für die eigene Arbeit mit n8n ist weniger der Gesetzestext entscheidend als die Risiko-Logik dahinter, denn sie lässt sich gut auf konkrete Workflows übertragen.
+Der EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft [@euaiact2024]. Seine Pflichten gelten gestaffelt; der sogenannte Digital Omnibus hat einige Fristen im Juli 2026 verschoben [@aiomnibus2026]. Stand Oktober 2026 gilt:
+
+| Pflicht | gilt seit oder ab |
+|---|---|
+| Verbotene Praktiken | 2. Februar 2025 |
+| Transparenzpflichten, etwa für Chatbots | 2. August 2026 |
+| Hochrisiko-Systeme nach Anhang III (etwa Personalauswahl, Bildung) | 2. Dezember 2027 |
+| Hochrisiko-Systeme in Produkten mit eigener EU-Produktsicherheitsregel | 2. August 2028 |
+
+Für die eigene Arbeit mit n8n ist weniger der Gesetzestext entscheidend als die Risiko-Logik dahinter, denn sie lässt sich gut auf konkrete Workflows übertragen.
 
 ## Use Case statt Tool
 
@@ -33,7 +42,7 @@ Für solche Systeme gelten dann besondere Pflichten, unter anderem:
 
 ### Begrenztes Risiko
 
-Workflows, die KI nutzen, ohne in die Hochrisiko-Klasse zu fallen, brauchen oft Transparenz: Nutzer müssen erkennen können, dass sie mit KI interagieren. Beispiele sind ein Chatbot, der sich als KI zu erkennen gibt, oder generierte Texte und Bilder, die als solche gekennzeichnet werden.
+Workflows, die KI nutzen, ohne in die Hochrisiko-Klasse zu fallen, brauchen oft Transparenz: Nutzer müssen erkennen können, dass sie mit KI interagieren. Beispiele sind ein Chatbot, der sich als KI zu erkennen gibt, oder generierte Texte und Bilder, die als solche gekennzeichnet werden. Diese Pflichten gelten bereits, ein Chatbot-Workflow braucht den Hinweis also schon heute.
 
 ### Minimales Risiko
 
@@ -43,8 +52,8 @@ Die Mehrheit der Workflows, etwa Spam-Filterung, das automatische Verschlagworte
 
 Hochrisiko-Systeme müssen ihre Verarbeitungsschritte protokollieren. n8n bringt das von Haus aus mit: Jede Workflow-Ausführung wird im Execution-Log gespeichert, mit Eingaben, Ergebnissen und Fehlern je Knoten.
 
-::: {.callout-note}
-Für Hochrisiko-Workflows lohnt es sich, die Aufbewahrungsdauer des Execution-Logs auf den geforderten Zeitraum anzuheben, in n8n über die Variable `EXECUTIONS_DATA_PRUNE_MAX_AGE`.
+::: {.callout-note title="Aufbewahrungsdauer des Execution-Logs"}
+n8n löscht alte Ausführungen standardmäßig nach 14 Tagen und behält höchstens 10.000. Für Hochrisiko-Workflows lohnt es sich, beides auf den geforderten Zeitraum anzuheben. Dafür gibt es zwei Variablen: `EXECUTIONS_DATA_MAX_AGE` legt das Alter in Stunden fest (etwa `4320` für 180 Tage), `EXECUTIONS_DATA_PRUNE_MAX_COUNT` die Höchstzahl. Auf dem Hetzner-Server tragen wir beide als eigene Zeilen in die `.env` ein und starten danach mit `docker compose up -d` neu. Längere Aufbewahrung braucht mehr Speicherplatz.
 :::
 
 ## Menschliche Aufsicht in n8n

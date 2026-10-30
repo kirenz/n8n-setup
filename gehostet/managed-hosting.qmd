@@ -12,7 +12,7 @@ Self-Hosting bedeutet, dass n8n als eigenständige, nur einer Kundin oder einem 
 
 ## Eigenschaften
 
-- ab etwa 7 € im Monat für eine Basis-Instanz
+- ab etwa 7 US-Dollar im Monat für eine Basis-Instanz (Beispiel InstaPods, Stand Oktober 2026)
 - keine Lizenzkosten und keine eigene Server-Pflege
 - Daten auf europäischen Servern, je nach Anbieter wählbar
 - begrenzte Anpassbarkeit gegenüber einer eigenen Maschine
@@ -42,6 +42,14 @@ Managed Hosting ist eine passende Wahl, wenn sensible Daten verarbeitet werden, 
 ::: {.callout-note}
 Gegenüber einer eigenen Maschine ist die Anpassbarkeit begrenzt: kein freier Zugriff auf das Betriebssystem, keine beliebigen System-Pakete. Wer volle Kontrolle und Anpassbarkeit braucht, etwa um zusätzliche Dienste neben n8n zu betreiben, richtet eine eigene Instanz ein.
 :::
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| keine Bestätigungs-Mail nach der Bestellung | Mail im Spam-Ordner oder Tippfehler | Spam prüfen, Adresse im Kundenkonto kontrollieren |
+| Editor zeigt eine ältere n8n-Version | Anbieter aktualisiert zeitversetzt | im Kundenbereich nach einer Update-Funktion suchen oder den Support fragen |
+| eigene Domain öffnet die Instanz nicht | DNS-Eintrag fehlt oder ist noch nicht verteilt | DNS-Eintrag nach Anleitung des Anbieters prüfen, bis zu einige Stunden warten |
 
 ## Kontrollpunkt
 

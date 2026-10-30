@@ -49,14 +49,16 @@ hier.
 ### UFW (Uncomplicated Firewall)
 
 Server-Ebene als zweite Schicht. Vom Cloud-Init mit identischen Regeln
-konfiguriert. Sinn: Defense-in-Depth – falls die Cloud-Firewall
-versehentlich falsch konfiguriert wird, bleibt der Server geschützt.
+konfiguriert. Grenze: UFW schützt Dienste auf dem Host (etwa SSH). Von
+Docker veröffentlichte Ports umgehen UFW, siehe Docker-Doku "Docker and
+ufw". Deshalb veröffentlicht docker-compose.yml nur 80/443, und die
+Hetzner Cloud Firewall ist die maßgebliche Schicht.
 
 ### Caddy
 
 Einziger Container mit Port-Mapping nach außen. Übernimmt:
 
-- TLS-Terminierung (Let's Encrypt automatisch, `on_demand` mit Allowlist)
+- TLS-Terminierung (Let's Encrypt automatisch für den festen Hostnamen aus `DOMAIN`)
 - HSTS-Header
 - Reverse-Proxy auf `n8n:5678`
 - Korrekte Weiterleitung der Webhook-relevanten Header
@@ -126,5 +128,6 @@ Alle Container-Images sind auf konkrete Patch-Versionen gepinnt
 (siehe [.env.example](../.env.example)). Eine Studierende, die das
 Repo zu Semesterbeginn klont, bekommt dieselbe Version wie alle anderen.
 
-Updates sind ein bewusster Schritt: Tag in `.env` hochziehen, dann
-`scripts/update.sh` laufen lassen. Davor wird automatisch gesichert.
+Updates sind ein bewusster Schritt: `scripts/update.sh <tag>` (oder
+`update.sh caddy|postgres <tag>`) sichert zuerst mit den bisherigen
+Tags und setzt erst danach den neuen Tag in `.env`.

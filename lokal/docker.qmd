@@ -36,12 +36,15 @@ Ein benanntes Volume ist ein von Docker verwalteter Speicherort, der unabhängig
 
 ### Schritt 2: n8n starten
 
-Der folgende Block ist ein einziger Befehl, der nur zur besseren Lesbarkeit auf mehrere Zeilen verteilt ist. Jede Zeile außer der letzten endet mit einem umgekehrten Schrägstrich `\`, der bedeutet „der Befehl geht weiter". Wir kopieren oder tippen den ganzen Block am Stück und bestätigen erst am Ende mit der Eingabetaste:
+Der folgende Block ist ein einziger Befehl, der nur zur besseren Lesbarkeit auf mehrere Zeilen verteilt ist. Jede Zeile außer der letzten endet mit einem umgekehrten Schrägstrich `\`, der bedeutet „der Befehl geht weiter". Wir kopieren oder tippen den ganzen Block am Stück und bestätigen erst am Ende mit der Eingabetaste. In der Windows-PowerShell gilt der Backslash nicht; dort nutzen wir den Reiter „Windows (PowerShell)" mit demselben Befehl in einer Zeile:
+
+::: {.panel-tabset group="os"}
+#### macOS und Linux
 
 ```bash
 docker run -it --rm \
   --name n8n \
-  -p 5678:5678 \
+  -p 127.0.0.1:5678:5678 \
   -e GENERIC_TIMEZONE="Europe/Berlin" \
   -e TZ="Europe/Berlin" \
   -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true \
@@ -50,10 +53,17 @@ docker run -it --rm \
   docker.n8n.io/n8nio/n8n
 ```
 
+#### Windows (PowerShell)
+
+```powershell
+docker run -it --rm --name n8n -p 127.0.0.1:5678:5678 -e GENERIC_TIMEZONE="Europe/Berlin" -e TZ="Europe/Berlin" -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e N8N_RUNNERS_ENABLED=true -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+```
+:::
+
 ::: {.callout-tip title="Die Optionen im Befehl, Stück für Stück"}
 Der Befehl wirkt lang, besteht aber nur aus mehreren kleinen Anweisungen, je eine pro Zeile:
 
-- `-p 5678:5678` verbindet n8n im Container mit dem eigenen Rechner, sodass der Editor unter `localhost:5678` erreichbar ist.
+- `-p 127.0.0.1:5678:5678` verbindet n8n im Container mit dem eigenen Rechner, sodass der Editor unter `localhost:5678` erreichbar ist. Der Teil `127.0.0.1` ist die Adresse von `localhost` und sorgt dafür, dass nur dieser Rechner die Tür nutzen kann, nicht andere Geräte im selben Netzwerk.
 - `-v n8n_data:/home/node/.n8n` hängt das Daten-Volume an die Stelle ein, an der n8n seine Daten ablegt.
 - die `-e`-Zeilen setzen Umgebungsvariablen, also Einstellungen, die dem Programm beim Start mitgegeben werden (hier die Zeitzone und zwei empfohlene Voreinstellungen).
 - `docker.n8n.io/n8nio/n8n` ist das offizielle Image, also die Vorlage, aus der der Container entsteht.
@@ -72,15 +82,25 @@ Im Browser `http://localhost:5678` aufrufen und das Owner-Konto anlegen. Die Obe
 
 Wer n8n nicht im Vordergrund halten möchte, startet den Container losgelöst mit `-d` statt `-it --rm`:
 
+::: {.panel-tabset group="os"}
+#### macOS und Linux
+
 ```bash
 docker run -d \
   --name n8n \
-  -p 5678:5678 \
+  -p 127.0.0.1:5678:5678 \
   -v n8n_data:/home/node/.n8n \
   -e GENERIC_TIMEZONE="Europe/Berlin" -e TZ="Europe/Berlin" \
   -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e N8N_RUNNERS_ENABLED=true \
   docker.n8n.io/n8nio/n8n
 ```
+
+#### Windows (PowerShell)
+
+```powershell
+docker run -d --name n8n -p 127.0.0.1:5678:5678 -v n8n_data:/home/node/.n8n -e GENERIC_TIMEZONE="Europe/Berlin" -e TZ="Europe/Berlin" -e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true -e N8N_RUNNERS_ENABLED=true docker.n8n.io/n8nio/n8n
+```
+:::
 
 ::: {.callout-note title="Vordergrund und Hintergrund"}
 Im Vordergrund (`-it --rm`) belegt der Container das Terminal-Fenster und zeigt dort laufend seine Ausgabe; schließen wir das Fenster, stoppt n8n. Mit `-d` (für „detached", also losgelöst) läuft der Container im Hintergrund weiter, und das Terminal ist sofort wieder frei. `docker stop n8n` hält ihn dann an, `docker start n8n` startet ihn wieder. Anders als bei `--rm` bleibt der Container bestehen, bis er ausdrücklich mit `docker rm n8n` entfernt wird.
@@ -97,7 +117,9 @@ Lokal nutzt n8n standardmäßig eine SQLite-Datei im Volume, was zum Lernen und 
 | Symptom | Wahrscheinliche Ursache | Nächster Schritt |
 |---|---|---|
 | `Cannot connect to the Docker daemon` | Docker läuft nicht | Docker Desktop starten und erneut versuchen |
-| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit `-p 5679:5678` starten und `localhost:5679` aufrufen |
+| `Port 5678 is already in use` | ein anderer Dienst belegt den Port | mit `-p 127.0.0.1:5679:5678` starten und `localhost:5679` aufrufen |
+| unter Windows bricht der Befehl nach der ersten Zeile ab | mehrzeilige Fassung mit `\` in der PowerShell | den Befehl aus dem Reiter „Windows (PowerShell)" verwenden |
+| `The container name "/n8n" is already in use` | ein früherer Container mit `-d` besteht noch | `docker start n8n` nutzen oder den alten Container mit `docker rm n8n` entfernen |
 | Daten nach Neustart verschwunden | Container ohne Volume gestartet | `-v n8n_data:/home/node/.n8n` ergänzen |
 | Meldung zu Datei-Rechten der Settings | zu offene Rechte der Settings-Datei | `N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true` gesetzt lassen |
 

@@ -12,8 +12,8 @@ Der n8n-Editor ist unter der eigenen `https`-Adresse geöffnet, ein Owner-Konto 
 
 Die zuvor ermittelte Adresse der Form `https://1-2-3-4.sslip.io` im Browser aufrufen.
 
-::: {.callout-note title="Der erste Aufruf dauert etwas länger"}
-Caddy holt das TLS-Zertifikat bedarfsgesteuert, also erst beim ersten Aufruf. Deshalb dauert die erste Anfrage 5 bis 10 Sekunden länger als spätere. Erscheint kurz eine Sicherheitswarnung, hilft ein erneutes Laden nach wenigen Sekunden, sobald das Zertifikat ausgestellt ist.
+::: {.callout-note title="Das Zertifikat ist schon da"}
+Caddy holt das TLS-Zertifikat beim ersten Start selbst. Meldet die Begrüßung auf dem Server „n8n läuft", ist es bereits ausgestellt, denn die Einrichtung prüft genau diese verschlüsselte Verbindung. Erscheint trotzdem eine Sicherheitswarnung, hilft ein erneutes Laden nach einer Minute.
 :::
 
 ### Schritt 2: Owner-Konto anlegen
@@ -30,8 +30,9 @@ Die meisten Startprobleme betreffen das TLS-Zertifikat oder die Erreichbarkeit. 
 
 | Symptom | Wahrscheinliche Ursache | Nächster Schritt |
 |---|---|---|
-| Zertifikatsfehler oder Timeout | Zertifikat wird gerade erst geholt | einige Sekunden warten, neu laden; Caddy-Logs prüfen |
-| Seite gar nicht erreichbar | Provisioning noch nicht fertig | eine Minute warten; `http://<ip>` ergibt einen Redirect und ist ein guter Test |
+| Zertifikatsfehler oder Timeout | Zertifikat wird gerade erst geholt | eine Minute warten, neu laden; Caddy-Logs prüfen |
+| Seite gar nicht erreichbar | Provisioning noch nicht fertig oder ein Container läuft nicht | eine Minute warten; auf dem Server `cd /opt/n8n` und `docker compose ps` prüfen: alle drei Container sollten „Up" zeigen |
+| unklar, ob der Server überhaupt antwortet | Problem mit Zertifikat oder Firewall | `http://1-2-3-4.sslip.io` (ohne s, mit der eigenen Adresse) aufrufen: Caddy leitet auf `https` um, wenn der Server erreichbar ist |
 | dauerhafter Zertifikatsfehler | Let's-Encrypt-Limit erreicht | siehe Hinweis unten |
 
 Die Caddy-Logs lassen sich auf dem Server einsehen:
@@ -45,14 +46,34 @@ docker compose logs caddy | tail -n 50
 `cd /opt/n8n` wechselt in das Verzeichnis des Stacks („cd" steht für „change directory", also „Verzeichnis wechseln"). Das senkrechte Zeichen `|` zwischen zwei Befehlen ist eine Pipe: Sie reicht die Ausgabe des linken Befehls direkt an den rechten weiter. Hier gibt `docker compose logs caddy` das gesamte Protokoll von Caddy aus, und `tail -n 50` zeigt davon nur die letzten 50 Zeilen.
 :::
 
-::: {.callout-important title="Wenn viele gleichzeitig starten: das Zertifikat-Limit"}
-Die Stelle, die die Verschlüsselungs-Zertifikate kostenlos ausstellt (Let's Encrypt), begrenzt, wie viele davon pro Woche auf `sslip.io`-Adressen ausgegeben werden, und dieses Kontingent gilt weltweit gemeinsam für alle. Im Einzelbetrieb spielt das nie eine Rolle. Startet aber eine ganze Kursgruppe am selben Tag ihren ersten Server, kann das gemeinsame Kontingent erschöpft sein. Dann hilft eines von dreien: die Starts über mehrere Tage verteilen, einige Stunden warten und erneut versuchen, oder eine eigene Domain hinterlegen (in der `.env` als `DOMAIN` eintragen).
+::: {.callout-note title="Selten: das Zertifikat-Limit"}
+Die Stelle, die die Verschlüsselungs-Zertifikate kostenlos ausstellt (Let's Encrypt), begrenzt, wie viele davon pro Woche auf `sslip.io`-Adressen ausgegeben werden. Dieses Kontingent teilen sich alle Nutzer weltweit. Es ist inzwischen sehr großzügig bemessen, deshalb trifft es einzelne Server nur selten. Bleibt der Zertifikatsfehler dennoch über Stunden bestehen und nennen die Caddy-Logs ein „rate limit", stellen wir die Adresse auf den Schwesterdienst nip.io um. Wie das geht, zeigt der nächste Abschnitt.
+:::
 
-Im Hintergrund: sslip.io gilt bei Let's Encrypt technisch als eine einzige Domain, weshalb sich alle Nutzer das Wochenlimit teilen.
+## Die Adresse wechseln
+
+Die Adresse der Instanz steht an drei Stellen in der Datei `/opt/n8n/.env`: in den Zeilen `DOMAIN`, `N8N_HOST` und `WEBHOOK_URL`. Ein Wechsel, etwa von `1-2-3-4.sslip.io` auf `1-2-3-4.nip.io` oder auf eine eigene Domain, ändert alle drei gemeinsam.
+
+Voraussetzung für eine eigene Domain: Beim Domain-Anbieter zeigt ein DNS-Eintrag vom Typ „A" auf die IP-Adresse des Servers. Ein solcher Eintrag ist der Wegweiser, der den Namen in die Adresse übersetzt.
+
+1. Auf dem Server anmelden: `ssh root@<server-ip>`.
+2. In das Verzeichnis des Stacks wechseln: `cd /opt/n8n`.
+3. Die Datei im Editor öffnen: `nano .env`.
+4. In den Zeilen `DOMAIN`, `N8N_HOST` und `WEBHOOK_URL` die alte Adresse durch die neue ersetzen.
+5. Mit `Strg + O` und der Eingabetaste speichern, mit `Strg + X` den Editor beenden.
+6. Die Container mit der neuen Einstellung neu starten: `docker compose up -d`.
+7. Prüfen: Die neue Adresse öffnet nach etwa einer Minute den n8n-Editor ohne Sicherheitswarnung.
+
+::: {.callout-note title="Mit nano arbeiten"}
+`nano` ist ein einfacher Texteditor, der direkt im Terminal läuft. Mit den Pfeiltasten bewegen wir den Cursor zur richtigen Stelle und ändern den Text. Die wichtigsten Tastenkürzel zeigt nano am unteren Rand an; das Zeichen `^` steht dort für die Strg-Taste, auch auf macOS.
+:::
+
+::: {.callout-important title="Webhooks und Anmeldungen bei externen Diensten"}
+Nach einem Adresswechsel kennen externe Dienste noch die alte Adresse. Webhook-Adressen müssen dort neu eingetragen werden, und Verbindungen mit Anmeldung über OAuth (etwa Google) brauchen die neue Callback-Adresse.
 :::
 
 ::: {.callout-note title="Bestimmte Knoten fehlen im Editor"}
-Wer die Knoten „Execute Command" oder „Local File Trigger" sucht und nicht findet: Das ist Absicht. n8n 2.x deaktiviert diese beiden Knoten standardmäßig, weil sie beliebige Shell-Befehle beziehungsweise Dateisystem-Zugriff erlauben. Eine gezielte Reaktivierung ist über die Variable `NODES_EXCLUDE` in der `.env` möglich, sollte aber bewusst abgewogen werden, da sie weitreichenden Zugriff auf den Container öffnet.
+Wer die Knoten „Execute Command" oder „Local File Trigger" sucht und nicht findet: Das ist Absicht. n8n 2.x deaktiviert diese beiden Knoten standardmäßig, weil sie beliebige Shell-Befehle beziehungsweise Dateisystem-Zugriff erlauben. Eine gezielte Reaktivierung ist möglich: In der `.env` die Zeile `NODES_EXCLUDE=[]` ergänzen (wie im Abschnitt oben beschrieben mit `nano`) und danach `docker compose up -d` ausführen. Das sollte bewusst abgewogen werden, da es weitreichenden Zugriff auf den Container öffnet.
 :::
 
 ## Kontrollpunkt
@@ -62,3 +83,4 @@ Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 - die Instanz über die eigene `https`-Adresse aufrufen
 - das Owner-Konto im Setup-Wizard anlegen
 - einen Zertifikats- oder Erreichbarkeitsfehler eingrenzen
+- die Adresse der Instanz an allen drei Stellen der `.env` wechseln

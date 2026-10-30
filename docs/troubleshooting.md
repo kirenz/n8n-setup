@@ -21,9 +21,10 @@ sudo /usr/local/sbin/n8n-setup.sh
 
 ## Browser zeigt Zertifikatsfehler oder Timeout
 
-Caddy holt das TLS-Zertifikat **on-demand**, das heißt erst beim ersten
-Aufruf. Der erste Request kann 5–10 Sekunden dauern. Wenn nach mehreren
-Minuten immer noch ein Fehler kommt: in den Caddy-Logs nachsehen.
+Caddy holt das TLS-Zertifikat beim Start für den festen Hostnamen aus
+`DOMAIN`. Das Setup-Skript meldet erst Erfolg, wenn `https://<domain>/healthz`
+antwortet. Wenn danach immer noch ein Fehler kommt: in den Caddy-Logs
+nachsehen.
 
 ```bash
 cd /opt/n8n
@@ -33,21 +34,19 @@ docker compose logs caddy | tail -n 50
 Häufige Ursachen:
 
 - **Cloud-Init noch nicht fertig** → eine Minute warten, dann neu probieren
-- **DNS-Glitch bei sslip.io** → Domain im Browser per IP testen
-  (HTTP, kein HTTPS): `http://<ip>` – ergibt 308 Redirect auf HTTPS, was
-  schon ein guter Test ist
+- **DNS-Glitch bei sslip.io** → `http://<ip-mit-bindestrichen>.sslip.io`
+  (HTTP, kein HTTPS) aufrufen: ergibt einen Redirect auf HTTPS, wenn der
+  Server erreichbar ist. Die nackte IP liefert keinen Redirect, weil Caddy
+  nur den konfigurierten Hostnamen bedient.
 - **Let's Encrypt Rate Limit** → siehe nächster Abschnitt
 
 ## Let's Encrypt Rate Limit (sslip.io-Spezifikum)
 
-**Hintergrund:** sslip.io ist nicht auf der Public Suffix List eingetragen.
-Let's Encrypt zählt deshalb alle `*.sslip.io`-Subdomains als **eine
-einzige Registered Domain** – mit gemeinsamem Limit von 50 Zertifikaten
-pro Woche, weltweit über alle sslip.io-Nutzer hinweg.
-
-In der Praxis ist das meistens kein Problem (sslip.io wird selten genug
-genutzt). Bei einer Klasse mit 20+ Studierenden, die *gleichzeitig*
-ihren ersten Zertifikatsantrag stellen, kann es allerdings knallen.
+**Hintergrund:** Let's Encrypt zählt alle `*.sslip.io`-Subdomains als
+eine gemeinsame Registered Domain. Laut Betreiber (nip.io, Stand Oktober
+2026) hat Let's Encrypt das gemeinsame Kontingent von 50 auf 250.000
+Zertifikate pro Woche angehoben. Ein Engpass ist damit selten, aber nicht
+ausgeschlossen.
 
 **Symptome im Caddy-Log:**
 
@@ -57,15 +56,18 @@ acme: error: 429 :: too many certificates already issued
 
 **Workarounds:**
 
-1. **Warten und retry**: das Limit ist gleitend; nach einigen Stunden
-   funktioniert es wieder. Caddy retry t automatisch mit Backoff.
-2. **Onboarding staffeln**: Studierende über mehrere Tage oder
+1. **Auf nip.io ausweichen**: In `.env` die Domain in `DOMAIN`, `N8N_HOST`
+   und `WEBHOOK_URL` von `…sslip.io` auf `…nip.io` umstellen, dann
+   `docker compose up -d`. Beide Dienste lösen gleich auf.
+2. **Warten und retry**: das Limit ist gleitend; nach einigen Stunden
+   funktioniert es wieder. Caddy versucht es automatisch mit Backoff erneut.
+3. **Onboarding staffeln**: Studierende über mehrere Tage oder
    Übungs-Slots hinweg ihre Server starten lassen.
-3. **Eigene Domain nutzen** (robusteste Lösung für produktiven Einsatz):
+4. **Eigene Domain nutzen** (robusteste Lösung für produktiven Einsatz):
    eigene Domain bei einem Registrar holen, A-Record auf die Server-IP
-   setzen, `DOMAIN` in `.env` auf die eigene Domain ändern, Container
-   neu starten.
-4. **Caddy-Staging-CA** (zum reinen Testen): in der Caddyfile-Option
+   setzen, `DOMAIN`, `N8N_HOST` und `WEBHOOK_URL` in `.env` ändern,
+   `docker compose up -d`.
+5. **Caddy-Staging-CA** (zum reinen Testen): in der Caddyfile-Option
    `acme_ca https://acme-staging-v02.api.letsencrypt.org/directory`
    setzen. Die Staging-Zertifikate sind nicht von Browsern als gültig
    anerkannt, aber das Limit ist viel höher.
@@ -137,13 +139,14 @@ docker system df
 
 Wenn `/var/lib/docker` voll läuft: alte Backups prüfen
 (`/opt/n8n/backups/`), n8n-Execution-Daten in der Datenbank prunen
-(in n8n unter Settings → Executions Data Pruning oder via Env-Variable
-`EXECUTIONS_DATA_PRUNE_MAX_AGE`).
+(Env-Variablen `EXECUTIONS_DATA_MAX_AGE` in Stunden und
+`EXECUTIONS_DATA_PRUNE_MAX_COUNT` in `.env` senken, dann
+`docker compose up -d`).
 
-Auf CPX11 mit 2 GB RAM: bei AI-Workflows mit großen Payloads kann es
+Auf CPX12 mit 2 GB RAM: bei AI-Workflows mit großen Payloads kann es
 OOM-Kills geben. Lösung entweder:
 
-- Server auf CPX21 (4 GB) hochstufen (in der Hetzner-Console möglich
+- Server auf CPX22 (4 GB) hochstufen (in der Hetzner-Console möglich
   ohne Datenverlust)
 - Workflows so umbauen, dass weniger Daten parallel im Speicher sind
 

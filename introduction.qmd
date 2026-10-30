@@ -9,11 +9,11 @@ Die vier Wege unterscheiden sich vor allem darin, wie viel wir selbst betreiben 
 | Weg | Aufwand | Kosten pro Monat | Datenkontrolle | Gut geeignet für |
 |---|---|---|---|---|
 | Lokal (eigener Rechner) | sehr gering | keine | vollständig, lokal | Ausprobieren, Lernen, Entwicklung |
-| n8n Cloud | gering | ab ca. 24 € | beim Anbieter | schneller Start ohne Technik |
-| Managed Hosting | gering | ab ca. 7 € | eigene Instanz, fremd betrieben | Datenkontrolle ohne Server-Pflege |
-| Eigener Hetzner-Server | mittel | ca. 4 bis 7 € | vollständig | produktiver, souveräner Betrieb |
+| n8n Cloud | gering | ab ca. 20 € | beim Anbieter | schneller Start ohne Technik |
+| Managed Hosting | gering | ab ca. 7 US-Dollar | eigene Instanz, fremd betrieben | Datenkontrolle ohne Server-Pflege |
+| Eigener Hetzner-Server | mittel | ca. 12 bis 20 € | vollständig | produktiver, souveräner Betrieb |
 
-Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.
+Alle Preise sind Nettopreise mit Stand Oktober 2026 und ändern sich von Zeit zu Zeit. Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.
 
 ## Grundbegriffe für alle Wege
 
@@ -32,7 +32,7 @@ Eine Instanz ist eine laufende Kopie von n8n, erreichbar über den Browser. Unab
 Das Terminal ist ein Programm, in dem wir dem Rechner Befehle als Text geben, statt mit der Maus zu klicken. Es zeigt eine Eingabezeile, in die wir einen Befehl tippen und mit der Eingabetaste bestätigen; die Antwort des Rechners erscheint als Text darunter. „Kommandozeile" und „Konsole" sind andere Wörter für dieselbe textbasierte Eingabe.
 
 ::: {.callout-tip title="Das Terminal öffnen"}
-Auf **macOS** öffnen wir die App „Terminal": Cmd + Leertaste drücken, „Terminal" eintippen, mit der Eingabetaste starten. Unter **Windows** nutzen wir „PowerShell": Start-Menü öffnen, „PowerShell" eintippen, starten. Unter **Linux** heißt das Programm meist „Terminal" oder „Konsole" und liegt im Anwendungsmenü. In allen Fällen erscheint ein Fenster mit einer blinkenden Eingabezeile. Dort tippen wir die Befehle aus diesem Buch ein und bestätigen jeden mit der Eingabetaste.
+Auf **macOS** öffnen wir die App „Terminal": Cmd + Leertaste drücken, „Terminal" eintippen, mit der Eingabetaste starten. Unter **Windows** nutzen wir „PowerShell": Start-Menü öffnen, „PowerShell" eintippen, starten. Die Befehle `ssh`, `scp` und `ssh-keygen` sind in der PowerShell ab Windows 10 bereits enthalten. Unter **Linux** heißt das Programm meist „Terminal" oder „Konsole" und liegt im Anwendungsmenü. In allen Fällen erscheint ein Fenster mit einer blinkenden Eingabezeile. Dort tippen wir die Befehle aus diesem Buch ein und bestätigen jeden mit der Eingabetaste.
 :::
 
 ### Befehl und Platzhalter
@@ -41,6 +41,8 @@ Ein Befehl ist eine einzelne Anweisung, die wir ins Terminal tippen, etwa `node 
 
 ::: {.callout-note}
 Längere Befehle in diesem Buch sind oft auf mehrere Zeilen verteilt, wobei jede Zeile außer der letzten mit einem umgekehrten Schrägstrich `\` endet. Dieser Backslash bedeutet „der Befehl geht in der nächsten Zeile weiter". Wir kopieren oder tippen den ganzen Block als einen einzigen Befehl und bestätigen erst am Ende mit der Eingabetaste.
+
+In der Windows-PowerShell funktioniert der Backslash nicht als Zeilenfortsetzung. Wo ein Befehl auf dem eigenen Rechner unter Windows anders lautet, zeigt das Buch ihn in einem eigenen Reiter „Windows (PowerShell)". Befehle, die nach der Anmeldung per SSH auf dem Server laufen, sind auf allen Betriebssystemen gleich, denn sie laufen auf dem Linux-Server.
 :::
 
 ### localhost und Port
@@ -61,7 +63,7 @@ Ein Container verpackt eine Anwendung zusammen mit allem, was sie zum Laufen bra
 
 ### Image und Tag
 
-Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa `2.20.6`) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.
+Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa `2.45.7`) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.
 
 ### Stack
 
@@ -81,7 +83,7 @@ TLS ist die Verschlüsselung hinter dem `https` und dem Schloss-Symbol in der Ad
 
 ### Domain und sslip.io
 
-Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa `n8n.example.com`). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form `1-2-3-4.sslip.io` automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup.
+Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa `n8n.example.com`). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form `1-2-3-4.sslip.io` automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup. Der Schwesterdienst nip.io funktioniert genauso (`1-2-3-4.nip.io`).
 
 ### Credentials und Encryption-Key
 

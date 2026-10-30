@@ -24,30 +24,31 @@ Architektur verstehen.
 
 | Entscheidung                            | Warum                                                                                                  |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Hetzner Cloud (Nürnberg/Falkenstein)    | DSGVO-konform, deutsches Unternehmen, AVV nach Art. 28 DSGVO, ~4–7 €/Monat                             |
+| Hetzner Cloud (Nürnberg/Falkenstein/Helsinki) | DSGVO-konform, deutsches Unternehmen, AVV nach Art. 28 DSGVO, ca. 12 bis 20 € netto/Monat (Stand 10/2026) |
 | Cloud-Init für Provisioning             | Industriestandard, transparent, übertragbar auf andere Provider                                        |
 | Docker Compose (statt Coolify/One-Click) | Transparenz vor Komfort – Studierende sollen die Schichten verstehen                                  |
 | Postgres statt SQLite                   | Produktionsnaher Setup, Kursinhalt damit auch für reale Projekte tragfähig                             |
 | Caddy als Reverse Proxy                 | Auto-SSL via Let's Encrypt, deutlich weniger Konfigurationsaufwand als Nginx                            |
 | sslip.io als DNS                        | Keine eigene Domain nötig (didaktischer Vorteil); bekannte Einschränkung beim Let's-Encrypt-Rate-Limit |
-| Caddy `on_demand` TLS                   | Zertifikate werden bedarfsgesteuert geholt; Allowlist verhindert Missbrauch                            |
+| Caddy mit festem Hostnamen              | Zertifikat beim Start für genau `DOMAIN`; keine fremden Hostnamen, keine Allowlist nötig               |
 | Spezifisches Versionspinning            | Reproduzierbarkeit über das Semester, keine Breaking-Change-Überraschungen                              |
 | Hetzner Cloud Firewall + UFW            | Defense-in-Depth (Provider-Ebene + Server-Ebene)                                                        |
 | Ubuntu 24.04 LTS                        | Hetzner-Default, lange Support-Laufzeit                                                                  |
 
 ## Tech-Stack (Versionen gepinnt)
 
-- Hetzner Cloud Server: **CPX11** (2 vCPU, 2 GB RAM) als Minimum oder
-  **CPX21** (2 vCPU, 4 GB RAM) als Empfehlung
+- Hetzner Cloud Server: **CPX12** (1 vCPU, 2 GB RAM) als Minimum oder
+  **CPX22** (2 vCPU, 4 GB RAM) als Empfehlung. CPX11/CPX21 sind in den
+  EU-Standorten seit 2026 nicht mehr neu bestellbar.
 - OS: **Ubuntu 24.04 LTS**
 - Docker: aus Ubuntu-Repos (`docker.io`)
-- n8n: **`n8nio/n8n:2.20.6`** – wir starten direkt auf der aktuellen
-  Major-Version 2.x (stabil seit Anfang 2026, Setup ist „2.0-ready").
-  Patch-Pinning übers Semester, vor jedem neuen Semester wird bewusst
-  auf eine neuere Stable-Version gehoben. Keine automatischen
-  Updates während eines laufenden Semesters.
-- Postgres: **`postgres:16.13-alpine3.23`**
-- Caddy: **`caddy:2.11.2-alpine`**
+- n8n: **`n8nio/n8n:2.45.7`** (Stand 2026-10-30, auf GitHub als „Latest"
+  markiert; 2.46.x ist Pre-release). Patch-Pinning bleibt, aber
+  mindestens monatlich auf die aktuelle Stable-Version prüfen, weil
+  n8n-Updates regelmäßig Sicherheitslücken schließen. Keine
+  automatischen Updates; jedes Update über `scripts/update.sh <tag>`.
+- Postgres: **`postgres:16.15-alpine3.24`**
+- Caddy: **`caddy:2.11.7-alpine`**
 - DNS: **sslip.io** (kein eigenes DNS-Setup für den Kurs)
 
 ## Pädagogische Anforderungen
@@ -61,7 +62,7 @@ Architektur verstehen.
   Drittlandtransfer. Souveräne Alternativen werden in `docs/dsgvo.md` benannt.
 - **EU AI Act:** trifft Use Case, nicht Tool. `docs/eu-ai-act.md` erklärt
   Risikoklassen anhand typischer n8n-Workflows.
-- **Verantwortung nach Kursende:** `docs/server-loeschen.md` macht
+- **Verantwortung nach Kursende:** `betrieb/server-loeschen.qmd` macht
   Workflow-Export und `.env`-Sicherung (mit Encryption-Key) zur Pflicht
   vor dem Server-Delete.
 

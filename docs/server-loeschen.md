@@ -28,7 +28,7 @@ ssh root@<server-ip>
 exit
 
 # Lokal:
-scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
+scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-<datum>
 ```
 
 Im Verzeichnis `n8n-backup-YYYY-MM-DD` liegen jetzt:
@@ -69,33 +69,19 @@ Daten werden entfernt; auf Hetzner-Seite bleibt nichts zurück.
 Auf einem frischen, mit dieser Anleitung aufgesetzten Server:
 
 ```bash
+# Lokal: gesicherten Ordner auf den neuen Server kopieren
+scp -r ./n8n-backup-<datum> root@<neue-ip>:/root/restore
+
+# Auf dem neuen Server: jüngsten Satz zurückspielen
 ssh root@<neue-ip>
-
-# Stack stoppen
-cd /opt/n8n
-docker compose down
-
-# Encryption-Key aus dem alten Backup einspielen
-cp /pfad/zur/env-YYYY-…backup /opt/n8n/.env
-# DOMAIN auf die neue Server-IP anpassen!
-nano /opt/n8n/.env
-
-# Postgres-Volume vorbereiten
-docker compose up -d postgres
-sleep 10
-
-# Dump einspielen
-zcat /pfad/zum/postgres-YYYY-…sql.gz \
-  | docker compose exec -T postgres psql -U n8n n8n
-
-# n8n-Daten zurückspielen
-docker compose up -d n8n
-docker compose exec -T n8n sh -c 'cd /home/node && tar xzf -' \
-  < /pfad/zum/n8n-data-YYYY-…tar.gz
-
-# Caddy starten
-docker compose up -d caddy
+/opt/n8n/scripts/restore.sh /root/restore
 ```
+
+Das Skript übernimmt die alte `.env` (Encryption-Key, Image-Tags,
+Datenbank-Passwort), setzt `DOMAIN`, `N8N_HOST` und `WEBHOOK_URL` auf die
+Domain des neuen Servers, legt Postgres- und n8n-Volume neu an, spielt
+Dump und Daten-Tarball bei gestopptem n8n ein und wartet auf
+`/healthz/readiness`.
 
 Workflows und Credentials sind nun in der neuen Instanz verfügbar. Externe
 OAuth-Verbindungen müssen je nach Anbieter neu autorisiert werden, weil

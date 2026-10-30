@@ -45,7 +45,7 @@ Ubuntu 24.04 erstellen und den kompletten Inhalt von
 [`cloud-init.yaml`](cloud-init.yaml) ins Feld „Cloud-Config" einfügen. Nach 5
 bis 8 Minuten ist n8n unter `https://<ip>.sslip.io` erreichbar.
 
-Der Stack ist versionsgepinnt (n8n `2.20.6`, Postgres `16.13`, Caddy `2.11.2`);
+Der Stack ist versionsgepinnt (n8n `2.45.7`, Postgres `16.15`, Caddy `2.11.7`);
 Telemetrie ist im Kurs-Default deaktiviert. Begründungen in
 [PROJECT.md](PROJECT.md) und [docs/dsgvo.md](docs/dsgvo.md).
 

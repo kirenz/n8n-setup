@@ -13,10 +13,13 @@ Ein Backup-Satz im Verzeichnis `backups/` auf dem Server, regelmäßig erzeugt u
 ```bash
 ssh root@<server-ip>
 /opt/n8n/scripts/backup.sh
+exit
 ```
 
+Der erste Befehl meldet uns auf dem Server an, der zweite erzeugt das Backup, `exit` beendet die Sitzung und bringt uns zurück auf den eigenen Rechner. Das Skript endet mit einer Liste der Dateien im Ordner `backups/`; drei neue Dateien mit der aktuellen Uhrzeit im Namen zeigen, dass es geklappt hat.
+
 ::: {.callout-tip title="Was gesichert wird"}
-Das Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflows, Credentials und Ausführungen, einen Tarball des n8n-Daten-Volumes und eine Kopie der `.env` mit dem Encryption-Key. Es behält die sieben jüngsten Sätze und entfernt ältere automatisch.
+Das Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflows, Credentials und Ausführungen, einen Tarball des n8n-Daten-Volumes und eine Kopie der `.env` mit dem Encryption-Key und den eingesetzten Versionen. Damit Datenbank und Dateien denselben Stand haben, hält es n8n für wenige Sekunden an und startet es danach wieder. Die Dateien sind nur für das Administrator-Konto lesbar. Das Skript behält die sieben jüngsten Sätze und entfernt ältere automatisch.
 :::
 
 ### Schritt 2: Backup lokal sichern
@@ -25,14 +28,16 @@ Das Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflow
 Solange das Backup nur auf dem Server liegt, ist es bei einem Server-Verlust ebenfalls weg. Wer Workflows behalten möchte, kopiert den Ordner regelmäßig auf den eigenen Rechner.
 :::
 
+Dieser Befehl läuft **auf dem eigenen Rechner**, also nach dem `exit` aus Schritt 1. `<datum>` ersetzen wir durch das heutige Datum, etwa `2026-10-30`:
+
 ```bash
-scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
+scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-<datum>
 ```
 
-Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum.
+Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum. Der Befehl funktioniert im Terminal von macOS und Linux ebenso wie in der Windows-PowerShell.
 
 ::: {.callout-note title="scp und das Datum im Namen"}
-`scp` steht für „secure copy" und kopiert Dateien über dieselbe verschlüsselte Verbindung wie SSH, hier vom Server auf den eigenen Rechner. Der Teil `root@<server-ip>:/opt/n8n/backups` benennt die Quelle auf dem Server (Adresse, Doppelpunkt, Pfad), `-r` kopiert den ganzen Ordner samt Inhalt. Das Ziel `./n8n-backup-$(date +%F)` liegt im aktuellen Verzeichnis, wofür das `./` steht. Der Ausdruck `$(date +%F)` wird vor dem Kopieren durch das heutige Datum ersetzt, sodass der Ordner zum Beispiel `n8n-backup-2026-06-13` heißt.
+`scp` steht für „secure copy" und kopiert Dateien über dieselbe verschlüsselte Verbindung wie SSH, hier vom Server auf den eigenen Rechner. Der Teil `root@<server-ip>:/opt/n8n/backups` benennt die Quelle auf dem Server (Adresse, Doppelpunkt, Pfad), `-r` kopiert den ganzen Ordner samt Inhalt. Das Ziel `./n8n-backup-2026-10-30` liegt im aktuellen Verzeichnis, wofür das `./` steht. Das Datum im Namen hält mehrere Sicherungen auseinander.
 :::
 
 ### Schritt 3: Tägliches Backup per Cron
@@ -54,6 +59,8 @@ Cron ist der eingebaute Zeitplaner von Linux, der Befehle automatisch zu festgel
 | `permission denied` beim Skript | Skript nicht ausführbar oder falscher Nutzer | als `root` ausführen, Pfad `/opt/n8n/scripts/backup.sh` prüfen |
 | Speicher voll | alte Backups oder viele Ausführungsdaten | freien Speicher mit `df -h` prüfen, alte Ausführungsdaten in n8n löschen |
 | `scp: no such file` | falscher Pfad auf dem Server | Pfad `/opt/n8n/backups` kontrollieren |
+| Kopie landet nicht auf dem eigenen Rechner | `scp` lief noch in der Server-Sitzung | mit `exit` die Sitzung beenden, dann `scp` erneut ausführen |
+| n8n nach dem Backup nicht erreichbar | Skript wurde mitten im Lauf abgebrochen | auf dem Server `cd /opt/n8n` und `docker compose start n8n` |
 
 ## Kontrollpunkt
 

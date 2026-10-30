@@ -23,11 +23,11 @@ ssh root@<server-ip>
 /opt/n8n/scripts/backup.sh
 exit
 
-scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-$(date +%F)
+scp -r root@<server-ip>:/opt/n8n/backups ./n8n-backup-<datum>
 ```
 
 ::: {.callout-note title="Server-Sitzung und lokaler Befehl"}
-Die ersten Befehle laufen auf dem Server: `ssh` öffnet die Sitzung, `backup.sh` erzeugt das Backup, `exit` beendet die Sitzung wieder und bringt uns zurück auf den eigenen Rechner. Erst der letzte Befehl, `scp`, läuft wieder lokal und holt den Backup-Ordner herüber. Die Reihenfolge ist wichtig: erst auf dem Server sichern und die Sitzung verlassen, dann von zu Hause kopieren.
+Die ersten Befehle laufen auf dem Server: `ssh` öffnet die Sitzung, `backup.sh` erzeugt das Backup, `exit` beendet die Sitzung wieder und bringt uns zurück auf den eigenen Rechner. Erst der letzte Befehl, `scp`, läuft wieder lokal und holt den Backup-Ordner herüber; `<datum>` ersetzen wir durch das heutige Datum, etwa `2026-10-30`. Die Reihenfolge ist wichtig: erst auf dem Server sichern und die Sitzung verlassen, dann von zu Hause kopieren.
 :::
 
 ::: {.callout-important title="Ohne Encryption-Key sind die Credentials wertlos"}
@@ -45,9 +45,45 @@ In der Hetzner-Console unter **Server → Server auswählen → Aktionen → Lö
 
 ## Restore in eine neue Instanz
 
-::: {.callout-note title="Kurzfassung für den Wiederherstellungs-Fall" collapse="true"}
-Auf einem frischen, mit dieser Anleitung aufgesetzten Server lässt sich der Stand zurückspielen: den Stack mit `docker compose down` stoppen, die gesicherte `env-…backup` als `.env` einspielen und die `DOMAIN` auf die neue IP anpassen, Postgres starten, den Dump mit `zcat … | docker compose exec -T postgres psql -U n8n n8n` einspielen, danach das n8n-Daten-Volume aus dem Tarball zurückspielen und die Container starten. Externe OAuth-Verbindungen müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-URL ändert.
+Der lokal gesicherte Ordner lässt sich später auf einen neuen Server zurückspielen, etwa zum nächsten Semester. Das Restore-Skript übernimmt dabei den alten Encryption-Key und die alten Versionen und stellt die Adresse auf die des neuen Servers um.
+
+Voraussetzungen:
+
+- ein neuer Server, angelegt wie im Kapitel [Server anlegen und starten](../hetzner/server-anlegen.qmd), dessen Begrüßung „n8n läuft" meldet
+- der lokal gesicherte Ordner aus Schritt 2, etwa `n8n-backup-2026-10-30`
+
+1. Auf dem eigenen Rechner den Ordner auf den neuen Server kopieren:
+
+    ```bash
+    scp -r ./n8n-backup-<datum> root@<neue-server-ip>:/root/restore
+    ```
+
+2. Auf dem neuen Server anmelden: `ssh root@<neue-server-ip>`.
+3. Das Restore-Skript starten:
+
+    ```bash
+    /opt/n8n/scripts/restore.sh /root/restore
+    ```
+
+4. Die angezeigte alte und neue Adresse prüfen, dann `RESTORE` eintippen und mit der Eingabetaste bestätigen.
+5. Warten, bis das Skript `Fertig: … antwortet.` meldet. Das dauert einige Minuten.
+6. Prüfen: Unter der neuen Adresse funktioniert die Anmeldung mit dem alten Owner-Konto, die Workflows sind vorhanden, und ein Workflow mit Credentials läuft ohne Fehler.
+
+::: {.callout-warning title="Der neue Server wird überschrieben"}
+Das Skript ersetzt Datenbank und n8n-Daten des neuen Servers vollständig. Was dort schon angelegt wurde, etwa ein neues Owner-Konto, ist danach nicht mehr vorhanden.
 :::
+
+::: {.callout-note title="Externe Dienste kennen die alte Adresse"}
+Der neue Server hat eine neue Adresse. Webhook-Adressen müssen bei externen Diensten neu eingetragen werden, und Verbindungen mit Anmeldung über OAuth müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-Adresse ändert.
+:::
+
+## Fehler diagnostizieren
+
+| Symptom | Wahrscheinliche Ursache | Nächster Schritt |
+|---|---|---|
+| Restore meldet „kein postgres-*.sql.gz" | falscher Ordner angegeben | mit `ls /root/restore` prüfen, ob die drei Backup-Dateien direkt darin liegen |
+| Restore meldet „Satz ist unvollständig" | eine der drei Dateien fehlt | lokal prüfen, ob Dump, Daten-Tarball und `env-…backup` mit derselben Uhrzeit vorhanden sind |
+| Anmeldung klappt, Credentials melden Fehler | falsche `env-…backup` eingespielt | Restore mit dem vollständigen Satz wiederholen, der zum Dump gehört |
 
 ## Kontrollpunkt
 
@@ -55,4 +91,5 @@ Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:
 
 - Workflows als JSON exportieren
 - ein Voll-Backup samt Encryption-Key lokal sichern
-- den Server in der Console löschen und wissen, was sich später wiederherstellen lässt
+- den Server in der Console löschen
+- einen gesicherten Stand mit dem Restore-Skript auf einen neuen Server zurückspielen

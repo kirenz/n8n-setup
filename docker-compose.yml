@@ -11,7 +11,7 @@ services:
   postgres:
     # Datenbank für n8n-Workflows, -Credentials, -Executions.
     # Gepinnt auf konkretes Patch-Tag, kein "latest".
-    image: postgres:${POSTGRES_IMAGE_TAG:-16.13-alpine3.23}
+    image: postgres:${POSTGRES_IMAGE_TAG:-16.15-alpine3.24}
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -31,11 +31,16 @@ services:
 
   n8n:
     # Workflow-Engine. Minor-/Patch-Pinning – siehe PROJECT.md.
-    image: n8nio/n8n:${N8N_IMAGE_TAG:-2.20.6}
+    image: n8nio/n8n:${N8N_IMAGE_TAG:-2.45.7}
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
+    # Weitere n8n-Variablen (etwa NODES_EXCLUDE oder EXECUTIONS_DATA_MAX_AGE)
+    # lassen sich direkt in .env ergänzen und kommen über env_file an.
+    # Die Werte unter environment haben Vorrang.
+    env_file:
+      - .env
     environment:
       # Persistenz in Postgres (statt der Default-SQLite-Datei).
       DB_TYPE: postgresdb
@@ -57,6 +62,9 @@ services:
       N8N_PORT: 5678
       WEBHOOK_URL: ${WEBHOOK_URL}
       N8N_EDITOR_BASE_URL: ${WEBHOOK_URL}
+      # Caddy steht als genau ein Proxy davor. Damit wertet n8n die
+      # X-Forwarded-Header aus und sieht die echte Client-IP.
+      N8N_PROXY_HOPS: 1
 
       # Zeitzone für Cron-/Schedule-Trigger und Log-Timestamps.
       GENERIC_TIMEZONE: ${GENERIC_TIMEZONE:-Europe/Berlin}
@@ -83,9 +91,8 @@ services:
       - internal
 
   caddy:
-    # Reverse Proxy mit automatischem TLS via Let's Encrypt.
-    # on_demand TLS plus Allowlist – siehe Caddyfile.
-    image: caddy:${CADDY_IMAGE_TAG:-2.11.2-alpine}
+    # Reverse Proxy mit automatischem TLS via Let's Encrypt, siehe Caddyfile.
+    image: caddy:${CADDY_IMAGE_TAG:-2.11.7-alpine}
     restart: unless-stopped
     depends_on:
       - n8n
