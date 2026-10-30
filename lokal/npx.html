@@ -362,7 +362,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="prüfen-ob-node.js-vorhanden-ist"><span class="header-section-number">1.2.1</span> Prüfen, ob Node.js vorhanden ist</h3>
 <p>Wir tippen den folgenden Befehl ins Terminal und bestätigen mit der Eingabetaste:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">node</span> <span class="at">--version</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Erscheint eine Versionsnummer ab 18 (etwa <code>v20.11.0</code>), ist alles bereit. Erscheint stattdessen eine Meldung wie <code>command not found</code>, fehlt Node.js noch.</p>
+<p>n8n braucht eine Version zwischen 20.19 und 24. Erscheint eine passende Versionsnummer (etwa <code>v24.11.0</code>), ist alles bereit. Erscheint stattdessen eine Meldung wie <code>command not found</code>, fehlt Node.js noch. Ist die Version älter als 20.19 oder neuer als 24, installieren wir Version 24 wie unten beschrieben.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Node.js installieren">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -373,7 +373,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Fehlt Node.js, laden wir die LTS-Version von <a href="https://nodejs.org">nodejs.org</a> und folgen dem Installationsprogramm. LTS steht für „Long Term Support” und bezeichnet die Fassung mit der längsten Pflegezusage, also die stabile Wahl für einen verlässlichen Start. Nach der Installation schließen wir das Terminal einmal und öffnen es neu, damit der <code>node</code>-Befehl erkannt wird.</p>
+<p>Fehlt Node.js oder passt die Version nicht, laden wir von <a href="https://nodejs.org/en/download">nodejs.org/download</a> die Version 24 (LTS) und folgen dem Installationsprogramm. LTS steht für „Long Term Support” und bezeichnet eine Fassung mit langer Pflegezusage, also die stabile Wahl für einen verlässlichen Start. Bietet die Seite bereits eine neuere LTS-Version an, wählen wir trotzdem ausdrücklich Version 24, solange n8n neuere Versionen noch nicht unterstützt. Nach der Installation schließen wir das Terminal einmal und öffnen es neu, damit der <code>node</code>-Befehl erkannt wird.</p>
 </div>
 </div>
 </section>
@@ -456,15 +456,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td><code>Port 5678 is already in use</code></td>
 <td>ein anderer Dienst belegt den Port</td>
-<td>mit anderem Port starten: <code>N8N_PORT=5679 npx n8n</code>, dann <code>localhost:5679</code> aufrufen</td>
+<td>mit anderem Port starten (Befehl unter der Tabelle), dann <code>localhost:5679</code> aufrufen</td>
 </tr>
 <tr class="odd">
+<td>Fehlermeldung zur Node.js-Version</td>
+<td>Node.js zu alt oder zu neu</td>
+<td>Version 24 von nodejs.org installieren, Terminal neu öffnen</td>
+</tr>
+<tr class="even">
 <td>Browser zeigt nichts an</td>
 <td>n8n startet noch</td>
 <td>warten, bis das Terminal „Editor is now accessible” meldet</td>
 </tr>
 </tbody>
 </table>
+<p>n8n auf einem anderen Port starten:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">macOS und Linux</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Windows (PowerShell)</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="va">N8N_PORT</span><span class="op">=</span>5679 <span class="ex">npx</span> n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="va">$env</span><span class="op">:</span><span class="va">N8N_PORT</span><span class="op">=</span><span class="dv">5679</span><span class="op">;</span> npx n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
 </section>
 <section id="kontrollpunkt" class="level2" data-number="1.6">
 <h2 data-number="1.6" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">1.6</span> Kontrollpunkt</h2>

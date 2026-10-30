@@ -336,27 +336,27 @@ ul.task-list li input[type="checkbox"] {
 <tr class="even">
 <td>n8n Cloud</td>
 <td>gering</td>
-<td>ab ca. 24 €</td>
+<td>ab ca. 20 €</td>
 <td>beim Anbieter</td>
 <td>schneller Start ohne Technik</td>
 </tr>
 <tr class="odd">
 <td>Managed Hosting</td>
 <td>gering</td>
-<td>ab ca. 7 €</td>
+<td>ab ca. 7 US-Dollar</td>
 <td>eigene Instanz, fremd betrieben</td>
 <td>Datenkontrolle ohne Server-Pflege</td>
 </tr>
 <tr class="even">
 <td>Eigener Hetzner-Server</td>
 <td>mittel</td>
-<td>ca. 4 bis 7 €</td>
+<td>ca. 12 bis 20 €</td>
 <td>vollständig</td>
 <td>produktiver, souveräner Betrieb</td>
 </tr>
 </tbody>
 </table>
-<p>Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.</p>
+<p>Alle Preise sind Nettopreise mit Stand Oktober 2026 und ändern sich von Zeit zu Zeit. Die Zuordnung zeigt typische Fälle, keine starren Regeln. Ein Wechsel ist später möglich, denn Workflows lassen sich als JSON-Datei exportieren und in einer anderen Instanz wieder importieren.</p>
 </section>
 <section id="grundbegriffe-für-alle-wege" class="level2">
 <h2 class="anchored" data-anchor-id="grundbegriffe-für-alle-wege">Grundbegriffe für alle Wege</h2>
@@ -382,7 +382,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Auf <strong>macOS</strong> öffnen wir die App „Terminal”: Cmd + Leertaste drücken, „Terminal” eintippen, mit der Eingabetaste starten. Unter <strong>Windows</strong> nutzen wir „PowerShell”: Start-Menü öffnen, „PowerShell” eintippen, starten. Unter <strong>Linux</strong> heißt das Programm meist „Terminal” oder „Konsole” und liegt im Anwendungsmenü. In allen Fällen erscheint ein Fenster mit einer blinkenden Eingabezeile. Dort tippen wir die Befehle aus diesem Buch ein und bestätigen jeden mit der Eingabetaste.</p>
+<p>Auf <strong>macOS</strong> öffnen wir die App „Terminal”: Cmd + Leertaste drücken, „Terminal” eintippen, mit der Eingabetaste starten. Unter <strong>Windows</strong> nutzen wir „PowerShell”: Start-Menü öffnen, „PowerShell” eintippen, starten. Die Befehle <code>ssh</code>, <code>scp</code> und <code>ssh-keygen</code> sind in der PowerShell ab Windows 10 bereits enthalten. Unter <strong>Linux</strong> heißt das Programm meist „Terminal” oder „Konsole” und liegt im Anwendungsmenü. In allen Fällen erscheint ein Fenster mit einer blinkenden Eingabezeile. Dort tippen wir die Befehle aus diesem Buch ein und bestätigen jeden mit der Eingabetaste.</p>
 </div>
 </div>
 </section>
@@ -396,6 +396,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <div class="callout-body-container">
 <p>Längere Befehle in diesem Buch sind oft auf mehrere Zeilen verteilt, wobei jede Zeile außer der letzten mit einem umgekehrten Schrägstrich <code>\</code> endet. Dieser Backslash bedeutet „der Befehl geht in der nächsten Zeile weiter”. Wir kopieren oder tippen den ganzen Block als einen einzigen Befehl und bestätigen erst am Ende mit der Eingabetaste.</p>
+<p>In der Windows-PowerShell funktioniert der Backslash nicht als Zeilenfortsetzung. Wo ein Befehl auf dem eigenen Rechner unter Windows anders lautet, zeigt das Buch ihn in einem eigenen Reiter „Windows (PowerShell)“. Befehle, die nach der Anmeldung per SSH auf dem Server laufen, sind auf allen Betriebssystemen gleich, denn sie laufen auf dem Linux-Server.</p>
 </div>
 </div>
 </div>
@@ -418,7 +419,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="image-und-tag" class="level3">
 <h3 class="anchored" data-anchor-id="image-und-tag">Image und Tag</h3>
-<p>Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa <code>2.20.6</code>) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.</p>
+<p>Ein Image ist die unveränderliche Vorlage, aus der ein Container gestartet wird. Der Tag (etwa <code>2.45.7</code>) benennt eine konkrete Version dieses Images, sodass alle dieselbe, reproduzierbare Fassung starten.</p>
 </section>
 <section id="stack" class="level3">
 <h3 class="anchored" data-anchor-id="stack">Stack</h3>
@@ -438,7 +439,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="domain-und-sslip.io" class="level3">
 <h3 class="anchored" data-anchor-id="domain-und-sslip.io">Domain und sslip.io</h3>
-<p>Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa <code>n8n.example.com</code>). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form <code>1-2-3-4.sslip.io</code> automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup.</p>
+<p>Eine Domain ist der Name, unter dem eine Instanz erreichbar ist (etwa <code>n8n.example.com</code>). Wer keine eigene Domain einrichten möchte, nutzt sslip.io: Der Dienst löst jeden Namen der Form <code>1-2-3-4.sslip.io</code> automatisch auf die enthaltene IP-Adresse auf, ganz ohne eigenes DNS-Setup. Der Schwesterdienst nip.io funktioniert genauso (<code>1-2-3-4.nip.io</code>).</p>
 </section>
 <section id="credentials-und-encryption-key" class="level3">
 <h3 class="anchored" data-anchor-id="credentials-und-encryption-key">Credentials und Encryption-Key</h3>

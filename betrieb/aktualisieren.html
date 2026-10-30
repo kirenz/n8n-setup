@@ -293,15 +293,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#zielbild" id="toc-zielbild" class="nav-link active" data-scroll-target="#zielbild"><span class="header-section-number">9.1</span> Zielbild</a></li>
-  <li><a href="#schritt-für-schritt-selbst-bauen" id="toc-schritt-für-schritt-selbst-bauen" class="nav-link" data-scroll-target="#schritt-für-schritt-selbst-bauen"><span class="header-section-number">9.2</span> Schritt für Schritt selbst bauen</a>
+  <li><a href="#wie-oft-aktualisieren" id="toc-wie-oft-aktualisieren" class="nav-link" data-scroll-target="#wie-oft-aktualisieren"><span class="header-section-number">9.2</span> Wie oft aktualisieren?</a></li>
+  <li><a href="#schritt-für-schritt-selbst-bauen" id="toc-schritt-für-schritt-selbst-bauen" class="nav-link" data-scroll-target="#schritt-für-schritt-selbst-bauen"><span class="header-section-number">9.3</span> Schritt für Schritt selbst bauen</a>
   <ul class="collapse">
-  <li><a href="#schritt-1-zielversion-wählen" id="toc-schritt-1-zielversion-wählen" class="nav-link" data-scroll-target="#schritt-1-zielversion-wählen"><span class="header-section-number">9.2.1</span> Schritt 1: Zielversion wählen</a></li>
-  <li><a href="#schritt-2-tag-in-der-.env-setzen" id="toc-schritt-2-tag-in-der-.env-setzen" class="nav-link" data-scroll-target="#schritt-2-tag-in-der-.env-setzen"><span class="header-section-number">9.2.2</span> Schritt 2: Tag in der .env setzen</a></li>
-  <li><a href="#schritt-3-update-skript-ausführen" id="toc-schritt-3-update-skript-ausführen" class="nav-link" data-scroll-target="#schritt-3-update-skript-ausführen"><span class="header-section-number">9.2.3</span> Schritt 3: Update-Skript ausführen</a></li>
+  <li><a href="#schritt-1-zielversion-wählen" id="toc-schritt-1-zielversion-wählen" class="nav-link" data-scroll-target="#schritt-1-zielversion-wählen"><span class="header-section-number">9.3.1</span> Schritt 1: Zielversion wählen</a></li>
+  <li><a href="#schritt-2-update-skript-mit-der-zielversion-ausführen" id="toc-schritt-2-update-skript-mit-der-zielversion-ausführen" class="nav-link" data-scroll-target="#schritt-2-update-skript-mit-der-zielversion-ausführen"><span class="header-section-number">9.3.2</span> Schritt 2: Update-Skript mit der Zielversion ausführen</a></li>
+  <li><a href="#schritt-3-ergebnis-prüfen" id="toc-schritt-3-ergebnis-prüfen" class="nav-link" data-scroll-target="#schritt-3-ergebnis-prüfen"><span class="header-section-number">9.3.3</span> Schritt 3: Ergebnis prüfen</a></li>
   </ul></li>
-  <li><a href="#warum-nicht-latest-und-nicht-automatisch" id="toc-warum-nicht-latest-und-nicht-automatisch" class="nav-link" data-scroll-target="#warum-nicht-latest-und-nicht-automatisch"><span class="header-section-number">9.3</span> Warum nicht latest und nicht automatisch</a></li>
-  <li><a href="#fehler-diagnostizieren" id="toc-fehler-diagnostizieren" class="nav-link" data-scroll-target="#fehler-diagnostizieren"><span class="header-section-number">9.4</span> Fehler diagnostizieren</a></li>
-  <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">9.5</span> Kontrollpunkt</a></li>
+  <li><a href="#warum-nicht-latest-und-nicht-automatisch" id="toc-warum-nicht-latest-und-nicht-automatisch" class="nav-link" data-scroll-target="#warum-nicht-latest-und-nicht-automatisch"><span class="header-section-number">9.4</span> Warum nicht latest und nicht automatisch</a></li>
+  <li><a href="#der-weg-zurück" id="toc-der-weg-zurück" class="nav-link" data-scroll-target="#der-weg-zurück"><span class="header-section-number">9.5</span> Der Weg zurück</a></li>
+  <li><a href="#postgres-und-caddy-anheben" id="toc-postgres-und-caddy-anheben" class="nav-link" data-scroll-target="#postgres-und-caddy-anheben"><span class="header-section-number">9.6</span> Postgres und Caddy anheben</a></li>
+  <li><a href="#fehler-diagnostizieren" id="toc-fehler-diagnostizieren" class="nav-link" data-scroll-target="#fehler-diagnostizieren"><span class="header-section-number">9.7</span> Fehler diagnostizieren</a></li>
+  <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">9.8</span> Kontrollpunkt</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/kirenz/n8n-setup/blob/main/betrieb/aktualisieren.qmd" class="toc-action"><i class="bi bi-github"></i>Quellcode anzeigen</a></li><li><a href="https://github.com/kirenz/n8n-setup/issues/new" class="toc-action"><i class="bi empty"></i>Problem melden</a></li></ul></div></nav>
     </div>
@@ -327,40 +330,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Updates sind ein bewusster Schritt. Die Versionen sind festgelegt, damit jede Installation dieselbe Fassung nutzt; ein Update ändert den gewünschten Tag und zieht die neue Version kontrolliert nach. Davor wird automatisch gesichert.</p>
+<p>Updates sind ein bewusster Schritt. Die Versionen sind festgelegt, damit jede Installation dieselbe Fassung nutzt; ein Update setzt den gewünschten Tag und zieht die neue Version kontrolliert nach. Davor wird automatisch gesichert.</p>
 <section id="zielbild" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="zielbild"><span class="header-section-number">9.1</span> Zielbild</h2>
-<p>Eine aktualisierte Instanz auf einer bewusst gewählten Version, mit einem frischen Backup als Sicherheitsnetz.</p>
+<p>Eine aktualisierte Instanz auf einer bewusst gewählten Version, mit einem frischen Backup als Weg zurück.</p>
 </section>
-<section id="schritt-für-schritt-selbst-bauen" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="schritt-für-schritt-selbst-bauen"><span class="header-section-number">9.2</span> Schritt für Schritt selbst bauen</h2>
-<section id="schritt-1-zielversion-wählen" class="level3" data-number="9.2.1">
-<h3 data-number="9.2.1" class="anchored" data-anchor-id="schritt-1-zielversion-wählen"><span class="header-section-number">9.2.1</span> Schritt 1: Zielversion wählen</h3>
-<p>Vor dem Update prüfen wir, welche Version aktuell stabil ist. Die n8n-Release-Notes und die Tag-Übersicht auf Docker Hub zeigen die verfügbaren Fassungen.</p>
+<section id="wie-oft-aktualisieren" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="wie-oft-aktualisieren"><span class="header-section-number">9.2</span> Wie oft aktualisieren?</h2>
+<p>Neue n8n-Versionen schließen regelmäßig auch Sicherheitslücken. Deshalb prüfen wir mindestens einmal im Monat, ob eine neue stabile Version vorliegt, und aktualisieren zeitnah, statt eine Version über ein ganzes Semester laufen zu lassen.</p>
 </section>
-<section id="schritt-2-tag-in-der-.env-setzen" class="level3" data-number="9.2.2">
-<h3 data-number="9.2.2" class="anchored" data-anchor-id="schritt-2-tag-in-der-.env-setzen"><span class="header-section-number">9.2.2</span> Schritt 2: Tag in der .env setzen</h3>
+<section id="schritt-für-schritt-selbst-bauen" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="schritt-für-schritt-selbst-bauen"><span class="header-section-number">9.3</span> Schritt für Schritt selbst bauen</h2>
+<section id="schritt-1-zielversion-wählen" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="schritt-1-zielversion-wählen"><span class="header-section-number">9.3.1</span> Schritt 1: Zielversion wählen</h3>
+<p>Die Release-Übersicht von n8n auf <a href="https://github.com/n8n-io/n8n/releases">GitHub</a> listet alle Versionen. Wir wählen die Version mit der Markierung „Latest”, etwa <code>2.46.1</code>. Versionen mit der Markierung „Pre-release” sind Vorabfassungen zum Testen und für den laufenden Betrieb nicht gedacht.</p>
+</section>
+<section id="schritt-2-update-skript-mit-der-zielversion-ausführen" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="schritt-2-update-skript-mit-der-zielversion-ausführen"><span class="header-section-number">9.3.2</span> Schritt 2: Update-Skript mit der Zielversion ausführen</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /opt/n8n</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nano</span> .env</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In der <code>.env</code> wird der gewünschte Tag eingetragen, etwa <code>N8N_IMAGE_TAG=2.21.0</code>. Die Datenbank- und Caddy-Tags lassen sich auf dieselbe Weise anheben.</p>
-<div class="callout callout-style-simple callout-tip callout-titled" title="Mit nano arbeiten">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tipp</span>Mit nano arbeiten
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><code>nano</code> ist ein einfacher Texteditor, der direkt im Terminal läuft. Mit den Pfeiltasten bewegen wir den Cursor zur richtigen Stelle und ändern den Wert. Gespeichert wird mit <code>Strg + O</code> (danach mit der Eingabetaste bestätigen), beendet mit <code>Strg + X</code>. Die wichtigsten Tastenkürzel zeigt nano am unteren Rand an; das Zeichen <code>^</code> steht dort für die Strg-Taste, <code>^X</code> bedeutet also <code>Strg + X</code>.</p>
-</div>
-</div>
-</section>
-<section id="schritt-3-update-skript-ausführen" class="level3" data-number="9.2.3">
-<h3 data-number="9.2.3" class="anchored" data-anchor-id="schritt-3-update-skript-ausführen"><span class="header-section-number">9.2.3</span> Schritt 3: Update-Skript ausführen</h3>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/update.sh</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/update.sh</span> <span class="op">&lt;</span>version<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>&lt;version&gt;</code> ersetzen wir durch die gewählte Versionsnummer, etwa <code>/opt/n8n/scripts/update.sh 2.46.1</code>.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Was das Skript tut">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -371,13 +360,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Das Skript zieht zuerst ein vollständiges Backup, zeigt dann die in der <code>.env</code> gesetzten Tags an und führt anschließend <code>docker compose pull</code> und <code>docker compose up -d</code> aus. Der gewünschte Stand bleibt in der <code>.env</code> dokumentiert, das Update ist damit reproduzierbar.</p>
+<p>Das Skript prüft zuerst, ob die Versionsnummer die richtige Form hat. Dann zieht es ein vollständiges Backup, solange die bisherige Version noch eingetragen ist. Erst danach trägt es die neue Version in die <code>.env</code> ein, lädt sie mit <code>docker compose pull</code> und startet die Container mit <code>docker compose up -d</code> neu. Zum Schluss wartet es, bis n8n wieder über <code>https</code> antwortet.</p>
 </div>
 </div>
 </section>
+<section id="schritt-3-ergebnis-prüfen" class="level3" data-number="9.3.3">
+<h3 data-number="9.3.3" class="anchored" data-anchor-id="schritt-3-ergebnis-prüfen"><span class="header-section-number">9.3.3</span> Schritt 3: Ergebnis prüfen</h3>
+<p>Das Skript endet mit der Zeile <code>Fertig, n8n antwortet.</code> Danach öffnen wir die Instanz im Browser, melden uns an und starten einen bestehenden Workflow einmal von Hand. Läuft er wie zuvor, ist das Update abgeschlossen. Mit <code>exit</code> beenden wir die Server-Sitzung.</p>
 </section>
-<section id="warum-nicht-latest-und-nicht-automatisch" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="warum-nicht-latest-und-nicht-automatisch"><span class="header-section-number">9.3</span> Warum nicht latest und nicht automatisch</h2>
+</section>
+<section id="warum-nicht-latest-und-nicht-automatisch" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="warum-nicht-latest-und-nicht-automatisch"><span class="header-section-number">9.4</span> Warum nicht latest und nicht automatisch</h2>
 <div class="callout callout-style-simple callout-important callout-titled" title="Geplant statt automatisch">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -401,12 +394,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Ein „Breaking Change” ist eine Änderung in einer neuen Version, die bisher Funktionierendes bewusst anders macht, sodass etwas nicht mehr wie zuvor läuft. Eine „Migration” ist ein automatischer Anpassungsschritt, mit dem n8n beim Update die Datenbank auf die neue Version umstellt; läuft sie noch oder schlägt sie fehl, startet der Container unter Umständen nicht sofort. Beides ist der Grund, warum vor jedem Update ein Backup steht.</p>
+<p>Ein „Breaking Change” ist eine Änderung in einer neuen Version, die bisher Funktionierendes bewusst anders macht, sodass etwas nicht mehr wie zuvor läuft. Eine „Migration” ist ein automatischer Anpassungsschritt, mit dem n8n beim Update die Datenbank auf die neue Version umstellt. Eine migrierte Datenbank passt danach nicht mehr ohne Weiteres zur alten Version. Deshalb steht vor jedem Update ein Backup.</p>
 </div>
 </div>
 </section>
-<section id="fehler-diagnostizieren" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="fehler-diagnostizieren"><span class="header-section-number">9.4</span> Fehler diagnostizieren</h2>
+<section id="der-weg-zurück" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="der-weg-zurück"><span class="header-section-number">9.5</span> Der Weg zurück</h2>
+<p>Startet n8n nach einem Update nicht oder laufen Workflows nicht mehr, genügt es nicht, die alte Versionsnummer wieder einzutragen: Die Datenbank wurde unter Umständen schon migriert. Der sichere Weg zurück ist das Backup, das das Update-Skript in Schritt 2 angelegt hat. Es enthält die alte Version samt passender Datenbank.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/restore.sh</span> /opt/n8n/backups</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Das Restore-Skript nimmt den jüngsten Backup-Satz aus dem Ordner, zeigt ihn an und fragt zur Sicherheit nach. Erst wenn wir <code>RESTORE</code> eintippen und mit der Eingabetaste bestätigen, ersetzt es Datenbank und n8n-Daten durch den Stand vor dem Update. Es endet mit der Zeile <code>Fertig: … antwortet.</code></p>
+<div class="callout callout-style-simple callout-warning callout-titled" title="Änderungen seit dem Update gehen verloren">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warnung</span>Änderungen seit dem Update gehen verloren
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Alles, was zwischen Update und Restore in n8n entstanden ist, etwa neue Workflows oder Ausführungen, ist nach dem Restore nicht mehr vorhanden.</p>
+</div>
+</div>
+</section>
+<section id="postgres-und-caddy-anheben" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="postgres-und-caddy-anheben"><span class="header-section-number">9.6</span> Postgres und Caddy anheben</h2>
+<p>Die Datenbank und der Reverse Proxy haben eigene Versionen. Sie ändern sich seltener und werden mit demselben Skript angehoben; vor den Tag schreiben wir dann, welcher Baustein gemeint ist. Die verfügbaren Tags zeigen die Seiten von <a href="https://hub.docker.com/_/postgres/tags">Postgres</a> und <a href="https://hub.docker.com/_/caddy/tags">Caddy</a> auf Docker Hub; wir wählen Tags derselben Bauart wie bisher, also mit <code>-alpine</code> im Namen.</p>
+<ol type="1">
+<li>Auf dem Server anmelden: <code>ssh root@&lt;server-ip&gt;</code>.</li>
+<li>Das Skript mit Baustein und Tag ausführen, etwa <code>/opt/n8n/scripts/update.sh caddy 2.11.8-alpine</code> oder <code>/opt/n8n/scripts/update.sh postgres 16.16-alpine3.24</code>.</li>
+<li>Prüfen: Das Skript endet mit <code>Fertig, n8n antwortet.</code></li>
+</ol>
+<p>Auch hier sichert das Skript zuerst den bisherigen Stand und setzt erst danach den neuen Tag.</p>
+<div class="callout callout-style-simple callout-warning callout-titled" title="Postgres nur innerhalb der Hauptversion anheben">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warnung</span>Postgres nur innerhalb der Hauptversion anheben
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ein Wechsel innerhalb der Hauptversion, etwa von <code>16.15</code> auf <code>16.16</code>, ist unproblematisch. Ein Sprung auf eine neue Hauptversion, etwa von <code>16</code> auf <code>17</code>, kann die vorhandenen Daten nicht direkt übernehmen und braucht einen eigenen Umzug per Dump und Restore. Das Update-Skript lehnt einen solchen Sprung deshalb ab.</p>
+</div>
+</div>
+</section>
+<section id="fehler-diagnostizieren" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="fehler-diagnostizieren"><span class="header-section-number">9.7</span> Fehler diagnostizieren</h2>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 33%">
@@ -422,30 +457,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody>
 <tr class="odd">
-<td>Container startet nach dem Update nicht</td>
-<td>Breaking Change oder offene Migration</td>
-<td>Logs prüfen, im Zweifel den vorherigen Tag in <code>.env</code> setzen und erneut <code>docker compose up -d</code></td>
+<td>Skript meldet „kein Tag der Form 2.46.1”</td>
+<td>Tippfehler in der Versionsnummer</td>
+<td>Versionsnummer ohne Leerzeichen und ohne <code>v</code> eingeben</td>
 </tr>
 <tr class="even">
-<td><code>pull</code> schlägt fehl</td>
+<td>Skript meldet „Pull fehlgeschlagen”</td>
 <td>Tag existiert nicht</td>
-<td>Schreibweise des Tags auf Docker Hub abgleichen</td>
+<td>Schreibweise mit der Release-Übersicht abgleichen und erneut ausführen; die bisherige Version ist automatisch wieder eingetragen</td>
 </tr>
 <tr class="odd">
+<td>Skript meldet „n8n antwortet nach 10 Minuten nicht”</td>
+<td>Breaking Change oder fehlgeschlagene Migration</td>
+<td><code>cd /opt/n8n</code> und <code>docker compose logs n8n --tail 50</code> lesen; im Zweifel den Weg zurück nehmen</td>
+</tr>
+<tr class="even">
 <td>Update bricht vor dem Pull ab</td>
-<td>Pre-Backup gescheitert</td>
-<td>Speicherplatz und Backup-Pfad prüfen</td>
+<td>Backup gescheitert</td>
+<td>freien Speicher mit <code>df -h</code> prüfen</td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="kontrollpunkt" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">9.5</span> Kontrollpunkt</h2>
+<section id="kontrollpunkt" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">9.8</span> Kontrollpunkt</h2>
 <p>Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:</p>
 <ul>
-<li>eine Zielversion bewusst auswählen</li>
-<li>den Image-Tag in der <code>.env</code> setzen und das Update-Skript ausführen</li>
-<li>begründen, warum Updates geplant statt automatisch erfolgen</li>
+<li>eine stabile Zielversion bewusst auswählen</li>
+<li>das Update-Skript mit der Zielversion ausführen und das Ergebnis prüfen</li>
+<li>begründen, warum der Weg zurück über das Backup führt und nicht über die alte Versionsnummer</li>
 </ul>
 
 

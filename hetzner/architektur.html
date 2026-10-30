@@ -313,7 +313,7 @@ ul.task-list li input[type="checkbox"] {
                                 │  nur 22 / 80 / 443
                                 ▼
                     ┌───────────────────────┐
-                    │   UFW (Server-Ebene)   │   zweite Schicht
+                    │   UFW (Server-Ebene)   │   schützt Host-Dienste wie SSH
                     └───────────┬───────────┘
                                 │
                                 ▼
@@ -386,8 +386,8 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="zwei-kontrollen-am-eingang" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="zwei-kontrollen-am-eingang"><span class="header-section-number">5.3</span> Zwei Kontrollen am Eingang</h2>
-<p>Bevor eine Anfrage überhaupt beim Empfang ankommt, passiert sie zwei voneinander unabhängige Sicherheitskontrollen. Beide lassen nur drei Arten von Verkehr durch und weisen alles andere ab: die Anmeldung per SSH sowie den Web-Zugriff mit und ohne Verschlüsselung. Eine solche Kontrolle, die festlegt, welcher Verkehr durchgelassen wird, heißt Firewall.</p>
-<p>Die erste Kontrolle steht schon vor dem Gebäude: Die Hetzner Cloud Firewall filtert den Verkehr beim Anbieter, bevor er den Server überhaupt erreicht. Die zweite Kontrolle steht im Eingang des Servers selbst: die UFW (kurz für „Uncomplicated Firewall”), die beim Einrichten automatisch mit denselben Regeln aufgesetzt wird.</p>
+<p>Bevor eine Anfrage überhaupt beim Empfang ankommt, passiert sie Sicherheitskontrollen. Sie lassen nur drei Arten von Verkehr durch und weisen alles andere ab: die Anmeldung per SSH sowie den Web-Zugriff mit und ohne Verschlüsselung. Eine solche Kontrolle, die festlegt, welcher Verkehr durchgelassen wird, heißt Firewall.</p>
+<p>Die wichtigste Kontrolle steht schon vor dem Gebäude: Die Hetzner Cloud Firewall filtert den Verkehr beim Anbieter, bevor er den Server überhaupt erreicht. Eine zweite Kontrolle steht im Eingang des Servers selbst: die UFW (kurz für „Uncomplicated Firewall”), die beim Einrichten automatisch mit denselben Regeln aufgesetzt wird.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="Warum gleich zwei?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -398,7 +398,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Zwei hintereinandergeschaltete Kontrollen mit denselben Regeln nennt man Defense-in-Depth, also „Schutz in der Tiefe”. Der Gedanke dahinter: Sollte eine Kontrolle versehentlich falsch eingestellt sein, fängt die zweite den Fehler auf. Ein einzelner Konfigurationsfehler öffnet so nicht gleich den ganzen Server.</p>
+<p>Mehrere hintereinandergeschaltete Kontrollen nennt man Defense-in-Depth, also „Schutz in der Tiefe”. Der Gedanke dahinter: Ein einzelner Konfigurationsfehler soll nicht gleich den ganzen Server öffnen. Die zweite Kontrolle hat allerdings eine Lücke, die man kennen sollte: Sie schützt die Programme, die direkt auf dem Server laufen, etwa den SSH-Zugang. Türen, die Docker für einen Container öffnet, laufen an der UFW vorbei. Deshalb öffnet unser Setup nur die beiden Türen des Empfangs, und deshalb ist die Hetzner Cloud Firewall die entscheidende Kontrolle, die auf keinen Fall fehlen darf.</p>
 </div>
 </div>
 </section>
@@ -449,7 +449,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte: n8n auf <code>2.20.6</code>, Postgres auf <code>16.13-alpine3.23</code>, Caddy auf <code>2.11.2-alpine</code>). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.</p>
+<p>Würde der Server immer die neueste Version ziehen, könnte über Nacht eine Fassung mit einer störenden Änderung hereinkommen, ohne dass jemand damit rechnet. Deshalb ist die Version fest eingetragen (für Interessierte, Stand Oktober 2026: n8n auf <code>2.45.7</code>, Postgres auf <code>16.15-alpine3.24</code>, Caddy auf <code>2.11.7-alpine</code>). Ein Update wird dadurch zu einem bewussten, geplanten Schritt statt zu einer stillen Veränderung im Hintergrund.</p>
 </div>
 </div>
 </section>
@@ -459,7 +459,7 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>die drei Bausteine Empfang, Sachbearbeitung und Archiv und ihre Aufgabe benennen</li>
 <li>erklären, warum nur der Empfang (Caddy) von außen erreichbar ist</li>
-<li>die zwei Sicherheitskontrollen und den Zweck fester Versionen beschreiben</li>
+<li>die Sicherheitskontrollen am Eingang und den Zweck fester Versionen beschreiben</li>
 </ul>
 
 

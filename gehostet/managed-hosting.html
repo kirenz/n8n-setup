@@ -267,7 +267,8 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#wann-managed-hosting-passt" id="toc-wann-managed-hosting-passt" class="nav-link" data-scroll-target="#wann-managed-hosting-passt"><span class="header-section-number">4.4</span> Wann Managed Hosting passt</a></li>
   <li><a href="#grenzen" id="toc-grenzen" class="nav-link" data-scroll-target="#grenzen"><span class="header-section-number">4.5</span> Grenzen</a></li>
-  <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">4.6</span> Kontrollpunkt</a></li>
+  <li><a href="#fehler-diagnostizieren" id="toc-fehler-diagnostizieren" class="nav-link" data-scroll-target="#fehler-diagnostizieren"><span class="header-section-number">4.6</span> Fehler diagnostizieren</a></li>
+  <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">4.7</span> Kontrollpunkt</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/kirenz/n8n-setup/blob/main/gehostet/managed-hosting.qmd" class="toc-action"><i class="bi bi-github"></i>Quellcode anzeigen</a></li><li><a href="https://github.com/kirenz/n8n-setup/issues/new" class="toc-action"><i class="bi empty"></i>Problem melden</a></li></ul></div></nav>
     </div>
@@ -314,7 +315,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="eigenschaften" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="eigenschaften"><span class="header-section-number">4.2</span> Eigenschaften</h2>
 <ul>
-<li>ab etwa 7 € im Monat für eine Basis-Instanz</li>
+<li>ab etwa 7 US-Dollar im Monat für eine Basis-Instanz (Beispiel InstaPods, Stand Oktober 2026)</li>
 <li>keine Lizenzkosten und keine eigene Server-Pflege</li>
 <li>Daten auf europäischen Servern, je nach Anbieter wählbar</li>
 <li>begrenzte Anpassbarkeit gegenüber einer eigenen Maschine</li>
@@ -364,8 +365,42 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="kontrollpunkt" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">4.6</span> Kontrollpunkt</h2>
+<section id="fehler-diagnostizieren" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="fehler-diagnostizieren"><span class="header-section-number">4.6</span> Fehler diagnostizieren</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Wahrscheinliche Ursache</th>
+<th>Nächster Schritt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>keine Bestätigungs-Mail nach der Bestellung</td>
+<td>Mail im Spam-Ordner oder Tippfehler</td>
+<td>Spam prüfen, Adresse im Kundenkonto kontrollieren</td>
+</tr>
+<tr class="even">
+<td>Editor zeigt eine ältere n8n-Version</td>
+<td>Anbieter aktualisiert zeitversetzt</td>
+<td>im Kundenbereich nach einer Update-Funktion suchen oder den Support fragen</td>
+</tr>
+<tr class="odd">
+<td>eigene Domain öffnet die Instanz nicht</td>
+<td>DNS-Eintrag fehlt oder ist noch nicht verteilt</td>
+<td>DNS-Eintrag nach Anleitung des Anbieters prüfen, bis zu einige Stunden warten</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="kontrollpunkt" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">4.7</span> Kontrollpunkt</h2>
 <p>Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:</p>
 <ul>
 <li>Managed Hosting von der n8n Cloud und vom eigenen Server abgrenzen</li>

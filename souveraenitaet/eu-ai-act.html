@@ -313,7 +313,38 @@ div.csl-indent {
 </header>
 
 
-<p>Der EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft; die meisten Pflichten gelten gestaffelt zwischen 2025 und 2027 <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">Europäische Union 2024</a>)</span>. Für die eigene Arbeit mit n8n ist weniger der Gesetzestext entscheidend als die Risiko-Logik dahinter, denn sie lässt sich gut auf konkrete Workflows übertragen.</p>
+<p>Der EU AI Act (Verordnung (EU) 2024/1689) ist seit August 2024 in Kraft <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">Europäische Union 2024</a>)</span>. Seine Pflichten gelten gestaffelt; der sogenannte Digital Omnibus hat einige Fristen im Juli 2026 verschoben <span class="citation" data-cites="aiomnibus2026">(<a href="#ref-aiomnibus2026" role="doc-biblioref">Europäische Union 2026</a>)</span>. Stand Oktober 2026 gilt:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pflicht</th>
+<th>gilt seit oder ab</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Verbotene Praktiken</td>
+<td>2. Februar 2025</td>
+</tr>
+<tr class="even">
+<td>Transparenzpflichten, etwa für Chatbots</td>
+<td>2. August 2026</td>
+</tr>
+<tr class="odd">
+<td>Hochrisiko-Systeme nach Anhang III (etwa Personalauswahl, Bildung)</td>
+<td>2. Dezember 2027</td>
+</tr>
+<tr class="even">
+<td>Hochrisiko-Systeme in Produkten mit eigener EU-Produktsicherheitsregel</td>
+<td>2. August 2028</td>
+</tr>
+</tbody>
+</table>
+<p>Für die eigene Arbeit mit n8n ist weniger der Gesetzestext entscheidend als die Risiko-Logik dahinter, denn sie lässt sich gut auf konkrete Workflows übertragen.</p>
 <section id="use-case-statt-tool" class="level2" data-number="12.1">
 <h2 data-number="12.1" class="anchored" data-anchor-id="use-case-statt-tool"><span class="header-section-number">12.1</span> Use Case statt Tool</h2>
 <p>Der AI Act reguliert, wofür ein KI-System eingesetzt wird, nicht welches Werkzeug dahintersteht. Ein KI-System ist dabei die konkrete Anwendung, die KI nutzt, also nicht n8n selbst, sondern der einzelne Workflow mitsamt seinem Zweck. n8n als Plattform ist neutral; ein Workflow, der ein Sprach-Modell nutzt, kann erlaubt oder verboten sein, je nach Anwendungsfall.</p>
@@ -364,7 +395,7 @@ div.csl-indent {
 </section>
 <section id="begrenztes-risiko" class="level3" data-number="12.2.3">
 <h3 data-number="12.2.3" class="anchored" data-anchor-id="begrenztes-risiko"><span class="header-section-number">12.2.3</span> Begrenztes Risiko</h3>
-<p>Workflows, die KI nutzen, ohne in die Hochrisiko-Klasse zu fallen, brauchen oft Transparenz: Nutzer müssen erkennen können, dass sie mit KI interagieren. Beispiele sind ein Chatbot, der sich als KI zu erkennen gibt, oder generierte Texte und Bilder, die als solche gekennzeichnet werden.</p>
+<p>Workflows, die KI nutzen, ohne in die Hochrisiko-Klasse zu fallen, brauchen oft Transparenz: Nutzer müssen erkennen können, dass sie mit KI interagieren. Beispiele sind ein Chatbot, der sich als KI zu erkennen gibt, oder generierte Texte und Bilder, die als solche gekennzeichnet werden. Diese Pflichten gelten bereits, ein Chatbot-Workflow braucht den Hinweis also schon heute.</p>
 </section>
 <section id="minimales-risiko" class="level3" data-number="12.2.4">
 <h3 data-number="12.2.4" class="anchored" data-anchor-id="minimales-risiko"><span class="header-section-number">12.2.4</span> Minimales Risiko</h3>
@@ -374,14 +405,17 @@ div.csl-indent {
 <section id="protokollierung-und-das-execution-log" class="level2" data-number="12.3">
 <h2 data-number="12.3" class="anchored" data-anchor-id="protokollierung-und-das-execution-log"><span class="header-section-number">12.3</span> Protokollierung und das Execution-Log</h2>
 <p>Hochrisiko-Systeme müssen ihre Verarbeitungsschritte protokollieren. n8n bringt das von Haus aus mit: Jede Workflow-Ausführung wird im Execution-Log gespeichert, mit Eingaben, Ergebnissen und Fehlern je Knoten.</p>
-<div class="callout callout-style-simple callout-note">
-<div class="callout-body d-flex">
+<div class="callout callout-style-simple callout-note callout-titled" title="Aufbewahrungsdauer des Execution-Logs">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-body-container">
-<p>Für Hochrisiko-Workflows lohnt es sich, die Aufbewahrungsdauer des Execution-Logs auf den geforderten Zeitraum anzuheben, in n8n über die Variable <code>EXECUTIONS_DATA_PRUNE_MAX_AGE</code>.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Aufbewahrungsdauer des Execution-Logs
 </div>
+</div>
+<div class="callout-body-container callout-body">
+<p>n8n löscht alte Ausführungen standardmäßig nach 14 Tagen und behält höchstens 10.000. Für Hochrisiko-Workflows lohnt es sich, beides auf den geforderten Zeitraum anzuheben. Dafür gibt es zwei Variablen: <code>EXECUTIONS_DATA_MAX_AGE</code> legt das Alter in Stunden fest (etwa <code>4320</code> für 180 Tage), <code>EXECUTIONS_DATA_PRUNE_MAX_COUNT</code> die Höchstzahl. Auf dem Hetzner-Server tragen wir beide als eigene Zeilen in die <code>.env</code> ein und starten danach mit <code>docker compose up -d</code> neu. Längere Aufbewahrung braucht mehr Speicherplatz.</p>
 </div>
 </div>
 </section>
@@ -428,6 +462,9 @@ div.csl-indent {
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-euaiact2024" class="csl-entry" role="listitem">
 Europäische Union. 2024. <span>„Verordnung (EU) 2024/1689 zur Festlegung harmonisierter Vorschriften für künstliche Intelligenz (KI-Verordnung)“</span>. Amtsblatt der Europäischen Union. <a href="https://eur-lex.europa.eu/eli/reg/2024/1689">https://eur-lex.europa.eu/eli/reg/2024/1689</a>.
+</div>
+<div id="ref-aiomnibus2026" class="csl-entry" role="listitem">
+———. 2026. <span>„Verordnung (EU) 2026/1744 zur Änderung der Verordnung (EU) 2024/1689 (Digital Omnibus zur KI)“</span>. Amtsblatt der Europäischen Union, veröffentlicht am 24.07.2026. <a href="https://eur-lex.europa.eu/eli/reg/2026/1744">https://eur-lex.europa.eu/eli/reg/2026/1744</a>.
 </div>
 </div>
 </section>

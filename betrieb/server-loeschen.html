@@ -301,7 +301,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#aufräumen" id="toc-aufräumen" class="nav-link" data-scroll-target="#aufräumen"><span class="header-section-number">10.3</span> Aufräumen</a></li>
   <li><a href="#restore-in-eine-neue-instanz" id="toc-restore-in-eine-neue-instanz" class="nav-link" data-scroll-target="#restore-in-eine-neue-instanz"><span class="header-section-number">10.4</span> Restore in eine neue Instanz</a></li>
-  <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">10.5</span> Kontrollpunkt</a></li>
+  <li><a href="#fehler-diagnostizieren" id="toc-fehler-diagnostizieren" class="nav-link" data-scroll-target="#fehler-diagnostizieren"><span class="header-section-number">10.5</span> Fehler diagnostizieren</a></li>
+  <li><a href="#kontrollpunkt" id="toc-kontrollpunkt" class="nav-link" data-scroll-target="#kontrollpunkt"><span class="header-section-number">10.6</span> Kontrollpunkt</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/kirenz/n8n-setup/blob/main/betrieb/server-loeschen.qmd" class="toc-action"><i class="bi bi-github"></i>Quellcode anzeigen</a></li><li><a href="https://github.com/kirenz/n8n-setup/issues/new" class="toc-action"><i class="bi empty"></i>Problem melden</a></li></ul></div></nav>
     </div>
@@ -354,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/backup.sh</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span>:/opt/n8n/backups ./n8n-backup-<span class="va">$(</span><span class="fu">date</span> +%F<span class="va">)</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span>:/opt/n8n/backups ./n8n-backup-<span class="op">&lt;</span>datum<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-simple callout-note callout-titled" title="Server-Sitzung und lokaler Befehl">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -365,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Die ersten Befehle laufen auf dem Server: <code>ssh</code> öffnet die Sitzung, <code>backup.sh</code> erzeugt das Backup, <code>exit</code> beendet die Sitzung wieder und bringt uns zurück auf den eigenen Rechner. Erst der letzte Befehl, <code>scp</code>, läuft wieder lokal und holt den Backup-Ordner herüber. Die Reihenfolge ist wichtig: erst auf dem Server sichern und die Sitzung verlassen, dann von zu Hause kopieren.</p>
+<p>Die ersten Befehle laufen auf dem Server: <code>ssh</code> öffnet die Sitzung, <code>backup.sh</code> erzeugt das Backup, <code>exit</code> beendet die Sitzung wieder und bringt uns zurück auf den eigenen Rechner. Erst der letzte Befehl, <code>scp</code>, läuft wieder lokal und holt den Backup-Ordner herüber; <code>&lt;datum&gt;</code> ersetzen wir durch das heutige Datum, etwa <code>2026-10-30</code>. Die Reihenfolge ist wichtig: erst auf dem Server sichern und die Sitzung verlassen, dann von zu Hause kopieren.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-important callout-titled" title="Ohne Encryption-Key sind die Credentials wertlos">
@@ -396,30 +397,91 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="restore-in-eine-neue-instanz" class="level2" data-number="10.4">
 <h2 data-number="10.4" class="anchored" data-anchor-id="restore-in-eine-neue-instanz"><span class="header-section-number">10.4</span> Restore in eine neue Instanz</h2>
-<div class="callout callout-style-simple callout-note callout-titled" title="Kurzfassung für den Wiederherstellungs-Fall">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<p>Der lokal gesicherte Ordner lässt sich später auf einen neuen Server zurückspielen, etwa zum nächsten Semester. Das Restore-Skript übernimmt dabei den alten Encryption-Key und die alten Versionen und stellt die Adresse auf die des neuen Servers um.</p>
+<p>Voraussetzungen:</p>
+<ul>
+<li>ein neuer Server, angelegt wie im Kapitel <a href="../hetzner/server-anlegen.html">Server anlegen und starten</a>, dessen Begrüßung „n8n läuft” meldet</li>
+<li>der lokal gesicherte Ordner aus Schritt 2, etwa <code>n8n-backup-2026-10-30</code></li>
+</ul>
+<ol type="1">
+<li><p>Auf dem eigenen Rechner den Ordner auf den neuen Server kopieren:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> ./n8n-backup-<span class="op">&lt;</span>datum<span class="op">&gt;</span> root@<span class="op">&lt;</span>neue-server-ip<span class="op">&gt;</span>:/root/restore</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Auf dem neuen Server anmelden: <code>ssh root@&lt;neue-server-ip&gt;</code>.</p></li>
+<li><p>Das Restore-Skript starten:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/restore.sh</span> /root/restore</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Die angezeigte alte und neue Adresse prüfen, dann <code>RESTORE</code> eintippen und mit der Eingabetaste bestätigen.</p></li>
+<li><p>Warten, bis das Skript <code>Fertig: … antwortet.</code> meldet. Das dauert einige Minuten.</p></li>
+<li><p>Prüfen: Unter der neuen Adresse funktioniert die Anmeldung mit dem alten Owner-Konto, die Workflows sind vorhanden, und ein Workflow mit Credentials läuft ohne Fehler.</p></li>
+</ol>
+<div class="callout callout-style-simple callout-warning callout-titled" title="Der neue Server wird überschrieben">
+<div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Hinweis</span>Kurzfassung für den Wiederherstellungs-Fall
+<span class="screen-reader-only">Warnung</span>Der neue Server wird überschrieben
 </div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Auf einem frischen, mit dieser Anleitung aufgesetzten Server lässt sich der Stand zurückspielen: den Stack mit <code>docker compose down</code> stoppen, die gesicherte <code>env-…backup</code> als <code>.env</code> einspielen und die <code>DOMAIN</code> auf die neue IP anpassen, Postgres starten, den Dump mit <code>zcat … | docker compose exec -T postgres psql -U n8n n8n</code> einspielen, danach das n8n-Daten-Volume aus dem Tarball zurückspielen und die Container starten. Externe OAuth-Verbindungen müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-URL ändert.</p>
+<p>Das Skript ersetzt Datenbank und n8n-Daten des neuen Servers vollständig. Was dort schon angelegt wurde, etwa ein neues Owner-Konto, ist danach nicht mehr vorhanden.</p>
 </div>
+</div>
+<div class="callout callout-style-simple callout-note callout-titled" title="Externe Dienste kennen die alte Adresse">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Hinweis</span>Externe Dienste kennen die alte Adresse
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Der neue Server hat eine neue Adresse. Webhook-Adressen müssen bei externen Diensten neu eingetragen werden, und Verbindungen mit Anmeldung über OAuth müssen je nach Anbieter neu autorisiert werden, weil sich die Callback-Adresse ändert.</p>
 </div>
 </div>
 </section>
-<section id="kontrollpunkt" class="level2" data-number="10.5">
-<h2 data-number="10.5" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">10.5</span> Kontrollpunkt</h2>
+<section id="fehler-diagnostizieren" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="fehler-diagnostizieren"><span class="header-section-number">10.5</span> Fehler diagnostizieren</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Symptom</th>
+<th>Wahrscheinliche Ursache</th>
+<th>Nächster Schritt</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Restore meldet „kein postgres-*.sql.gz”</td>
+<td>falscher Ordner angegeben</td>
+<td>mit <code>ls /root/restore</code> prüfen, ob die drei Backup-Dateien direkt darin liegen</td>
+</tr>
+<tr class="even">
+<td>Restore meldet „Satz ist unvollständig”</td>
+<td>eine der drei Dateien fehlt</td>
+<td>lokal prüfen, ob Dump, Daten-Tarball und <code>env-…backup</code> mit derselben Uhrzeit vorhanden sind</td>
+</tr>
+<tr class="odd">
+<td>Anmeldung klappt, Credentials melden Fehler</td>
+<td>falsche <code>env-…backup</code> eingespielt</td>
+<td>Restore mit dem vollständigen Satz wiederholen, der zum Dump gehört</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="kontrollpunkt" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="kontrollpunkt"><span class="header-section-number">10.6</span> Kontrollpunkt</h2>
 <p>Am Ende dieses Kapitels sollten folgende Punkte bekannt sein:</p>
 <ul>
 <li>Workflows als JSON exportieren</li>
 <li>ein Voll-Backup samt Encryption-Key lokal sichern</li>
-<li>den Server in der Console löschen und wissen, was sich später wiederherstellen lässt</li>
+<li>den Server in der Console löschen</li>
+<li>einen gesicherten Stand mit dem Restore-Skript auf einen neuen Server zurückspielen</li>
 </ul>
 
 

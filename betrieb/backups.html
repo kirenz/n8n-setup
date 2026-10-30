@@ -336,7 +336,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="schritt-1-backup-manuell-laufen-lassen" class="level3" data-number="8.2.1">
 <h3 data-number="8.2.1" class="anchored" data-anchor-id="schritt-1-backup-manuell-laufen-lassen"><span class="header-section-number">8.2.1</span> Schritt 1: Backup manuell laufen lassen</h3>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/backup.sh</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/opt/n8n/scripts/backup.sh</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">exit</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Der erste Befehl meldet uns auf dem Server an, der zweite erzeugt das Backup, <code>exit</code> beendet die Sitzung und bringt uns zurück auf den eigenen Rechner. Das Skript endet mit einer Liste der Dateien im Ordner <code>backups/</code>; drei neue Dateien mit der aktuellen Uhrzeit im Namen zeigen, dass es geklappt hat.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Was gesichert wird">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -347,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Das Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflows, Credentials und Ausführungen, einen Tarball des n8n-Daten-Volumes und eine Kopie der <code>.env</code> mit dem Encryption-Key. Es behält die sieben jüngsten Sätze und entfernt ältere automatisch.</p>
+<p>Das Skript erzeugt drei Dateien pro Lauf: einen Postgres-Dump mit allen Workflows, Credentials und Ausführungen, einen Tarball des n8n-Daten-Volumes und eine Kopie der <code>.env</code> mit dem Encryption-Key und den eingesetzten Versionen. Damit Datenbank und Dateien denselben Stand haben, hält es n8n für wenige Sekunden an und startet es danach wieder. Die Dateien sind nur für das Administrator-Konto lesbar. Das Skript behält die sieben jüngsten Sätze und entfernt ältere automatisch.</p>
 </div>
 </div>
 </section>
@@ -366,8 +368,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Solange das Backup nur auf dem Server liegt, ist es bei einem Server-Verlust ebenfalls weg. Wer Workflows behalten möchte, kopiert den Ordner regelmäßig auf den eigenen Rechner.</p>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span>:/opt/n8n/backups ./n8n-backup-<span class="va">$(</span><span class="fu">date</span> +%F<span class="va">)</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum.</p>
+<p>Dieser Befehl läuft <strong>auf dem eigenen Rechner</strong>, also nach dem <code>exit</code> aus Schritt 1. <code>&lt;datum&gt;</code> ersetzen wir durch das heutige Datum, etwa <code>2026-10-30</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span>:/opt/n8n/backups ./n8n-backup-<span class="op">&lt;</span>datum<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Damit liegt der komplette Backup-Ordner lokal in einem Verzeichnis mit dem heutigen Datum. Der Befehl funktioniert im Terminal von macOS und Linux ebenso wie in der Windows-PowerShell.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="scp und das Datum im Namen">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -378,7 +381,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><code>scp</code> steht für „secure copy” und kopiert Dateien über dieselbe verschlüsselte Verbindung wie SSH, hier vom Server auf den eigenen Rechner. Der Teil <code>root@&lt;server-ip&gt;:/opt/n8n/backups</code> benennt die Quelle auf dem Server (Adresse, Doppelpunkt, Pfad), <code>-r</code> kopiert den ganzen Ordner samt Inhalt. Das Ziel <code>./n8n-backup-$(date +%F)</code> liegt im aktuellen Verzeichnis, wofür das <code>./</code> steht. Der Ausdruck <code>$(date +%F)</code> wird vor dem Kopieren durch das heutige Datum ersetzt, sodass der Ordner zum Beispiel <code>n8n-backup-2026-06-13</code> heißt.</p>
+<p><code>scp</code> steht für „secure copy” und kopiert Dateien über dieselbe verschlüsselte Verbindung wie SSH, hier vom Server auf den eigenen Rechner. Der Teil <code>root@&lt;server-ip&gt;:/opt/n8n/backups</code> benennt die Quelle auf dem Server (Adresse, Doppelpunkt, Pfad), <code>-r</code> kopiert den ganzen Ordner samt Inhalt. Das Ziel <code>./n8n-backup-2026-10-30</code> liegt im aktuellen Verzeichnis, wofür das <code>./</code> steht. Das Datum im Namen hält mehrere Sicherungen auseinander.</p>
 </div>
 </div>
 </section>
@@ -431,6 +434,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>scp: no such file</code></td>
 <td>falscher Pfad auf dem Server</td>
 <td>Pfad <code>/opt/n8n/backups</code> kontrollieren</td>
+</tr>
+<tr class="even">
+<td>Kopie landet nicht auf dem eigenen Rechner</td>
+<td><code>scp</code> lief noch in der Server-Sitzung</td>
+<td>mit <code>exit</code> die Sitzung beenden, dann <code>scp</code> erneut ausführen</td>
+</tr>
+<tr class="odd">
+<td>n8n nach dem Backup nicht erreichbar</td>
+<td>Skript wurde mitten im Lauf abgebrochen</td>
+<td>auf dem Server <code>cd /opt/n8n</code> und <code>docker compose start n8n</code></td>
 </tr>
 </tbody>
 </table>

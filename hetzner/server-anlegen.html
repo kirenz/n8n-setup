@@ -357,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>ein Konto bei <a href="https://console.hetzner.cloud">console.hetzner.cloud</a></li>
 <li>ein SSH-Schlüssel, in der Hetzner-Console hinterlegt</li>
-<li>Budget von etwa 4 bis 7 € im Monat; der Server lässt sich jederzeit wieder löschen</li>
+<li>Budget von etwa 12 bis 20 € im Monat (netto, Stand Oktober 2026); Hetzner rechnet stundengenau ab, der Server lässt sich jederzeit wieder löschen</li>
 </ul>
 <p>Den SSH-Schlüssel brauchen wir, um uns später sicher auf dem Server anzumelden. Was SSH ist, erklärt die <a href="../introduction.html">Einführung</a>; hier erzeugen wir das Schlüsselpaar und hinterlegen es bei Hetzner.</p>
 <div class="callout callout-style-simple callout-note callout-titled" title="SSH-Schlüssel erzeugen und hinterlegen">
@@ -372,7 +372,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>Ein SSH-Schlüssel besteht aus zwei zusammengehörigen Teilen: einem privaten, der geheim auf dem eigenen Rechner bleibt, und einem öffentlichen, den wir beim Server hinterlegen. Wer noch keinen hat, erzeugt ihn im Terminal mit:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> ed25519</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Das Programm fragt nach einem Speicherort (wir bestätigen den Vorschlag mit der Eingabetaste) und optional nach einer Passphrase, also einem zusätzlichen Passwort für den Schlüssel, das leer bleiben darf. Danach liegen zwei Dateien im versteckten Ordner <code>~/.ssh</code>: der private Schlüssel <code>id_ed25519</code> und der öffentliche <code>id_ed25519.pub</code>. Den <strong>öffentlichen</strong> Teil (Endung <code>.pub</code>) kopieren wir und fügen ihn in der Hetzner-Console unter „SSH-Keys” ein. Den privaten Teil geben wir niemals weiter.</p>
+<p>Das Programm fragt nach einem Speicherort (wir bestätigen den Vorschlag mit der Eingabetaste) und optional nach einer Passphrase, also einem zusätzlichen Passwort für den Schlüssel, das leer bleiben darf. Danach liegen zwei Dateien im versteckten Ordner <code>~/.ssh</code>: der private Schlüssel <code>id_ed25519</code> und der öffentliche <code>id_ed25519.pub</code>. Den <strong>öffentlichen</strong> Teil (Endung <code>.pub</code>) zeigen wir im Terminal an, kopieren die ausgegebene Zeile vollständig und fügen sie in der Hetzner-Console unter „SSH-Keys” ein. Den privaten Teil geben wir niemals weiter.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">macOS und Linux</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Windows (PowerShell)</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_ed25519.pub</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Get-Content</span> <span class="va">$env</span><span class="op">:</span><span class="va">USERPROFILE</span>\<span class="op">.</span><span class="fu">ssh</span>\id_ed25519<span class="op">.</span><span class="fu">pub</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<p>Der Befehl <code>ssh-keygen -t ed25519</code> zum Erzeugen funktioniert in der Windows-PowerShell unverändert.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-warning callout-titled" title="Nicht ohne SSH-Schlüssel fortfahren">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warnung</span>Nicht ohne SSH-Schlüssel fortfahren
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wird beim Erstellen des Servers kein SSH-Schlüssel ausgewählt, schickt Hetzner ein Passwort für das Administrator-Konto per E-Mail, und die Anmeldung per Passwort bleibt offen. Das ist deutlich angreifbarer. Deshalb hinterlegen wir den Schlüssel zuerst und wählen ihn beim Erstellen aus.</p>
 </div>
 </div>
 </section>
@@ -401,10 +426,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="6.3.2" class="anchored" data-anchor-id="schritt-2-server-erstellen"><span class="header-section-number">6.3.2</span> Schritt 2: Server erstellen</h3>
 <p>In der Hetzner-Console unter <strong>Server → Server erstellen</strong> die folgenden Einstellungen wählen:</p>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Einstellung</th>
@@ -414,7 +435,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody>
 <tr class="odd">
 <td>Standort</td>
-<td>Nürnberg oder Falkenstein</td>
+<td>Nürnberg, Falkenstein oder Helsinki</td>
 </tr>
 <tr class="even">
 <td>Image</td>
@@ -422,21 +443,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="odd">
 <td>Server-Typ</td>
-<td>CPX11 (2 vCPU, 2 GB RAM) als Minimum, oder CPX21 (4 GB RAM), wenn KI-Knoten geplant sind</td>
+<td>CPX22 (2 vCPU, 4 GB RAM) als Empfehlung, CPX12 (1 vCPU, 2 GB RAM) als Minimum ohne KI-Knoten</td>
 </tr>
 <tr class="even">
+<td>Netzwerk</td>
+<td>„Public IPv4” eingeschaltet lassen</td>
+</tr>
+<tr class="odd">
 <td>SSH-Key</td>
 <td>den hinterlegten Schlüssel auswählen</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Firewall</td>
 <td><code>n8n-firewall</code> aus Schritt 1</td>
 </tr>
-<tr class="even">
-<td>Cloud-Config</td>
-<td>den kompletten Inhalt der Datei <code>cloud-init.yaml</code> einfügen</td>
-</tr>
 <tr class="odd">
+<td>Cloud config</td>
+<td>den kompletten Inhalt der Datei <a href="https://raw.githubusercontent.com/kirenz/n8n-setup/main/cloud-init.yaml"><code>cloud-init.yaml</code></a> einfügen</td>
+</tr>
+<tr class="even">
 <td>Name</td>
 <td>frei wählbar, etwa <code>n8n-kurs</code></td>
 </tr>
@@ -452,33 +477,40 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Ubuntu ist ein verbreitetes Linux-Betriebssystem, das auf Servern üblich ist. „vCPU” steht für virtuelle Prozessorkerne, „RAM” für den Arbeitsspeicher; beide bestimmen zusammen, wie viel der Server gleichzeitig leisten kann. Die Bezeichnungen CPX11 und CPX21 sind Hetzners Namen für unterschiedlich große Server.</p>
+<p>Ubuntu ist ein verbreitetes Linux-Betriebssystem, das auf Servern üblich ist. „vCPU” steht für virtuelle Prozessorkerne, „RAM” für den Arbeitsspeicher; beide bestimmen zusammen, wie viel der Server gleichzeitig leisten kann. Die Bezeichnungen CPX12 und CPX22 sind Hetzners Namen für unterschiedlich große Server. „Public IPv4” ist die öffentliche Adresse aus der <a href="../introduction.html">Einführung</a>; ohne sie kann das Einrichtungsskript keine Adresse für n8n bilden.</p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-important callout-titled" title="Cloud-Config nicht vergessen">
+<div class="callout callout-style-simple callout-important callout-titled" title="Cloud config nicht vergessen">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Wichtig</span>Cloud-Config nicht vergessen
+<span class="screen-reader-only">Wichtig</span>Cloud config nicht vergessen
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Der entscheidende Schritt ist das Feld „Cloud-Config” (manchmal unter „Erweitert” zu finden). Dort wird der vollständige Inhalt der Datei <code>cloud-init.yaml</code> aus diesem Repo eingefügt. Ohne diesen Inhalt startet zwar ein leerer Server, aber n8n wird nicht eingerichtet.</p>
+<p>Der entscheidende Schritt ist das Feld „Cloud config” (manchmal unter „Erweitert” zu finden). So kommt der Inhalt hinein:</p>
+<ol type="1">
+<li>Den Link <a href="https://raw.githubusercontent.com/kirenz/n8n-setup/main/cloud-init.yaml"><code>cloud-init.yaml</code></a> in einem neuen Browser-Tab öffnen. Der Tab zeigt reinen Text.</li>
+<li>Den ganzen Text markieren (<code>Strg + A</code>, auf macOS <code>Cmd + A</code>) und kopieren (<code>Strg + C</code>, auf macOS <code>Cmd + C</code>).</li>
+<li>In der Hetzner-Console in das Feld „Cloud config” klicken und einfügen (<code>Strg + V</code>, auf macOS <code>Cmd + V</code>).</li>
+</ol>
+<p>Prüfen: Die erste Zeile im Feld lautet <code>#cloud-config</code>. Ohne diesen Inhalt startet zwar ein leerer Server, aber n8n wird nicht eingerichtet.</p>
 </div>
 </div>
-<div class="callout callout-style-simple callout-tip callout-titled" title="CPX11 oder CPX21?">
+<div class="callout callout-style-simple callout-tip callout-titled" title="CPX12 oder CPX22?">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tipp</span>CPX11 oder CPX21?
+<span class="screen-reader-only">Tipp</span>CPX12 oder CPX22?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Für reine Workflows ohne KI genügt der kleinere CPX11. Sobald KI-Knoten mit größeren Datenmengen im Spiel sind, sind 2 GB RAM schnell knapp; dann ist der CPX21 mit 4 GB die ruhigere Wahl. Ein späterer Wechsel auf einen größeren Typ ist in der Console ohne Datenverlust möglich.</p>
+<p>Für erste Workflows ohne KI genügt der kleinere CPX12 (etwa 12 € im Monat). Sobald KI-Knoten mit größeren Datenmengen im Spiel sind, sind 2 GB RAM schnell knapp; dann ist der CPX22 mit 4 GB (etwa 20 € im Monat) die ruhigere Wahl. Ein späterer Wechsel auf einen größeren Typ ist in der Console ohne Datenverlust möglich.</p>
+<p>Hetzner ändert Typen, Preise und Verfügbarkeit von Zeit zu Zeit. Zeigt die Console einen Typ nicht an oder meldet sie ihn als nicht verfügbar, wählen wir einen anderen Standort oder einen ähnlich großen Typ mit mindestens 2 GB RAM, etwa den günstigeren CX23, sofern er angeboten wird.</p>
 </div>
 </div>
 </section>
@@ -486,7 +518,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 data-number="6.3.3" class="anchored" data-anchor-id="schritt-3-provisioning-abwarten"><span class="header-section-number">6.3.3</span> Schritt 3: Provisioning abwarten</h3>
 <p>Nach dem Start richtet sich der Server in etwa 5 bis 8 Minuten selbst ein. In dieser Zeit installiert er Docker, klont das Repo, erzeugt die Geheimnisse und startet die Container.</p>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Was im Hintergrund läuft">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -495,9 +527,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Das Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UFW-Firewall einrichten, das Repo nach <code>/opt/n8n</code> klonen, die Server-IP ermitteln und daraus die sslip.io-Domain bilden. Anschließend erzeugt es mit <code>openssl rand</code> ein Datenbank-Passwort und den Encryption-Key, schreibt sie in die <code>.env</code>-Datei und startet den Stack mit <code>docker compose up</code>. Die Schritte sind so geschrieben, dass ein erneuter Lauf bestehende Geheimnisse nicht überschreibt.</p>
+<p>Das Cloud-Init-Skript arbeitet eine feste Reihenfolge ab: Docker starten, die UFW-Firewall einrichten, das Repo nach <code>/opt/n8n</code> klonen, die Server-IP ermitteln und daraus die sslip.io-Domain bilden. Anschließend erzeugt es mit <code>openssl rand</code> ein Datenbank-Passwort und den Encryption-Key, schreibt sie in die <code>.env</code>-Datei und startet den Stack mit <code>docker compose up</code>. Zum Schluss wartet es, bis n8n über <code>https</code> antwortet; erst dann meldet es Erfolg. Die Schritte sind so geschrieben, dass ein erneuter Lauf bestehende Geheimnisse nicht überschreibt.</p>
 </div>
 </div>
 </div>
@@ -505,13 +537,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="schritt-4-url-ermitteln" class="level3" data-number="6.3.4">
 <h3 data-number="6.3.4" class="anchored" data-anchor-id="schritt-4-url-ermitteln"><span class="header-section-number">6.3.4</span> Schritt 4: URL ermitteln</h3>
 <p>Sobald der Server läuft, melden wir uns einmal per SSH an. Dafür brauchen wir die IP-Adresse des Servers, die in der Hetzner-Console neben dem Server steht. Im Terminal tippen wir:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> root@<span class="op">&lt;</span>server-ip<span class="op">&gt;</span></span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <p><code>&lt;server-ip&gt;</code> ist ein Platzhalter: Wir ersetzen ihn samt der spitzen Klammern durch die tatsächliche Adresse, aus <code>ssh root@&lt;server-ip&gt;</code> wird so zum Beispiel <code>ssh root@203.0.113.10</code>. <code>root</code> ist der Name des Administrator-Kontos auf dem Server. Beim allerersten Verbinden fragt SSH, ob der Server vertrauenswürdig ist; das bestätigen wir einmalig mit <code>yes</code>.</p>
 <p>Die Begrüßungsnachricht nach der Anmeldung zeigt die fertige URL:</p>
 <pre><code>n8n läuft. Aufrufen unter:
   https://1-2-3-4.sslip.io</code></pre>
-<p>Erscheint die Begrüßung noch nicht, läuft das Provisioning noch. Der Stand lässt sich prüfen mit:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 30 /var/log/n8n-setup.log</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Meldet die Begrüßung stattdessen „n8n antwortet noch nicht”, hat die Einrichtung nach zehn Minuten keine Antwort über <code>https</code> erhalten; die Begrüßung nennt dann die Befehle für die Fehlersuche. Erscheint gar keine Begrüßung, läuft das Provisioning noch. Der Stand lässt sich prüfen mit:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 30 /var/log/n8n-setup.log</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-simple callout-note callout-titled" title="Die Befehle in diesem Schritt">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -557,6 +589,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>SSH meldet „connection refused”</td>
 <td>Server noch im Boot-Vorgang</td>
 <td>eine Minute warten, IP-Adresse prüfen</td>
+</tr>
+<tr class="even">
+<td>Begrüßung meldet „n8n antwortet noch nicht”</td>
+<td>ein Container läuft nicht oder das Zertifikat fehlt</td>
+<td><code>cd /opt/n8n</code>, dann <code>docker compose ps</code> und <code>docker compose logs caddy --tail 50</code></td>
+</tr>
+<tr class="odd">
+<td>Server-Typ in der Console nicht wählbar</td>
+<td>Typ ausverkauft oder an diesem Standort nicht angeboten</td>
+<td>anderen Standort oder ähnlich großen Typ wählen</td>
 </tr>
 </tbody>
 </table>

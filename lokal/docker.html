@@ -391,16 +391,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="schritt-2-n8n-starten" class="level3" data-number="2.3.2">
 <h3 data-number="2.3.2" class="anchored" data-anchor-id="schritt-2-n8n-starten"><span class="header-section-number">2.3.2</span> Schritt 2: n8n starten</h3>
-<p>Der folgende Block ist ein einziger Befehl, der nur zur besseren Lesbarkeit auf mehrere Zeilen verteilt ist. Jede Zeile außer der letzten endet mit einem umgekehrten Schrägstrich <code>\</code>, der bedeutet „der Befehl geht weiter”. Wir kopieren oder tippen den ganzen Block am Stück und bestätigen erst am Ende mit der Eingabetaste:</p>
+<p>Der folgende Block ist ein einziger Befehl, der nur zur besseren Lesbarkeit auf mehrere Zeilen verteilt ist. Jede Zeile außer der letzten endet mit einem umgekehrten Schrägstrich <code>\</code>, der bedeutet „der Befehl geht weiter”. Wir kopieren oder tippen den ganzen Block am Stück und bestätigen erst am Ende mit der Eingabetaste. In der Windows-PowerShell gilt der Backslash nicht; dort nutzen wir den Reiter „Windows (PowerShell)” mit demselben Befehl in einer Zeile:</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">macOS und Linux</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Windows (PowerShell)</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-it</span> <span class="at">--rm</span> <span class="dt">\</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> n8n <span class="dt">\</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 5678:5678 <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 127.0.0.1:5678:5678 <span class="dt">\</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GENERIC_TIMEZONE=<span class="st">"Europe/Berlin"</span> <span class="dt">\</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> TZ=<span class="st">"Europe/Berlin"</span> <span class="dt">\</span></span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true <span class="dt">\</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> N8N_RUNNERS_ENABLED=true <span class="dt">\</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> n8n_data:/home/node/.n8n <span class="dt">\</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  docker.n8n.io/n8nio/n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>docker run <span class="op">-</span>it <span class="op">--</span>rm <span class="op">--</span>name n8n <span class="op">-</span>p <span class="dv">127.0</span><span class="op">.</span><span class="dv">0.1</span><span class="op">:</span><span class="dv">5678</span><span class="op">:</span><span class="dv">5678</span> <span class="op">-</span>e GENERIC_TIMEZONE<span class="op">=</span><span class="st">"Europe/Berlin"</span> <span class="op">-</span>e TZ<span class="op">=</span><span class="st">"Europe/Berlin"</span> <span class="op">-</span>e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS<span class="op">=</span>true <span class="op">-</span>e N8N_RUNNERS_ENABLED<span class="op">=</span>true <span class="op">-</span>v n8n_data<span class="op">:/</span>home<span class="op">/</span>node<span class="op">/.</span><span class="fu">n8n</span> docker<span class="op">.</span><span class="fu">n8n</span><span class="op">.</span><span class="fu">io</span><span class="op">/</span>n8nio<span class="op">/</span>n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
 <div class="callout callout-style-simple callout-tip callout-titled" title="Die Optionen im Befehl, Stück für Stück">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -413,7 +423,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>Der Befehl wirkt lang, besteht aber nur aus mehreren kleinen Anweisungen, je eine pro Zeile:</p>
 <ul>
-<li><code>-p 5678:5678</code> verbindet n8n im Container mit dem eigenen Rechner, sodass der Editor unter <code>localhost:5678</code> erreichbar ist.</li>
+<li><code>-p 127.0.0.1:5678:5678</code> verbindet n8n im Container mit dem eigenen Rechner, sodass der Editor unter <code>localhost:5678</code> erreichbar ist. Der Teil <code>127.0.0.1</code> ist die Adresse von <code>localhost</code> und sorgt dafür, dass nur dieser Rechner die Tür nutzen kann, nicht andere Geräte im selben Netzwerk.</li>
 <li><code>-v n8n_data:/home/node/.n8n</code> hängt das Daten-Volume an die Stelle ein, an der n8n seine Daten ablegt.</li>
 <li>die <code>-e</code>-Zeilen setzen Umgebungsvariablen, also Einstellungen, die dem Programm beim Start mitgegeben werden (hier die Zeitzone und zwei empfohlene Voreinstellungen).</li>
 <li><code>docker.n8n.io/n8nio/n8n</code> ist das offizielle Image, also die Vorlage, aus der der Container entsteht.</li>
@@ -434,13 +444,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="im-hintergrund-laufen-lassen" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="im-hintergrund-laufen-lassen"><span class="header-section-number">2.4</span> Im Hintergrund laufen lassen</h2>
 <p>Wer n8n nicht im Vordergrund halten möchte, startet den Container losgelöst mit <code>-d</code> statt <code>-it --rm</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> n8n <span class="dt">\</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 5678:5678 <span class="dt">\</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> n8n_data:/home/node/.n8n <span class="dt">\</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GENERIC_TIMEZONE=<span class="st">"Europe/Berlin"</span> <span class="at">-e</span> TZ=<span class="st">"Europe/Berlin"</span> <span class="dt">\</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true <span class="at">-e</span> N8N_RUNNERS_ENABLED=true <span class="dt">\</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  docker.n8n.io/n8nio/n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="os">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">macOS und Linux</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Windows (PowerShell)</a></li></ul>
+<div class="tab-content" data-group="os">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span> n8n <span class="dt">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 127.0.0.1:5678:5678 <span class="dt">\</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-v</span> n8n_data:/home/node/.n8n <span class="dt">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> GENERIC_TIMEZONE=<span class="st">"Europe/Berlin"</span> <span class="at">-e</span> TZ=<span class="st">"Europe/Berlin"</span> <span class="dt">\</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true <span class="at">-e</span> N8N_RUNNERS_ENABLED=true <span class="dt">\</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  docker.n8n.io/n8nio/n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>docker run <span class="op">-</span>d <span class="op">--</span>name n8n <span class="op">-</span>p <span class="dv">127.0</span><span class="op">.</span><span class="dv">0.1</span><span class="op">:</span><span class="dv">5678</span><span class="op">:</span><span class="dv">5678</span> <span class="op">-</span>v n8n_data<span class="op">:/</span>home<span class="op">/</span>node<span class="op">/.</span><span class="fu">n8n</span> <span class="op">-</span>e GENERIC_TIMEZONE<span class="op">=</span><span class="st">"Europe/Berlin"</span> <span class="op">-</span>e TZ<span class="op">=</span><span class="st">"Europe/Berlin"</span> <span class="op">-</span>e N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS<span class="op">=</span>true <span class="op">-</span>e N8N_RUNNERS_ENABLED<span class="op">=</span>true docker<span class="op">.</span><span class="fu">n8n</span><span class="op">.</span><span class="fu">io</span><span class="op">/</span>n8nio<span class="op">/</span>n8n</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
 <div class="callout callout-style-simple callout-note callout-titled" title="Vordergrund und Hintergrund">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -492,7 +512,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td><code>Port 5678 is already in use</code></td>
 <td>ein anderer Dienst belegt den Port</td>
-<td>mit <code>-p 5679:5678</code> starten und <code>localhost:5679</code> aufrufen</td>
+<td>mit <code>-p 127.0.0.1:5679:5678</code> starten und <code>localhost:5679</code> aufrufen</td>
+</tr>
+<tr class="odd">
+<td>unter Windows bricht der Befehl nach der ersten Zeile ab</td>
+<td>mehrzeilige Fassung mit <code>\</code> in der PowerShell</td>
+<td>den Befehl aus dem Reiter „Windows (PowerShell)” verwenden</td>
+</tr>
+<tr class="even">
+<td><code>The container name "/n8n" is already in use</code></td>
+<td>ein früherer Container mit <code>-d</code> besteht noch</td>
+<td><code>docker start n8n</code> nutzen oder den alten Container mit <code>docker rm n8n</code> entfernen</td>
 </tr>
 <tr class="odd">
 <td>Daten nach Neustart verschwunden</td>
