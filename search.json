@@ -977,5 +977,126 @@
       "Souveränität, Datenschutz und EU AI Act",
       "<span class='chapter-number'>12</span>  <span class='chapter-title'>Der EU AI Act für eigene Workflows</span>"
     ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html",
+    "href": "anleitungen/streamlit-agent.html",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "",
+    "text": "A.1 Rollen\nDieses Kapitel ist anders als die übrigen: Es richtet sich nicht an Sie, sondern an Ihren Coding-Agenten (Claude Code, Codex, Cursor oder ein vergleichbares Werkzeug). Es beschreibt, wie der Agent eine eigene Streamlit-App mit lokalen Sprachmodellen auf einem Hetzner-Server einrichtet, nach demselben Muster wie der n8n-Stack in diesem Buch: Docker Compose, Caddy mit automatischem HTTPS, sslip.io als Adresse. Neu sind Ollama für die Modelle und ein Login, weil Streamlit anders als n8n keinen mitbringt.\nSo nutzen Sie das Kapitel: Geben Sie Ihrem Agenten den Link zur Rohfassung, streamlit-hetzner-agent.md, oder legen Sie die Datei in Ihr Projekt. Erledigen Sie vorher die Punkte im Abschnitt „Rollen“, die ein Konto oder eine Unterschrift brauchen. Alles Weitere arbeitet der Agent Schritt für Schritt ab; jeder Schritt endet mit einem Prüfkriterium.\nDiese Datei ist für einen Coding-Agenten geschrieben (Claude Code, Codex, Cursor oder vergleichbar), der auf dem Rechner der Entwicklerin läuft. Der Agent richtet eine Streamlit-App mit lokalen Sprachmodellen als Docker-Stack auf einem Hetzner-Cloud-Server ein, hinter HTTPS und Login. Die Entwicklerin bleibt Betreiberin des Servers.\nZielbild: Die App ist unter https://&lt;ip-mit-bindestrichen&gt;.sslip.io erreichbar, verlangt Benutzername und Passwort, und alle Daten bleiben auf dem Server in Deutschland. Kein Aufruf geht an externe KI-Anbieter.\nDie Grundlagen (Hetzner, Docker Compose, Caddy, sslip.io) sind im Kurs n8n einrichten erklärt, Kapitel Hetzner. Diese Anleitung ersetzt n8n durch die Streamlit-App und ergänzt Ollama für die Modelle und einen Login in Caddy.\nDie Entwicklerin erledigt vorab, was ein Konto oder eine Unterschrift braucht:\nDer Agent erledigt alle Schritte unten. Er legt den Server per hcloud-CLI an, baut den Stack und prüft ihn. Er stoppt und fragt nach, wenn ein Schritt Geld kostet, das über die hier genannte Größenordnung hinausgeht (etwa 30 bis 40 € im Monat), oder wenn Unternehmensdaten ins Spiel kommen.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#rollen",
+    "href": "anleitungen/streamlit-agent.html#rollen",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "",
+    "text": "Konto bei console.hetzner.cloud anlegen und Zahlungsmittel hinterlegen.\nAuftragsverarbeitungsvertrag (AVV) in der Console unter Konto, Rechtliches, abschließen.\nIn der Console ein Projekt anlegen (zum Beispiel content-engine) und darin unter Sicherheit, API-Tokens, einen Token mit Lese- und Schreibrechten erzeugen. Den Token dem Agenten über eine Umgebungsvariable HCLOUD_TOKEN geben, nicht im Chat und nicht in einer Datei im Repo.\nFestlegen, welche Modelle die App braucht (Name und Größe) und welche Unternehmen Zugang bekommen.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#leitplanken",
+    "href": "anleitungen/streamlit-agent.html#leitplanken",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.2 Leitplanken",
+    "text": "A.2 Leitplanken\n\nGeheimnisse (.env, Passwörter, API-Token, Hashes) stehen in keinem Commit. .env gehört in .gitignore. Prüfe das, bevor du zum ersten Mal committest.\nAlle Modellaufrufe laufen gegen Ollama auf dem Server. Wenn die App irgendwo einen externen API-Key (OpenAI, Anthropic, Google) erwartet, halte an und berichte, statt ihn zu setzen.\nDer Server hat keine GPU. Modelle laufen auf der CPU, also langsam. Wähle den Server nach dem Speicherbedarf der Modelle (Abschnitt Servergröße). Wenn die Antwortzeit für die Nutzung unbrauchbar ist, berichte das mit Messwerten, und schlage ein kleineres Modell vor.\nZugang für Unternehmen erst nach deren schriftlicher Zustimmung. Bis dahin arbeitet nur die Entwicklerin mit der App.\nNach der Evaluation wird der Server gelöscht (Abschnitt Abbau). Vorher Daten sichern.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#schritt-1-app-containerfähig-machen",
+    "href": "anleitungen/streamlit-agent.html#schritt-1-app-containerfähig-machen",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.3 Schritt 1: App containerfähig machen",
+    "text": "A.3 Schritt 1: App containerfähig machen\nArbeite im Repo der Streamlit-App.\n\nLies die App und stelle fest, wie sie Modelle lädt:\n\nÜber Ollama (Python-Paket ollama oder HTTP auf Port 11434): Weiter mit Ollama als eigenem Container. Die App spricht Ollama über die Umgebungsvariable OLLAMA_HOST=http://ollama:11434 an. Ersetze fest kodierte localhost-Adressen durch diese Variable.\nÜber transformers, sentence-transformers oder Ähnliches direkt in Python: Kein Ollama nötig. Lege die Modelle in ein Volume (HF_HOME=/models), damit der Download den Container-Neustart überlebt.\n\nLege requirements.txt an oder prüfe sie: nur die Pakete, die die App importiert, mit festen Versionen (pip freeze aus der laufenden lokalen Umgebung als Basis).\nLege .streamlit/config.toml an:\n[server]\nheadless = true\naddress = \"0.0.0.0\"\nport = 8501\nenableXsrfProtection = true\n\n[browser]\ngatherUsageStats = false\nLege Dockerfile an:\nFROM python:3.12-slim\nWORKDIR /app\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY . .\nEXPOSE 8501\nHEALTHCHECK CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')\"\nCMD [\"streamlit\", \"run\", \"app.py\"]\nErsetze app.py durch die tatsächliche Startdatei.\nLege .dockerignore an mit .git, .venv, venv, __pycache__, .env, data/ und allem, was Unternehmensdaten oder lokale Modelldateien enthält.\n\nFertig, wenn docker build -t content-engine . lokal ohne Fehler durchläuft.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#schritt-2-stack-definieren",
+    "href": "anleitungen/streamlit-agent.html#schritt-2-stack-definieren",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.4 Schritt 2: Stack definieren",
+    "text": "A.4 Schritt 2: Stack definieren\nLege im Repo einen Ordner deploy/ an mit drei Dateien.\ndeploy/docker-compose.yml:\nservices:\n  app:\n    build: ..\n    restart: unless-stopped\n    env_file: .env\n    environment:\n      OLLAMA_HOST: http://ollama:11434\n    depends_on:\n      - ollama\n    networks: [internal]\n\n  ollama:\n    image: ollama/ollama:latest\n    restart: unless-stopped\n    volumes:\n      - ollama_models:/root/.ollama\n    networks: [internal]\n\n  caddy:\n    image: caddy:2.11.7-alpine\n    restart: unless-stopped\n    ports:\n      - \"80:80\"\n      - \"443:443\"\n    environment:\n      DOMAIN: ${DOMAIN}\n      BASIC_AUTH_USER: ${BASIC_AUTH_USER}\n      BASIC_AUTH_HASH: ${BASIC_AUTH_HASH}\n    volumes:\n      - ./Caddyfile:/etc/caddy/Caddyfile:ro\n      - caddy_data:/data\n      - caddy_config:/config\n    depends_on:\n      - app\n    networks: [internal]\n\nnetworks:\n  internal:\n\nvolumes:\n  ollama_models:\n  caddy_data:\n  caddy_config:\nNur Caddy veröffentlicht Ports. App und Ollama sind von außen nicht erreichbar. Lass den Ollama-Dienst weg, wenn die App ihre Modelle direkt in Python lädt; hänge dann stattdessen ein Volume models:/models an app und setze HF_HOME=/models.\ndeploy/Caddyfile:\n{$DOMAIN} {\n    header Strict-Transport-Security \"max-age=31536000\"\n\n    basic_auth {\n        {$BASIC_AUTH_USER} {$BASIC_AUTH_HASH}\n    }\n\n    reverse_proxy app:8501\n}\nCaddy holt das Let’s-Encrypt-Zertifikat selbst. basic_auth schützt die ganze App, auch die WebSocket-Verbindung von Streamlit.\ndeploy/.env.example:\nDOMAIN=__DOMAIN__\nBASIC_AUTH_USER=content-engine\n# bcrypt-Hash, erzeugt mit: docker run --rm caddy:2.11.7-alpine caddy hash-password --plaintext '&lt;passwort&gt;'\n# In einfachen Anführungszeichen lassen: Docker Compose interpretiert sonst die $-Zeichen im Hash.\nBASIC_AUTH_HASH='__BASIC_AUTH_HASH__'\nTrage deploy/.env in .gitignore ein.\nFertig, wenn der Stack lokal läuft: Lege dafür eine lokale deploy/.env mit DOMAIN=localhost an, starte docker compose -f deploy/docker-compose.yml up --build, und prüfe, dass https://localhost nach Login die App zeigt (das lokale Zertifikat ist selbstsigniert, die Browserwarnung ist hier erwartet). Lade einmal ein Modell mit docker compose -f deploy/docker-compose.yml exec ollama ollama pull &lt;modell&gt; und stelle sicher, dass die App damit antwortet.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#schritt-3-servergröße-bestimmen",
+    "href": "anleitungen/streamlit-agent.html#schritt-3-servergröße-bestimmen",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.5 Schritt 3: Servergröße bestimmen",
+    "text": "A.5 Schritt 3: Servergröße bestimmen\nRechne vor dem Anlegen:\n\nArbeitsspeicher: Summe der Modellgrößen (die Dateigröße der quantisierten Modelle, bei Ollama ollama list) plus 3 GB für Betriebssystem, App und Caddy. Ein 7B-Modell in 4-Bit-Quantisierung braucht etwa 5 GB.\nFür ein einzelnes 7B-Modell reichen 16 GB RAM. Für ein 3B-Modell reichen 8 GB.\nMehr vCPU bedeutet schnellere Antworten. Nimm die Variante mit den meisten Kernen in der gewählten RAM-Klasse.\n\nDie aktuellen Typnamen und Preise zeigt hcloud server-type list. Lege dich auf einen Typ fest und nenne der Entwicklerin den Monatspreis, bevor du Schritt 4 ausführst.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#schritt-4-server-anlegen",
+    "href": "anleitungen/streamlit-agent.html#schritt-4-server-anlegen",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.6 Schritt 4: Server anlegen",
+    "text": "A.6 Schritt 4: Server anlegen\nVoraussetzung: HCLOUD_TOKEN ist in der Umgebung gesetzt, ein SSH-Schlüssel liegt unter ~/.ssh/id_ed25519.pub (sonst mit ssh-keygen -t ed25519 erzeugen).\n\nInstalliere die Hetzner-CLI (brew install hcloud auf macOS, sonst siehe github.com/hetznercloud/cli). Prüfe mit hcloud server-type list, dass der Token funktioniert.\nLege deploy/cloud-init.yaml an:\n#cloud-config\npackage_update: true\npackage_upgrade: true\npackages:\n  - docker.io\n  - docker-compose-v2\n  - ufw\n  - rsync\nruncmd:\n  - systemctl enable --now docker\n  - ufw default deny incoming\n  - ufw default allow outgoing\n  - ufw allow 22/tcp\n  - ufw allow 80/tcp\n  - ufw allow 443/tcp\n  - ufw --force enable\nLege SSH-Schlüssel, Firewall und Server an:\nhcloud ssh-key create --name content-engine --public-key-from-file ~/.ssh/id_ed25519.pub\nhcloud firewall create --name content-engine-fw\nfor p in 22 80 443; do\n  hcloud firewall add-rule content-engine-fw --direction in --protocol tcp --port $p --source-ips 0.0.0.0/0 --source-ips ::/0\ndone\nhcloud server create --name content-engine --type &lt;typ-aus-schritt-3&gt; --image ubuntu-24.04 \\\n  --location nbg1 --ssh-key content-engine --firewall content-engine-fw \\\n  --user-data-from-file deploy/cloud-init.yaml\nnbg1 ist Nürnberg, fsn1 Falkenstein. Beide liegen in Deutschland.\nLies die IP mit hcloud server ip content-engine und warte, bis ssh root@&lt;ip&gt; cloud-init status --wait mit done endet (etwa drei Minuten).\n\nFertig, wenn ssh root@&lt;ip&gt; docker compose version eine Version ausgibt und ssh root@&lt;ip&gt; ufw status die drei Ports zeigt.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#schritt-5-stack-auf-den-server-bringen",
+    "href": "anleitungen/streamlit-agent.html#schritt-5-stack-auf-den-server-bringen",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.7 Schritt 5: Stack auf den Server bringen",
+    "text": "A.7 Schritt 5: Stack auf den Server bringen\n\nBilde die Domain aus der IP: Punkte durch Bindestriche ersetzen und .sslip.io anhängen. Aus 1.2.3.4 wird 1-2-3-4.sslip.io.\nErzeuge ein Passwort (openssl rand -base64 18) und den Hash dazu (docker run --rm caddy:2.11.7-alpine caddy hash-password --plaintext '&lt;passwort&gt;').\nKopiere das Repo ohne lokale Daten auf den Server:\nrsync -az --exclude-from=.dockerignore --exclude .git ./ root@&lt;ip&gt;:/opt/content-engine/\nSchreibe /opt/content-engine/deploy/.env auf dem Server mit DOMAIN, BASIC_AUTH_USER und BASIC_AUTH_HASH (Hash in einfachen Anführungszeichen) und setze chmod 600.\nStarte den Stack und lade die Modelle:\nssh root@&lt;ip&gt; 'cd /opt/content-engine/deploy && docker compose up -d --build'\nssh root@&lt;ip&gt; 'cd /opt/content-engine/deploy && docker compose exec ollama ollama pull &lt;modell&gt;'\nPrüfe von außen:\ncurl -sI https://&lt;domain&gt; | head -1                     # erwartet: HTTP/2 401\ncurl -sI -u content-engine:'&lt;passwort&gt;' https://&lt;domain&gt; | head -1   # erwartet: HTTP/2 200\nMiss eine typische Anfrage der App einmal durch (Zeit bis zur vollständigen Antwort) und notiere den Wert für die Übergabe.\n\nFertig, wenn beide curl-Aufrufe die erwarteten Statuscodes liefern und die App im Browser nach Login eine Modellantwort erzeugt.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#schritt-6-übergabe",
+    "href": "anleitungen/streamlit-agent.html#schritt-6-übergabe",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.8 Schritt 6: Übergabe",
+    "text": "A.8 Schritt 6: Übergabe\nLege lokal, außerhalb des Repos, eine Datei ZUGANG-content-engine.md an, mit: URL, Benutzername, Passwort, Server-IP, Servertyp und Monatspreis, Antwortzeit aus Schritt 5, und den drei Betriebsbefehlen (docker compose ps, docker compose logs -f app, docker compose up -d --build nach Änderungen). Übergib der Entwicklerin den Pfad. Das Passwort erscheint nirgends sonst, auch nicht im Chatverlauf.\nFür Updates der App genügen danach Schritt 5.3 und docker compose up -d --build.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#abbau-nach-der-evaluation",
+    "href": "anleitungen/streamlit-agent.html#abbau-nach-der-evaluation",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.9 Abbau nach der Evaluation",
+    "text": "A.9 Abbau nach der Evaluation\n\nDaten sichern, die in der App entstanden sind (Volumes oder Exportfunktion der App, je nach Aufbau).\nhcloud server delete content-engine, danach hcloud firewall delete content-engine-fw.\nIn der Hetzner-Console prüfen, dass keine Ressource mehr läuft, sonst läuft die Abrechnung weiter.",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
+  },
+  {
+    "objectID": "anleitungen/streamlit-agent.html#fehlerdiagnose",
+    "href": "anleitungen/streamlit-agent.html#fehlerdiagnose",
+    "title": "Anhang A — Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten",
+    "section": "A.10 Fehlerdiagnose",
+    "text": "A.10 Fehlerdiagnose\n\n\n\n\n\n\n\n\nSymptom\nWahrscheinliche Ursache\nNächster Schritt\n\n\n\n\ncurl liefert keine Antwort\nCaddy läuft nicht oder Zertifikat fehlt noch\ndocker compose logs caddy --tail 50; bei Rate-Limit von Let’s Encrypt Domain auf nip.io umstellen\n\n\n502 Bad Gateway\nApp-Container gestartet, Streamlit noch nicht bereit oder abgestürzt\ndocker compose logs app --tail 100\n\n\nLogin wird nie akzeptiert\nHash in .env ohne einfache Anführungszeichen, Compose hat $ ersetzt\n.env korrigieren, docker compose up -d\n\n\nApp meldet Verbindung zu localhost:11434 verweigert\nApp nutzt nicht OLLAMA_HOST\nAufruf in der App auf die Umgebungsvariable umstellen\n\n\nContainer ollama wird beendet (OOM)\nModell größer als der Arbeitsspeicher\nkleineres Modell oder größeren Servertyp (hcloud server change-type)\n\n\nAntwort dauert Minuten\nModell zu groß für CPU-Betrieb\nkleineres oder stärker quantisiertes Modell, Messwert berichten",
+    "crumbs": [
+      "Anhang",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten</span>"
+    ]
   }
 ]
