@@ -4,7 +4,23 @@ title: "Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten"
 
 Dieses Kapitel ist anders als die übrigen: Es richtet sich nicht an Sie, sondern an Ihren Coding-Agenten (Claude Code, Codex, Cursor oder ein vergleichbares Werkzeug). Es beschreibt, wie der Agent eine eigene Streamlit-App mit lokalen Sprachmodellen auf einem Hetzner-Server einrichtet, nach demselben Muster wie der n8n-Stack in diesem Buch: Docker Compose, Caddy mit automatischem HTTPS, sslip.io als Adresse. Neu sind Ollama für die Modelle und ein Login, weil Streamlit anders als n8n keinen mitbringt.
 
-So nutzen Sie das Kapitel: Geben Sie Ihrem Agenten den Link zur Rohfassung, [streamlit-hetzner-agent.md](https://raw.githubusercontent.com/kirenz/n8n-setup/main/anleitungen/streamlit-hetzner-agent.md), oder legen Sie die Datei in Ihr Projekt. Erledigen Sie vorher die Punkte im Abschnitt „Rollen“, die ein Konto oder eine Unterschrift brauchen. Alles Weitere arbeitet der Agent Schritt für Schritt ab; jeder Schritt endet mit einem Prüfkriterium.
+## So geben Sie die Anleitung Ihrem Agenten
+
+Erledigen Sie zuerst die Punkte im Abschnitt „Rollen“, die ein Konto oder eine Unterschrift brauchen. Dann öffnen Sie Ihren Agenten im Ordner der Streamlit-App und geben ihm diesen Auftrag (Kopierknopf rechts oben im Block):
+
+```text
+Lies die Anleitung unter https://raw.githubusercontent.com/kirenz/n8n-setup/main/anleitungen/streamlit-hetzner-agent.md und arbeite sie Schritt für Schritt ab. Halte dich an die Leitplanken. Der Hetzner-Token liegt in der Umgebungsvariable HCLOUD_TOKEN. Frage mich, bevor du den Server anlegst.
+```
+
+Wenn Ihr Agent keine Links lesen darf, kopieren Sie stattdessen den ganzen Text aus dem aufklappbaren Block und legen ihn als `AGENT-HOSTING.md` in Ihr Projekt. Der Auftrag lautet dann „Lies AGENT-HOSTING.md und arbeite sie Schritt für Schritt ab“.
+
+::: {.callout-note title="Ganze Anleitung als Markdown kopieren" collapse="true"}
+````markdown
+{{< include streamlit-hetzner-agent.md >}}
+````
+:::
+
+Unten folgt derselbe Text zum Lesen. Jeder Schritt endet mit einem Prüfkriterium, an dem der Agent erkennt, ob er fertig ist.
 
 ::: {.callout-warning title="Vertrauliche Daten"}
 Dieses Setup hält alle Daten auf einem Server in Deutschland und ruft keine externen KI-Anbieter auf. Das ist die Voraussetzung, um die App mit Daten von Unternehmen zu testen. Die Zustimmung der Unternehmen ersetzt es nicht: Holen Sie diese ein, bevor deren Daten auf den Server gelangen.
