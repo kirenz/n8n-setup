@@ -24,7 +24,8 @@ ein Modul zu Datenschutz und EU AI Act.
 ├── docker-compose.yml               ← n8n + Postgres + Caddy
 ├── Caddyfile, .env.example          ← Reverse Proxy, Konfig-Template
 ├── scripts/                         ← backup.sh, update.sh
-└── docs/                            ← Quell-Notizen zu Architektur, DSGVO, EU AI Act
+├── docs/                            ← Quell-Notizen zu Architektur, DSGVO, EU AI Act
+└── anleitungen/                     ← Varianten für Coding-Agenten (z. B. Streamlit statt n8n)
 ```
 
 ## Buch bauen und veröffentlichen
