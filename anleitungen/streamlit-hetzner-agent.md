@@ -1,5 +1,3 @@
-# Streamlit-App mit lokalen Modellen auf Hetzner betreiben (Anleitung für einen Coding-Agenten)
-
 Diese Datei ist für einen Coding-Agenten geschrieben (Claude Code, Codex, Cursor oder vergleichbar), der auf dem Rechner der Entwicklerin läuft. Der Agent richtet eine Streamlit-App mit lokalen Sprachmodellen als Docker-Stack auf einem Hetzner-Cloud-Server ein, hinter HTTPS und Login. Die Entwicklerin bleibt Betreiberin des Servers.
 
 Zielbild: Die App ist unter `https://<ip-mit-bindestrichen>.sslip.io` erreichbar, verlangt Benutzername und Passwort, und alle Daten bleiben auf dem Server in Deutschland. Kein Aufruf geht an externe KI-Anbieter.

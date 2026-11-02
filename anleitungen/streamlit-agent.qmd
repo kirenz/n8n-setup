@@ -1,0 +1,13 @@
+---
+title: "Streamlit-App auf Hetzner: Anleitung für einen Coding-Agenten"
+---
+
+Dieses Kapitel ist anders als die übrigen: Es richtet sich nicht an Sie, sondern an Ihren Coding-Agenten (Claude Code, Codex, Cursor oder ein vergleichbares Werkzeug). Es beschreibt, wie der Agent eine eigene Streamlit-App mit lokalen Sprachmodellen auf einem Hetzner-Server einrichtet, nach demselben Muster wie der n8n-Stack in diesem Buch: Docker Compose, Caddy mit automatischem HTTPS, sslip.io als Adresse. Neu sind Ollama für die Modelle und ein Login, weil Streamlit anders als n8n keinen mitbringt.
+
+So nutzen Sie das Kapitel: Geben Sie Ihrem Agenten den Link zur Rohfassung, [streamlit-hetzner-agent.md](https://raw.githubusercontent.com/kirenz/n8n-setup/main/anleitungen/streamlit-hetzner-agent.md), oder legen Sie die Datei in Ihr Projekt. Erledigen Sie vorher die Punkte im Abschnitt „Rollen“, die ein Konto oder eine Unterschrift brauchen. Alles Weitere arbeitet der Agent Schritt für Schritt ab; jeder Schritt endet mit einem Prüfkriterium.
+
+::: {.callout-warning title="Vertrauliche Daten"}
+Dieses Setup hält alle Daten auf einem Server in Deutschland und ruft keine externen KI-Anbieter auf. Das ist die Voraussetzung, um die App mit Daten von Unternehmen zu testen. Die Zustimmung der Unternehmen ersetzt es nicht: Holen Sie diese ein, bevor deren Daten auf den Server gelangen.
+:::
+
+{{< include streamlit-hetzner-agent.md >}}

@@ -11,6 +11,7 @@ project:
     - "hetzner/*.qmd"
     - "betrieb/*.qmd"
     - "souveraenitaet/*.qmd"
+    - "anleitungen/*.qmd"
 
 lang: de
 
@@ -63,6 +64,9 @@ book:
       chapters:
         - souveraenitaet/datenschutz.qmd
         - souveraenitaet/eu-ai-act.qmd
+
+  appendices:
+    - anleitungen/streamlit-agent.qmd
 
 format:
   html:
